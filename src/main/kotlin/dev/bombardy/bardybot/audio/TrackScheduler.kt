@@ -6,6 +6,15 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrack
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason
 import java.util.concurrent.ArrayBlockingQueue
 
+/**
+ * Represents a Guild Track Scheduler, used for queueing, clearing, skipping,
+ * and auto-playing the next track in the queue. Also will be responsible for
+ * looping tracks where necessary in the future, though that is not implemented
+ * yet.
+ *
+ * @author BomBardyGamer
+ * @since 1.0
+ */
 class TrackScheduler(private val player: AudioPlayer) : AudioEventAdapter() {
 
     private var isLooping = false

@@ -12,6 +12,12 @@ import org.springframework.beans.factory.BeanFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 
+/**
+ * Handles loading, playing, pausing, skipping, queueing, and volume of tracks.
+ *
+ * @author Callum Seabrook
+ * @since 1.0
+ */
 @Service
 class TrackService @Autowired constructor(private val connectionService: ConnectionService,
                                           private val beanFactory: BeanFactory

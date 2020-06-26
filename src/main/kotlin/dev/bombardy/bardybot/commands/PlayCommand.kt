@@ -7,6 +7,12 @@ import me.mattstudios.mfjda.base.CommandBase
 import net.dv8tion.jda.api.EmbedBuilder
 import java.awt.Color
 
+/**
+ * Handles command execution for the play command, which plays music through the bot.
+ *
+ * @author BomBardyGamer
+ * @since 1.0
+ */
 @Command("play", "p")
 class PlayCommand(private val trackService: TrackService,
                   private val prefix: String

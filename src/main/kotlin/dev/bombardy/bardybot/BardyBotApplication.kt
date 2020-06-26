@@ -13,9 +13,23 @@ import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 import javax.annotation.PostConstruct
 
+/**
+ * The main Spring Boot Application class
+ *
+ * @author Callum Seabrook
+ * @since 1.0
+ */
 @SpringBootApplication
 class BardyBotApplication @Autowired constructor(private val beanFactory: BeanFactory) {
 
+    /**
+     * Registers the local and remote sources for the bot to load music
+     * from.
+     *
+     * Remote loading is restricted due to security flaws with the HTTP
+     * audio source manager, allowing for users to play tracks to grab
+     * the server's IP.
+     */
     @PostConstruct
     fun init() {
         val playerManager = beanFactory.getBean<AudioPlayerManager>()
@@ -32,4 +46,10 @@ fun main() {
     runApplication<BardyBotApplication>()
 }
 
+/**
+ * Gets the specified type [T] from its bean method using the [BeanFactory]
+ *
+ * @param T the type of the bean.
+ * @return the type requested as [T]
+ */
 inline fun <reified T> BeanFactory.getBean() = getBean(T::class.java)

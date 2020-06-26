@@ -9,6 +9,14 @@ import net.dv8tion.jda.api.utils.cache.CacheFlag
 import org.springframework.context.annotation.Bean
 import org.springframework.stereotype.Service
 
+/**
+ * Handles set up of [JDA] and [CommandManager], used for connecting
+ * to the Discord API (and ultimately, the Discord bot), and handling
+ * commands.
+ *
+ * @author Callum Seabrook
+ * @since 1.0
+ */
 @Service
 class JDAService {
 
