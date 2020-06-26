@@ -8,7 +8,7 @@ plugins {
 }
 
 group = "dev.bombardy"
-version = "1.0-SNAPSHOT"
+version = "1.0.1"
 java.sourceCompatibility = JavaVersion.VERSION_1_8
 
 repositories {

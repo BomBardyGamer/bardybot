@@ -2,7 +2,11 @@ package dev.bombardy.bardybot
 
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager
 import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers
-import com.sedmelluq.discord.lavaplayer.tools.PlayerLibrary
+import com.sedmelluq.discord.lavaplayer.source.bandcamp.BandcampAudioSourceManager
+import com.sedmelluq.discord.lavaplayer.source.soundcloud.SoundCloudAudioSourceManager
+import com.sedmelluq.discord.lavaplayer.source.twitch.TwitchStreamAudioSourceManager
+import com.sedmelluq.discord.lavaplayer.source.vimeo.VimeoAudioSourceManager
+import com.sedmelluq.discord.lavaplayer.source.youtube.YoutubeAudioSourceManager
 import org.springframework.beans.factory.BeanFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.SpringBootApplication
@@ -16,7 +20,11 @@ class BardyBotApplication @Autowired constructor(private val beanFactory: BeanFa
     fun init() {
         val playerManager = beanFactory.getBean<AudioPlayerManager>()
         AudioSourceManagers.registerLocalSource(playerManager)
-        AudioSourceManagers.registerRemoteSources(playerManager)
+
+        playerManager.registerSourceManager(YoutubeAudioSourceManager(true))
+        playerManager.registerSourceManager(SoundCloudAudioSourceManager.createDefault())
+        playerManager.registerSourceManager(VimeoAudioSourceManager())
+        playerManager.registerSourceManager(TwitchStreamAudioSourceManager())
     }
 }
 
