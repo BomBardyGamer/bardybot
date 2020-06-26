@@ -1,15 +1,22 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 
 plugins {
     id("org.springframework.boot") version "2.3.1.RELEASE"
     id("io.spring.dependency-management") version "1.0.9.RELEASE"
+
     kotlin("jvm") version "1.3.72"
     kotlin("plugin.spring") version "1.3.72"
+
+    application
+    id("com.github.johnrengelman.shadow") version "6.0.0"
 }
 
 group = "dev.bombardy"
-version = "1.0.1"
+version = "1.0.2"
 java.sourceCompatibility = JavaVersion.VERSION_1_8
+
+application.mainClassName = "dev.bombardy.bardybot.BardyBotApplicationKt"
 
 repositories {
     mavenCentral()
@@ -48,4 +55,8 @@ tasks.withType<KotlinCompile> {
         freeCompilerArgs = listOf("-Xjsr305=strict")
         jvmTarget = "1.8"
     }
+}
+
+tasks.withType<ShadowJar> {
+    archiveFileName.set("BardyBot-${project.version}.jar")
 }
