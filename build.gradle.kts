@@ -1,6 +1,6 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
-import org.springframework.boot.gradle.tasks.run.BootRun
+import org.jetbrains.dokka.gradle.DokkaTask
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     id("org.springframework.boot") version "2.3.1.RELEASE"
@@ -11,6 +11,7 @@ plugins {
 
     application
     id("com.github.johnrengelman.shadow") version "6.0.0"
+    id("org.jetbrains.dokka") version "0.10.1"
 }
 
 group = "dev.bombardy"
@@ -62,4 +63,8 @@ tasks.withType<KotlinCompile> {
 
 tasks.withType<ShadowJar> {
     archiveFileName.set("BardyBot-${project.version}.jar")
+}
+
+tasks.withType<DokkaTask> {
+    outputFormat = "html"
 }
