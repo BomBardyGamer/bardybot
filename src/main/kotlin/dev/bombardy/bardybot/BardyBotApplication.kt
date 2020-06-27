@@ -7,10 +7,14 @@ import com.sedmelluq.discord.lavaplayer.source.soundcloud.SoundCloudAudioSourceM
 import com.sedmelluq.discord.lavaplayer.source.twitch.TwitchStreamAudioSourceManager
 import com.sedmelluq.discord.lavaplayer.source.vimeo.VimeoAudioSourceManager
 import com.sedmelluq.discord.lavaplayer.source.youtube.YoutubeAudioSourceManager
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.BeanFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.SpringBootApplication
+import org.springframework.boot.logging.logback.LogbackLoggingSystem
 import org.springframework.boot.runApplication
+import java.io.File
 import javax.annotation.PostConstruct
 
 /**
@@ -41,6 +45,8 @@ class BardyBotApplication @Autowired constructor(private val beanFactory: BeanFa
         playerManager.registerSourceManager(TwitchStreamAudioSourceManager())
     }
 }
+
+val LOGGER: Logger = LoggerFactory.getLogger(BardyBotApplication::class.java)
 
 fun main() {
     runApplication<BardyBotApplication>()

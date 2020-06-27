@@ -1,5 +1,6 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+import org.springframework.boot.gradle.tasks.run.BootRun
 
 plugins {
     id("org.springframework.boot") version "2.3.1.RELEASE"
@@ -13,7 +14,7 @@ plugins {
 }
 
 group = "dev.bombardy"
-version = "1.0.2"
+version = "1.1"
 java.sourceCompatibility = JavaVersion.VERSION_1_8
 
 application.mainClassName = "dev.bombardy.bardybot.BardyBotApplicationKt"
@@ -28,6 +29,8 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-redis")
     implementation("org.springframework.integration:spring-integration-ip:5.3.1.RELEASE")
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
+
+    implementation("org.yaml:snakeyaml:1.8")
 
     // Kotlin
     implementation("org.jetbrains.kotlin:kotlin-reflect")
