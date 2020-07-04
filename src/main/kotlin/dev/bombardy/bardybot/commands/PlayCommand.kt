@@ -1,10 +1,10 @@
 package dev.bombardy.bardybot.commands
 
-import dev.bombardy.bardybot.spring.TrackService
-import me.mattstudios.mfjda.annotations.Command
-import me.mattstudios.mfjda.annotations.Default
-import me.mattstudios.mfjda.base.CommandBase
+import dev.bombardy.bardybot.services.TrackService
+import dev.bombardy.octo.command.Command
 import net.dv8tion.jda.api.EmbedBuilder
+import net.dv8tion.jda.api.MessageBuilder
+import net.dv8tion.jda.api.entities.Message
 import java.awt.Color
 
 /**
@@ -13,38 +13,30 @@ import java.awt.Color
  * @author BomBardyGamer
  * @since 1.0
  */
-@Command("play", "p")
-class PlayCommand(private val trackService: TrackService,
-                  private val prefix: String
-) : CommandBase() {
+class PlayCommand(private val trackService: TrackService) : Command(listOf("play", "p"), true) {
 
-    @Default
-    fun defaultCommand(track: Array<String>) {
-        val channel = message.textChannel
+    override val helpMessage = MessageBuilder().setEmbed(EmbedBuilder()
+            .setDescription("""
+                **You got it wrong, here's how you use it:**
 
-        val member = when (message.author.isBot) {
-            true -> return channel.sendMessage("**Sorry mate, unfortunately bots can't use commands**").queue()
-            else -> message.member ?: return
-        }
+                ${prefix}play [Link or query]
+            """.trimIndent())
+            .setColor(Color.RED)
+            .build()
+    ).build()
 
-        if (track.isEmpty()) {
+    override fun execute(message: Message, arguments: List<String>) {
+        val member = message.member ?: return
+
+        if (arguments.isEmpty()) {
             if (trackService.isPaused) {
                 trackService.isPaused = false
                 return
             }
-            return channel.sendMessage(EmbedBuilder()
-                    .setDescription("""
-                        **You got it wrong, here's how you use it:**
-                        
-                        ${prefix}play [Link or query]
-                    """.trimIndent())
-                    .setColor(Color.RED)
-                    .build()).queue()
-        }
-
-        if (!trackService.loadTrack(channel, track, member)) {
-            channel.sendMessage("**I can't play music if there isn't a channel to play music on!**").queue()
+            message.channel.sendMessage(helpMessage).queue()
             return
         }
+
+        message.channel.sendMessage(trackService.loadTrack(message.textChannel, arguments, member).message).queue()
     }
 }

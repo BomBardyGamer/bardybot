@@ -1,16 +1,15 @@
-package dev.bombardy.bardybot.spring
+package dev.bombardy.bardybot.services
 
 import dev.bombardy.bardybot.LOGGER
-import me.mattstudios.mfjda.base.CommandManager
+import dev.bombardy.bardybot.config.BotConfig
+import dev.bombardy.octo.command.CommandManager
 import net.dv8tion.jda.api.JDA
 import net.dv8tion.jda.api.JDABuilder
 import net.dv8tion.jda.api.entities.Activity
 import net.dv8tion.jda.api.requests.GatewayIntent
 import net.dv8tion.jda.api.utils.cache.CacheFlag
-import net.dv8tion.jda.internal.JDAImpl
 import org.springframework.context.annotation.Bean
 import org.springframework.stereotype.Service
-import javax.security.auth.login.LoginException
 import kotlin.system.exitProcess
 
 /**
@@ -25,7 +24,7 @@ import kotlin.system.exitProcess
 class JDAService {
 
     @Bean
-    fun jda(config: DiscordConfig) = runCatching {
+    fun jda(config: BotConfig) = runCatching {
         println(config.token)
         JDABuilder.create(config.token, GATEWAY_INTENTS)
                     .setActivity(Activity.playing("prevarinite.com"))
@@ -37,7 +36,7 @@ class JDAService {
     }
 
     @Bean
-    fun commandManager(config: DiscordConfig, jda: JDA) = CommandManager(jda, config.prefix)
+    fun commandManager(config: BotConfig, jda: JDA) = CommandManager(jda, config.prefix, COMMAND_MESSAGES)
 
     companion object {
 
@@ -49,5 +48,9 @@ class JDAService {
                 CacheFlag.ACTIVITY,
                 CacheFlag.CLIENT_STATUS,
                 CacheFlag.EMOTE)
+
+        private val COMMAND_MESSAGES = mapOf(
+                "commandNotFound" to "Sorry, I couldn't find the command you were looking for."
+        )
     }
 }

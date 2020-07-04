@@ -1,4 +1,4 @@
-package dev.bombardy.bardybot.spring
+package dev.bombardy.bardybot.components
 
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager
 import dev.bombardy.bardybot.audio.MusicManager

@@ -15,7 +15,7 @@ plugins {
 }
 
 group = "dev.bombardy"
-version = "1.1"
+version = "1.2.1"
 java.sourceCompatibility = JavaVersion.VERSION_1_8
 
 application.mainClassName = "dev.bombardy.bardybot.BardyBotApplicationKt"
@@ -23,6 +23,10 @@ application.mainClassName = "dev.bombardy.bardybot.BardyBotApplicationKt"
 repositories {
     mavenCentral()
     jcenter()
+
+    maven {
+        url = uri("https://repo.prevarinite.com/repository/maven-snapshots/")
+    }
 }
 
 dependencies {
@@ -31,10 +35,7 @@ dependencies {
     implementation("org.springframework.integration:spring-integration-ip:5.3.1.RELEASE")
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
 
-    implementation("org.yaml:snakeyaml:1.8")
-
     // Kotlin
-    implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test") {
@@ -45,6 +46,7 @@ dependencies {
     implementation("net.dv8tion:JDA:4.1.1_165")
     implementation("com.sedmelluq:lavaplayer:1.3.50")
     implementation("me.mattstudios.utils:matt-framework-jda:1.1.10-BETA")
+    implementation("dev.bombardy:octo:1.0-SNAPSHOT")
 
     // Logging
     implementation("ch.qos.logback:logback-classic:1.2.3")

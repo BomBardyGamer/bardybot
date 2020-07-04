@@ -1,4 +1,4 @@
-package dev.bombardy.bardybot.spring
+package dev.bombardy.bardybot.config
 
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.context.annotation.Configuration
@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Configuration
  */
 @Configuration
 @ConfigurationProperties(prefix = "bot")
-class DiscordConfig {
+class BotConfig {
 
     /**
      * The token of the Discord Bot, used to connect to the Bot application

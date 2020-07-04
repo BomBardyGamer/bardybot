@@ -5,7 +5,7 @@ import com.sedmelluq.discord.lavaplayer.tools.FriendlyException
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack
 import com.sedmelluq.discord.lavaplayer.source.AudioSourceManager
-import dev.bombardy.bardybot.spring.TrackService
+import dev.bombardy.bardybot.services.TrackService
 import net.dv8tion.jda.api.entities.Member
 import net.dv8tion.jda.api.entities.TextChannel
 
@@ -16,10 +16,10 @@ import net.dv8tion.jda.api.entities.TextChannel
  * @author Callum Seabrook
  * @since 1.0
  */
-class ResultHandler(private val channel: TextChannel,
-                    private val requester: Member,
-                    private val trackURL: String,
-                    private val trackService: TrackService
+class LoadResultHandler(private val channel: TextChannel,
+                        private val requester: Member,
+                        private val trackURL: String,
+                        private val trackService: TrackService
 ) : AudioLoadResultHandler {
 
     /**

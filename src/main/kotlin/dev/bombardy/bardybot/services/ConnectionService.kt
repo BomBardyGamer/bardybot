@@ -1,7 +1,9 @@
-package dev.bombardy.bardybot.spring
+package dev.bombardy.bardybot.services
 
 import dev.bombardy.bardybot.audio.MusicManager
+import dev.bombardy.bardybot.audio.Result
 import dev.bombardy.bardybot.getBean
+import dev.bombardy.bardybot.components.GuildWrapperFactory
 import net.dv8tion.jda.api.entities.VoiceChannel
 import org.springframework.beans.factory.BeanFactory
 import org.springframework.beans.factory.annotation.Autowired
@@ -22,13 +24,21 @@ class ConnectionService @Autowired constructor(
 
     var inVoiceChannel = false
 
+    var voiceChannel: VoiceChannel? = null
+
     /**
      * Connects the bot to the given voice channel, or, if the bot is
      * already in a channel, does nothing.
      */
-    fun join(channel: VoiceChannel) {
-        guildWrapperFactory.create(channel.guild).guild.audioManager.openAudioConnection(channel)
-        inVoiceChannel = true
+    fun join(channel: VoiceChannel): Result {
+        runCatching {
+            guildWrapperFactory.create(channel.guild).guild.audioManager.openAudioConnection(channel)
+            inVoiceChannel = true
+            voiceChannel = channel
+            return Result.SUCCESSFUL
+        }.getOrElse {
+            return Result.CANNOT_JOIN_CHANNEL
+        }
     }
 
     /**

@@ -12,6 +12,7 @@ import org.springframework.beans.factory.BeanFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
+import org.springframework.cache.annotation.EnableCaching
 import javax.annotation.PostConstruct
 
 /**
@@ -21,6 +22,7 @@ import javax.annotation.PostConstruct
  * @since 1.0
  */
 @SpringBootApplication
+@EnableCaching
 class BardyBotApplication @Autowired constructor(private val beanFactory: BeanFactory) {
 
     /**

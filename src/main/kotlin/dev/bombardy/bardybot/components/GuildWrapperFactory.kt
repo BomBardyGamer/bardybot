@@ -1,4 +1,4 @@
-package dev.bombardy.bardybot.spring
+package dev.bombardy.bardybot.components
 
 import dev.bombardy.bardybot.audio.MusicManager
 import dev.bombardy.bardybot.getBean
