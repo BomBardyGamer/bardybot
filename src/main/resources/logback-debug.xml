@@ -8,6 +8,10 @@
         </encoder>
     </appender>
 
+    <logger name="net.dv8tion" level="debug" />
+    <logger name="dev.bombardy" level="debug" />
+    <logger name="com.sedmelluq" level="debug" />
+
     <root level="info">
         <appender-ref ref="STDOUT" />
     </root>

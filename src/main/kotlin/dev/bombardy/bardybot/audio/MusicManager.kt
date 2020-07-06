@@ -12,8 +12,24 @@ import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager
  */
 class MusicManager(manager: AudioPlayerManager) {
 
-    val player: AudioPlayer = manager.createPlayer().apply { addListener(scheduler) }
+    val player: AudioPlayer = manager.createPlayer()
     val scheduler = TrackScheduler(player)
 
+    init {
+        player.addListener(scheduler)
+    }
+
     val sendHandler = SendHandler(player)
+
+    var isPaused = false
+        set(paused) {
+            player.isPaused = paused
+            field = paused
+        }
+
+    var volume = 100
+        set(volume) {
+            player.volume = volume
+            field = volume
+        }
 }

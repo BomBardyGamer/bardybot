@@ -2,10 +2,12 @@ package dev.bombardy.bardybot.services
 
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack
-import dev.bombardy.bardybot.audio.Result
-import dev.bombardy.bardybot.audio.MusicManager
 import dev.bombardy.bardybot.audio.LoadResultHandler
+import dev.bombardy.bardybot.audio.MusicManager
+import dev.bombardy.bardybot.audio.Result
 import dev.bombardy.bardybot.getBean
+import dev.bombardy.bardybot.getLogger
+import net.dv8tion.jda.api.JDA
 import net.dv8tion.jda.api.entities.Member
 import net.dv8tion.jda.api.entities.TextChannel
 import net.dv8tion.jda.api.entities.VoiceChannel
@@ -23,26 +25,22 @@ import org.springframework.stereotype.Service
 class TrackService @Autowired constructor(
         private val connectionService: ConnectionService,
         private val cacheService: RedisCacheService,
+        private val jda: JDA,
         private val beanFactory: BeanFactory
 ) {
 
-    private val musicManager = beanFactory.getBean<MusicManager>()
+    val musicManagers = mutableMapOf<Long, MusicManager>()
 
-    var isPaused = false
-        set(paused) {
-            musicManager.player.isPaused = paused
-            field = paused
-        }
-
-    var volume = 0
-        set(volume) {
-            musicManager.player.volume = volume
-            field = volume
-        }
+    @Synchronized
+    fun getMusicManager(guildId: Long): MusicManager {
+        val musicManager = musicManagers.getOrPut(guildId, { beanFactory.getBean() })
+        requireNotNull(jda.getGuildById(guildId)).audioManager.sendingHandler = musicManager.sendHandler
+        return musicManager
+    }
 
     fun loadTrack(channel: TextChannel, track: List<String>, requester: Member): Result {
+        val musicManager = getMusicManager(channel.guild.idLong)
         val playerManager = beanFactory.getBean<AudioPlayerManager>()
-        requester.guild.audioManager.sendingHandler = musicManager.sendHandler
 
         val trackString = track.joinToString(" ")
 
@@ -51,51 +49,60 @@ class TrackService @Autowired constructor(
             else -> "ytsearch:$trackString"
         }
 
-        if (requester.guild.voiceChannels.isEmpty()) return Result.CANNOT_JOIN_CHANNEL
+        if (requester.guild.voiceChannels.isEmpty()) {
+            LOGGER.debug("No voice channels found in guild.")
+            return Result.CHANNELS_NOT_EXIST
+        }
 
         val channelId = cacheService.getVoiceChannel(requester.guild.idLong)
         val voiceChannel = requester.voiceState?.channel
 
-        when (evalResult(requester.guild.idLong, channelId, voiceChannel)) {
-            Result.SUCCESSFUL -> connectionService.join(requireNotNull(voiceChannel))
-            else -> return evalResult(requester.guild.idLong, channelId, voiceChannel)
-        }
+        val result = evalResult(requester.guild.idLong, channelId, voiceChannel)
+        if (result != Result.SUCCESSFUL) return result
 
+        val connectionResult = connectionService.join(requireNotNull(voiceChannel))
+        if (connectionResult != Result.SUCCESSFUL) return connectionResult
+
+        channel.sendMessage("**I'm performing a search for your query** `$trackString`").queue()
         playerManager.loadItemOrdered(musicManager, trackURL, LoadResultHandler(channel, requester, trackURL, this))
 
         return Result.SUCCESSFUL
     }
 
-    fun playTrack(audioTrack: AudioTrack) {
+    fun playTrack(guildId: Long, audioTrack: AudioTrack) {
+        val musicManager = getMusicManager(guildId)
         musicManager.scheduler.queue(audioTrack)
     }
 
-    fun queueTracks(tracks: List<AudioTrack>, requester: Member) = tracks.forEach {
-        musicManager.scheduler.queue(it)
-        it.userData = requester
+    fun queueTracks(tracks: List<AudioTrack>, requester: Member) {
+        val musicManager = getMusicManager(requester.guild.idLong)
+        tracks.forEach {
+            musicManager.scheduler.queue(it)
+            it.userData = requester
+        }
     }
 
-    fun skipTrack() = musicManager.scheduler.nextTrack()
-
-    fun playOrPause() {
-        isPaused = !isPaused
-    }
-
-    companion object {
-        private val URL_REGEX = "^(https?)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]".toRegex()
+    fun skipTrack(guildId: Long): Boolean {
+        val musicManager = getMusicManager(guildId)
+        return musicManager.scheduler.nextTrack()
     }
 
     fun evalResult(guildId: Long, channelId: Long?, voiceChannel: VoiceChannel?): Result {
         if (channelId == null) {
             if (voiceChannel == null) return Result.USER_NOT_IN_CHANNEL
-            cacheService.putVoiceChannel(guildId, voiceChannel.idLong)
 
-            if (channelId != voiceChannel.idLong) return Result.USER_NOT_IN_CHANNEL_WITH_BOT
+            return Result.SUCCESSFUL
         }
 
         if (voiceChannel == null) return Result.USER_NOT_IN_CHANNEL_WITH_BOT
         if (channelId != voiceChannel.idLong) return Result.USER_NOT_IN_CHANNEL_WITH_BOT
 
         return Result.SUCCESSFUL
+    }
+
+    companion object {
+        private val URL_REGEX = "^(https?)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]".toRegex()
+
+        private val LOGGER = getLogger<TrackService>()
     }
 }

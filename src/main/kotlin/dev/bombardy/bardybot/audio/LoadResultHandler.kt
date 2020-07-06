@@ -7,6 +7,7 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrack
 import com.sedmelluq.discord.lavaplayer.source.AudioSourceManager
 import dev.bombardy.bardybot.services.TrackService
 import net.dv8tion.jda.api.entities.Member
+import net.dv8tion.jda.api.entities.MessageChannel
 import net.dv8tion.jda.api.entities.TextChannel
 
 /**
@@ -36,7 +37,7 @@ class LoadResultHandler(private val channel: TextChannel,
     override fun trackLoaded(track: AudioTrack) {
         channel.sendMessage("**I've queued up** `${track.info.title}` **ready to be played.**").queue()
         track.userData = requester
-        trackService.playTrack(track)
+        trackService.playTrack(channel.guild.idLong, track)
     }
 
     /**
@@ -65,7 +66,7 @@ class LoadResultHandler(private val channel: TextChannel,
     override fun playlistLoaded(playlist: AudioPlaylist) {
         val firstTrack = playlist.selectedTrack ?: playlist.tracks.first()
         firstTrack.userData = requester
-        trackService.playTrack(firstTrack)
+        trackService.playTrack(channel.guild.idLong, firstTrack)
 
         val message = when (playlist.isSearchResult) {
             false -> {

@@ -15,7 +15,7 @@ plugins {
 }
 
 group = "dev.bombardy"
-version = "1.2.1"
+version = "1.3-BETA"
 java.sourceCompatibility = JavaVersion.VERSION_1_8
 
 application.mainClassName = "dev.bombardy.bardybot.BardyBotApplicationKt"
@@ -25,7 +25,7 @@ repositories {
     jcenter()
 
     maven {
-        url = uri("https://repo.prevarinite.com/repository/maven-snapshots/")
+        url = uri("https://repo.prevarinite.com/repository/maven-releases/")
     }
 }
 
@@ -43,10 +43,9 @@ dependencies {
     }
 
     // Discord-related
-    implementation("net.dv8tion:JDA:4.1.1_165")
+    implementation("net.dv8tion:JDA:4.2.0_173")
     implementation("com.sedmelluq:lavaplayer:1.3.50")
-    implementation("me.mattstudios.utils:matt-framework-jda:1.1.10-BETA")
-    implementation("dev.bombardy:octo:1.0-SNAPSHOT")
+    implementation("dev.bombardy:octo:1.0.1")
 
     // Logging
     implementation("ch.qos.logback:logback-classic:1.2.3")
@@ -58,7 +57,7 @@ tasks.withType<Test> {
 
 tasks.withType<KotlinCompile> {
     kotlinOptions {
-        freeCompilerArgs = listOf("-Xjsr305=strict")
+        freeCompilerArgs = listOf("-Xjsr305=strict", "-Xopt-in=kotlin.time.ExperimentalTime")
         jvmTarget = "1.8"
     }
 }

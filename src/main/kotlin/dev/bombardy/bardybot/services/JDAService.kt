@@ -1,7 +1,7 @@
 package dev.bombardy.bardybot.services
 
-import dev.bombardy.bardybot.LOGGER
 import dev.bombardy.bardybot.config.BotConfig
+import dev.bombardy.bardybot.getLogger
 import dev.bombardy.octo.command.CommandManager
 import net.dv8tion.jda.api.JDA
 import net.dv8tion.jda.api.JDABuilder
@@ -25,7 +25,6 @@ class JDAService {
 
     @Bean
     fun jda(config: BotConfig) = runCatching {
-        println(config.token)
         JDABuilder.create(config.token, GATEWAY_INTENTS)
                     .setActivity(Activity.playing("prevarinite.com"))
                     .disableCache(DISABLED_FLAGS)
@@ -42,15 +41,19 @@ class JDAService {
 
         private val GATEWAY_INTENTS = listOf(
                 GatewayIntent.GUILD_MESSAGES,
-                GatewayIntent.GUILD_VOICE_STATES)
+                GatewayIntent.GUILD_VOICE_STATES
+        )
 
         private val DISABLED_FLAGS = listOf(
                 CacheFlag.ACTIVITY,
                 CacheFlag.CLIENT_STATUS,
-                CacheFlag.EMOTE)
+                CacheFlag.EMOTE
+        )
 
         private val COMMAND_MESSAGES = mapOf(
                 "commandNotFound" to "Sorry, I couldn't find the command you were looking for."
         )
+
+        private val LOGGER = getLogger<JDAService>()
     }
 }

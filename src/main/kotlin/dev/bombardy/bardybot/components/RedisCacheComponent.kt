@@ -2,7 +2,6 @@ package dev.bombardy.bardybot.components
 
 import dev.bombardy.bardybot.config.RedisConfig
 import org.springframework.context.annotation.Bean
-import org.springframework.data.redis.connection.RedisStandaloneConfiguration
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory
 import org.springframework.data.redis.core.RedisTemplate
 import org.springframework.stereotype.Component
@@ -19,7 +18,6 @@ class RedisCacheComponent {
 
         return RedisTemplate<Long, Long>().apply { setConnectionFactory(connectionFactory) }
     }
-
 
     @Bean
     fun valueOperations(redisTemplate: RedisTemplate<Long, Long>) = redisTemplate.opsForValue()
