@@ -1,5 +1,6 @@
-package dev.bombardy.bardybot.services
+package dev.bombardy.bardybot.components
 
+import com.sedmelluq.discord.lavaplayer.jdaudp.NativeAudioSendFactory
 import dev.bombardy.bardybot.config.BotConfig
 import dev.bombardy.bardybot.getLogger
 import dev.bombardy.octo.command.CommandManager
@@ -9,7 +10,7 @@ import net.dv8tion.jda.api.entities.Activity
 import net.dv8tion.jda.api.requests.GatewayIntent
 import net.dv8tion.jda.api.utils.cache.CacheFlag
 import org.springframework.context.annotation.Bean
-import org.springframework.stereotype.Service
+import org.springframework.stereotype.Component
 import kotlin.system.exitProcess
 
 /**
@@ -20,15 +21,16 @@ import kotlin.system.exitProcess
  * @author Callum Seabrook
  * @since 1.0
  */
-@Service
-class JDAService {
+@Component
+class JDAComponent {
 
     @Bean
     fun jda(config: BotConfig) = runCatching {
         JDABuilder.create(config.token, GATEWAY_INTENTS)
-                    .setActivity(Activity.playing("prevarinite.com"))
-                    .disableCache(DISABLED_FLAGS)
-                    .build()
+                .setActivity(Activity.playing("prevarinite.com"))
+                .setAudioSendFactory(NativeAudioSendFactory())
+                .disableCache(DISABLED_FLAGS)
+                .build()
     }.getOrElse {
         LOGGER.error("Your bot token is empty or invalid! You can configure your token by providing the -Dbot.token=my_token argument when running this application")
         exitProcess(0)
@@ -47,13 +49,14 @@ class JDAService {
         private val DISABLED_FLAGS = listOf(
                 CacheFlag.ACTIVITY,
                 CacheFlag.CLIENT_STATUS,
-                CacheFlag.EMOTE
+                CacheFlag.EMOTE,
+                CacheFlag.MEMBER_OVERRIDES
         )
 
         private val COMMAND_MESSAGES = mapOf(
                 "commandNotFound" to "Sorry, I couldn't find the command you were looking for."
         )
 
-        private val LOGGER = getLogger<JDAService>()
+        private val LOGGER = getLogger<JDAComponent>()
     }
 }

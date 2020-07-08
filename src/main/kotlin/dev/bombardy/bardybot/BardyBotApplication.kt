@@ -3,6 +3,7 @@ package dev.bombardy.bardybot
 import com.sedmelluq.discord.lavaplayer.player.AudioConfiguration
 import com.sedmelluq.discord.lavaplayer.player.AudioConfiguration.ResamplingQuality
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager
+import com.sedmelluq.discord.lavaplayer.source.AudioSourceManager
 import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers
 import com.sedmelluq.discord.lavaplayer.source.soundcloud.SoundCloudAudioSourceManager
 import com.sedmelluq.discord.lavaplayer.source.twitch.TwitchStreamAudioSourceManager
@@ -32,9 +33,7 @@ import kotlin.time.Duration
 @EnableCaching
 class BardyBotApplication @Autowired constructor(
         private val audioPlayerManager: AudioPlayerManager,
-        private val connectionFactory: LettuceConnectionFactory,
-        private val jda: JDA,
-        private val beanFactory: BeanFactory
+        private val connectionFactory: LettuceConnectionFactory
 ) {
 
     /**
@@ -50,16 +49,11 @@ class BardyBotApplication @Autowired constructor(
         AudioSourceManagers.registerLocalSource(audioPlayerManager)
 
         audioPlayerManager.registerSourceManager(YoutubeAudioSourceManager(true))
-        audioPlayerManager.registerSourceManager(SoundCloudAudioSourceManager.createDefault())
+        audioPlayerManager.registerSourceManager(SoundCloudAudioSourceManager.builder().withAllowSearch(true).build())
         audioPlayerManager.registerSourceManager(VimeoAudioSourceManager())
-        audioPlayerManager.registerSourceManager(TwitchStreamAudioSourceManager())
+        audioPlayerManager.registerSourceManager(TwitchStreamAudioSourceManager("zlgewfd7yonsfhsxslto0fsiy0uvoc"))
 
         audioPlayerManager.setTrackStuckThreshold(5000)
-    }
-
-    @PreDestroy
-    fun destroyCache() {
-        connectionFactory.connection.flushDb()
     }
 }
 
@@ -94,7 +88,7 @@ inline fun <reified T> getLogger(): Logger = LoggerFactory.getLogger(T::class.ja
 fun Duration.format() = when (inHours.toInt() > 0) {
     true -> String.format("%d:%02d:%02d", inHours.toInt(),
                 inMinutes.minus(inHours.toInt() * 60).toInt(),
-                inSeconds.minus(inHours.toInt() * 60 * 60).toInt())
+                inSeconds.minus(inMinutes.toInt() * 60 * 60).toInt())
 
     else -> String.format("%d:%02d", inMinutes.toInt(),
                 inSeconds.minus(inMinutes.toInt() * 60).toInt())

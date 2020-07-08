@@ -37,7 +37,7 @@ class LoadResultHandler(private val channel: TextChannel,
     override fun trackLoaded(track: AudioTrack) {
         channel.sendMessage("**I've queued up** `${track.info.title}` **ready to be played.**").queue()
         track.userData = requester
-        trackService.playTrack(channel.guild.idLong, track)
+        trackService.playTrack(channel.guild.id, track)
     }
 
     /**
@@ -66,7 +66,7 @@ class LoadResultHandler(private val channel: TextChannel,
     override fun playlistLoaded(playlist: AudioPlaylist) {
         val firstTrack = playlist.selectedTrack ?: playlist.tracks.first()
         firstTrack.userData = requester
-        trackService.playTrack(channel.guild.idLong, firstTrack)
+        trackService.playTrack(channel.guild.id, firstTrack)
 
         val message = when (playlist.isSearchResult) {
             false -> {

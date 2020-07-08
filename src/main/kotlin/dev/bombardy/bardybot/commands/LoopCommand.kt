@@ -8,7 +8,7 @@ class LoopCommand(private val trackService: TrackService) : Command(listOf("loop
 
     override suspend fun execute(message: Message, arguments: List<String>) {
         val channel = message.textChannel
-        val scheduler = trackService.getMusicManager(message.textChannel.guild.idLong).scheduler
+        val scheduler = trackService.getMusicManager(message.textChannel.guild.id).scheduler
 
         when (scheduler.isLooping) {
             false -> channel.sendMessage("**I've enabled looping! I will now loop the current track for all eternity!** *Yay...*").queue()

@@ -5,7 +5,9 @@ import com.sedmelluq.discord.lavaplayer.player.event.AudioEventAdapter
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason
 import dev.bombardy.bardybot.getLogger
+import java.util.*
 import java.util.concurrent.ArrayBlockingQueue
+import kotlin.concurrent.schedule
 
 /**
  * Represents a Guild Track Scheduler, used for queueing, clearing, skipping,
@@ -41,7 +43,7 @@ class TrackScheduler(private val player: AudioPlayer) : AudioEventAdapter() {
             return true
         }
 
-        return player.startTrack(queue.poll(), false)
+        return player.startTrack(next, false)
     }
 
     override fun onTrackEnd(player: AudioPlayer, track: AudioTrack, endReason: AudioTrackEndReason) {
@@ -53,7 +55,7 @@ class TrackScheduler(private val player: AudioPlayer) : AudioEventAdapter() {
             if (isLooping) {
                 LOGGER.debug("Loop is enabled. Attempting to start clone of previous track $track with player $player")
 
-                player.startTrack(queue.poll().makeClone(), false)
+                player.startTrack(track.makeClone(), false)
                 return
             }
 

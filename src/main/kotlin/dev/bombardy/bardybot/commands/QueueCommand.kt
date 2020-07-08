@@ -16,7 +16,7 @@ import kotlin.time.milliseconds
 class QueueCommand(private val trackService: TrackService) : Command(listOf("queue", "q"), true) {
 
     override suspend fun execute(message: Message, arguments: List<String>) {
-        val musicManager = trackService.getMusicManager(message.textChannel.guild.idLong)
+        val musicManager = trackService.getMusicManager(message.textChannel.guild.id)
 
         val member = message.member ?: return
         val channel = message.channel

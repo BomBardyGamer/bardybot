@@ -4,11 +4,6 @@
       "name": "bot",
       "type": "dev.bombardy.bardybot.config.BotConfig",
       "sourceType": "dev.bombardy.bardybot.config.BotConfig"
-    },
-    {
-      "name": "redis",
-      "type": "dev.bombardy.bardybot.config.RedisConfig",
-      "sourceType": "dev.bombardy.bardybot.config.RedisConfig"
     }
   ],
   "properties": [
@@ -29,8 +24,13 @@
     },
     {
       "name": "redis.port",
-      "type": "java.lang.String",
+      "type": "java.lang.Integer",
       "description": "Description for redis.port."
+    },
+    {
+      "name": "redis.database",
+      "type": "java.lang.Integer",
+      "description": "Description for redis.database."
     }
   ]
 }

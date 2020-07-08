@@ -23,5 +23,7 @@ class CommandService @Autowired constructor(
         commandManager.register(SkipCommand(trackService))
         commandManager.register(QueueCommand(trackService))
         commandManager.register(LoopCommand(trackService))
+        commandManager.register(NowPlayingCommand(trackService))
+        commandManager.register(VolumeCommand(trackService))
     }
 }

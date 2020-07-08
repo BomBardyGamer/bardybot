@@ -27,12 +27,15 @@ repositories {
     maven {
         url = uri("https://repo.prevarinite.com/repository/maven-releases/")
     }
+
+    maven {
+        url = uri("https://jitpack.io")
+    }
 }
 
 dependencies {
     // Spring
     implementation("org.springframework.boot:spring-boot-starter-data-redis")
-    implementation("org.springframework.integration:spring-integration-ip:5.3.1.RELEASE")
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
 
     // Kotlin
@@ -44,6 +47,7 @@ dependencies {
 
     // Discord-related
     implementation("net.dv8tion:JDA:4.2.0_173")
+    implementation("com.sedmelluq:jda-nas:1.1.0")
     implementation("com.sedmelluq:lavaplayer:1.3.50")
     implementation("dev.bombardy:octo:1.0.1")
 

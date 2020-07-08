@@ -9,7 +9,7 @@ class SkipCommand(private val trackService: TrackService) : Command(listOf("skip
 
     override suspend fun execute(message: Message, arguments: List<String>) {
         LOGGER.debug("Delegating track skipping to TrackService.")
-        if (!trackService.skipTrack(message.textChannel.guild.idLong)) {
+        if (!trackService.skipTrack(message.textChannel.guild.id)) {
             message.channel.sendMessage("**I cannot skip the track if there isn't a track playing!**").queue()
             return
         }
