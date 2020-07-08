@@ -1,13 +1,11 @@
 package dev.bombardy.bardybot.services
 
-import dev.bombardy.bardybot.audio.MusicManager
 import dev.bombardy.bardybot.audio.Result
-import dev.bombardy.bardybot.getBean
 import dev.bombardy.bardybot.getLogger
+import lavalink.client.io.jda.JdaLavalink
 import net.dv8tion.jda.api.JDA
 import net.dv8tion.jda.api.entities.VoiceChannel
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException
-import org.springframework.beans.factory.BeanFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 
@@ -21,7 +19,7 @@ import org.springframework.stereotype.Service
 @Service
 class ConnectionService @Autowired constructor(
         private val jda: JDA,
-        private val beanFactory: BeanFactory
+        private val lavalink: JdaLavalink
 ) {
 
     /**
@@ -29,7 +27,7 @@ class ConnectionService @Autowired constructor(
      * already in a channel, does nothing.
      */
     fun join(channel: VoiceChannel) = runCatching {
-        channel.guild.audioManager.openAudioConnection(channel)
+        lavalink.getLink(channel.guild.id).connect(channel)
         LOGGER.debug("Successfully connected to voice channel $channel in guild ${channel.guild}")
 
         Result.SUCCESSFUL
@@ -43,30 +41,26 @@ class ConnectionService @Autowired constructor(
      * the currently playing track and clear the queue if [clearQueue] is true, or,
      * if the bot is not in a channel, does nothing.
      *
-     * @param clearQueue if the queue should be cleared when the bot leaves the channel
+     * //@param clearQueue if the queue should be cleared when the bot leaves the channel
      */
     fun leave(guildId: String, clearQueue: Boolean) {
-        val musicManager = beanFactory.getBean<MusicManager>()
-        if (clearQueue) {
-            musicManager.scheduler.clearQueue()
-            musicManager.player.stopTrack()
-        }
+        val link = lavalink.getLink(guildId)
+        if (clearQueue) link.resetPlayer()
 
-        requireNotNull(jda.getGuildById(guildId)).audioManager.closeAudioConnection()
-
+        link.disconnect()
         LOGGER.debug("Successfully disconnected from voice channel")
     }
 
     fun reconnect(guildId: String) {
-        val guild = requireNotNull(jda.getGuildById(guildId))
-        val voiceChannel = guild.selfMember.voiceState?.channel
+        val link = lavalink.getLink(guildId)
+        val voiceChannel = link.channel?.let { requireNotNull(jda.getGuildById(guildId)).getVoiceChannelById(it) }
 
         LOGGER.debug("Attempting to disconnect from voice channel $voiceChannel in guild with id $guildId")
-        guild.audioManager.closeAudioConnection()
+        link.disconnect()
 
         LOGGER.debug("Attempting to reconnect to voice channel $voiceChannel in guild with id $guildId")
         runCatching {
-            guild.audioManager.openAudioConnection(voiceChannel)
+            link.connect(voiceChannel)
             LOGGER.debug("Successfully reconnected to voice channel $voiceChannel in guild with id $guildId")
         }.getOrElse {
             LOGGER.debug("Unable to connect to voice channel $voiceChannel. ${it.message}")

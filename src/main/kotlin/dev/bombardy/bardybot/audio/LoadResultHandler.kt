@@ -44,12 +44,12 @@ class LoadResultHandler(private val channel: TextChannel,
      * Will be called when a track cannot be found from the [AudioSourceManager],
      * either because the provided link did not resolve to an audio track or playlist,
      * the provided search query returned no results, or the source manager which
-     * the link would be processed using (e.g. YouTube, SoundCloud, HTTP) is disabled
-     * and so does not exist.
+     * the link would be processed using (e.g. YouTube, SoundCloud) is disabled and so
+     * does not exist.
      */
     override fun noMatches() {
-        val message = when (trackURL.contains("ytsearch:")) {
-            true -> trackURL.substring(9)
+        val message = when (trackURL.startsWith("ytsearch:")) {
+            true -> trackURL.substring(YT_SEARCH_PREFIX_LENGTH)
             else -> trackURL
         }
         channel.sendMessage("**I couldn't find anything under** \"$message\"").queue()
@@ -73,8 +73,12 @@ class LoadResultHandler(private val channel: TextChannel,
                 trackService.queueTracks(playlist.tracks, requester)
                 "*The first track of the playlist:* `${playlist.name}`"
             }
-            else -> "*What I found for:* \"${trackURL.substring(9)}\""
+            else -> "*What I found for:* \"${trackURL.substring(YT_SEARCH_PREFIX_LENGTH)}\""
         }
         channel.sendMessage("**I've queued up** `${firstTrack.info.title}` ($message) **ready to be played.**").queue()
+    }
+
+    companion object {
+        const val YT_SEARCH_PREFIX_LENGTH = 9
     }
 }

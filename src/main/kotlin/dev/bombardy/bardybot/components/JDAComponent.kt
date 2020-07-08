@@ -1,9 +1,11 @@
 package dev.bombardy.bardybot.components
 
-import com.sedmelluq.discord.lavaplayer.jdaudp.NativeAudioSendFactory
+import dev.bombardy.bardybot.JDAFunction
 import dev.bombardy.bardybot.config.BotConfig
+import dev.bombardy.bardybot.config.LavalinkConfig
 import dev.bombardy.bardybot.getLogger
 import dev.bombardy.octo.command.CommandManager
+import lavalink.client.io.jda.JdaLavalink
 import net.dv8tion.jda.api.JDA
 import net.dv8tion.jda.api.JDABuilder
 import net.dv8tion.jda.api.entities.Activity
@@ -11,6 +13,7 @@ import net.dv8tion.jda.api.requests.GatewayIntent
 import net.dv8tion.jda.api.utils.cache.CacheFlag
 import org.springframework.context.annotation.Bean
 import org.springframework.stereotype.Component
+import java.net.URI
 import kotlin.system.exitProcess
 
 /**
@@ -25,12 +28,25 @@ import kotlin.system.exitProcess
 class JDAComponent {
 
     @Bean
-    fun jda(config: BotConfig) = runCatching {
-        JDABuilder.create(config.token, GATEWAY_INTENTS)
+    fun jdaFunction() = JDAFunction()
+
+    @Bean
+    fun lavalink(jdaFunction: JDAFunction, config: LavalinkConfig) = JdaLavalink(
+            "730367951659859998",
+            1,
+            jdaFunction
+    ).apply { addNode(config.name, URI.create("wss://node-1.lavalink.prevarinite.com"), config.password) }
+
+    @Bean
+    fun jda(jdaFunction: JDAFunction, lavalink: JdaLavalink, config: BotConfig): JDA = runCatching {
+        val jda = JDABuilder.create(config.token, GATEWAY_INTENTS)
                 .setActivity(Activity.playing("prevarinite.com"))
-                .setAudioSendFactory(NativeAudioSendFactory())
+                .setVoiceDispatchInterceptor(lavalink.voiceInterceptor)
                 .disableCache(DISABLED_FLAGS)
                 .build()
+
+        jdaFunction.jda = jda
+        return jda
     }.getOrElse {
         LOGGER.error("Your bot token is empty or invalid! You can configure your token by providing the -Dbot.token=my_token argument when running this application")
         exitProcess(0)

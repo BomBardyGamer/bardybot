@@ -32,8 +32,7 @@ import kotlin.time.Duration
 @SpringBootApplication
 @EnableCaching
 class BardyBotApplication @Autowired constructor(
-        private val audioPlayerManager: AudioPlayerManager,
-        private val connectionFactory: LettuceConnectionFactory
+        private val audioPlayerManager: AudioPlayerManager
 ) {
 
     /**

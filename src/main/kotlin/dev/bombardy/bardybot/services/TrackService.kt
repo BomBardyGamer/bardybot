@@ -7,6 +7,7 @@ import dev.bombardy.bardybot.audio.MusicManager
 import dev.bombardy.bardybot.audio.Result
 import dev.bombardy.bardybot.getBean
 import dev.bombardy.bardybot.getLogger
+import lavalink.client.io.jda.JdaLavalink
 import net.dv8tion.jda.api.JDA
 import net.dv8tion.jda.api.entities.Member
 import net.dv8tion.jda.api.entities.TextChannel
@@ -24,18 +25,14 @@ import org.springframework.stereotype.Service
 @Service
 class TrackService @Autowired constructor(
         private val connectionService: ConnectionService,
-        private val jda: JDA,
+        private val lavalink: JdaLavalink,
         private val beanFactory: BeanFactory
 ) {
 
     val musicManagers = mutableMapOf<String, MusicManager>()
 
     @Synchronized
-    fun getMusicManager(guildId: String): MusicManager {
-        val musicManager = musicManagers.getOrPut(guildId, { beanFactory.getBean() })
-        requireNotNull(jda.getGuildById(guildId)).audioManager.sendingHandler = musicManager.sendHandler
-        return musicManager
-    }
+    fun getMusicManager(guildId: String) = musicManagers.getOrPut(guildId, { MusicManager(lavalink.getLink(guildId)) })
 
     fun loadTrack(channel: TextChannel, track: List<String>, requester: Member): Result {
         val musicManager = getMusicManager(channel.guild.id)

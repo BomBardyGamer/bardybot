@@ -4,6 +4,11 @@
       "name": "bot",
       "type": "dev.bombardy.bardybot.config.BotConfig",
       "sourceType": "dev.bombardy.bardybot.config.BotConfig"
+    },
+    {
+      "name": "lavalink",
+      "type": "dev.bombardy.bardybot.config.LavalinkConfig",
+      "sourceType": "dev.bombardy.bardybot.config.LavalinkConfig"
     }
   ],
   "properties": [
@@ -18,19 +23,14 @@
       "description": "Description for bot.prefix."
     },
     {
-      "name": "redis.hostname",
+      "name": "lavalink.name",
       "type": "java.lang.String",
-      "description": "Description for redis.hostname."
+      "description": "Description for lavalink.name."
     },
     {
-      "name": "redis.port",
-      "type": "java.lang.Integer",
-      "description": "Description for redis.port."
-    },
-    {
-      "name": "redis.database",
-      "type": "java.lang.Integer",
-      "description": "Description for redis.database."
+      "name": "lavalink.password",
+      "type": "java.lang.String",
+      "description": "Description for lavalink.password."
     }
   ]
 }
