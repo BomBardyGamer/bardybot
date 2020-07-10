@@ -1,15 +1,11 @@
 package dev.bombardy.bardybot.audio
 
-import com.sedmelluq.discord.lavaplayer.player.AudioPlayer
-import com.sedmelluq.discord.lavaplayer.player.event.AudioEventAdapter
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason
 import dev.bombardy.bardybot.getLogger
 import lavalink.client.player.IPlayer
 import lavalink.client.player.event.PlayerEventListenerAdapter
-import java.util.*
 import java.util.concurrent.ArrayBlockingQueue
-import kotlin.concurrent.schedule
 
 /**
  * Represents a Guild Track Scheduler, used for queueing, clearing, skipping,
@@ -37,8 +33,6 @@ class TrackScheduler(private val player: IPlayer) : PlayerEventListenerAdapter()
             player.playTrack(track)
         }
     }
-
-    fun clearQueue() = queue.clear()
 
     fun nextTrack(): Boolean {
         val next = queue.poll()

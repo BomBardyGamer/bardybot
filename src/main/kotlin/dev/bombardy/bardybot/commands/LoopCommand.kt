@@ -4,7 +4,7 @@ import dev.bombardy.bardybot.services.TrackService
 import dev.bombardy.octo.command.Command
 import net.dv8tion.jda.api.entities.Message
 
-class LoopCommand(private val trackService: TrackService) : Command(listOf("loop", "l"), true) {
+class LoopCommand(private val trackService: TrackService) : Command(listOf("loop", "l", "repeat"), true) {
 
     override suspend fun execute(message: Message, arguments: List<String>) {
         val channel = message.textChannel

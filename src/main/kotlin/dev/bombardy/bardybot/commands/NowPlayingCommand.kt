@@ -15,17 +15,18 @@ class NowPlayingCommand(private val trackService: TrackService) : Command(listOf
 
     override suspend fun execute(message: Message, arguments: List<String>) {
         val channel = message.textChannel
-        val musicManager = trackService.getMusicManager(message.guild.id)
+        val audioPlayer = trackService.getMusicManager(message.guild.id).player
 
-        val nowPlaying = musicManager.player.playingTrack
+        val nowPlaying = audioPlayer.playingTrack
                 ?: return channel.sendMessage("**I'm not playing anything at the moment! Use the play command to get the party started!**").queue()
         val requester = nowPlaying.userData as? Member
                 ?: return LOGGER.error("User data for requested track $nowPlaying should have been of type Member and wasn't, please report to creator.")
+        val position = audioPlayer.trackPosition
 
-        val position = nowPlaying.position.milliseconds.format()
+        val formattedPosition = position.milliseconds.format()
         val duration = nowPlaying.duration.milliseconds.format()
 
-        val percentage = (nowPlaying.position.toDouble() / nowPlaying.duration)
+        val percentage = (position.toDouble() / nowPlaying.duration)
 
         val embed = EmbedBuilder()
                 .setAuthor("What I'm playing now", "https://bot.bardy.me", "https://cdn.prevarinite.com/images/bbg.jpg")
@@ -35,7 +36,7 @@ class NowPlayingCommand(private val trackService: TrackService) : Command(listOf
                     
                     `${calculateBar(percentage)}`
                     
-                    `$position / $duration`
+                    `$formattedPosition / $duration`
                     
                     *Requested by: ${requester.formatName()}*
                 """.trimIndent())

@@ -9,5 +9,7 @@ class LavalinkConfig {
 
     lateinit var name: String
 
+    lateinit var url: String
+
     lateinit var password: String
 }

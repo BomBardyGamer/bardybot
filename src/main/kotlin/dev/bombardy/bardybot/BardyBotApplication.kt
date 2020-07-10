@@ -30,7 +30,6 @@ import kotlin.time.Duration
  * @since 1.0
  */
 @SpringBootApplication
-@EnableCaching
 class BardyBotApplication @Autowired constructor(
         private val audioPlayerManager: AudioPlayerManager
 ) {
@@ -99,8 +98,8 @@ fun Duration.format() = when (inHours.toInt() > 0) {
  * @return the [Member]'s name in a specific format, as a [String]
  */
 fun Member.formatName() = when (nickname) {
-    null -> String.format("%s#%s", user.name, user.discriminator)
-    else -> String.format("%s (%s#%s)", nickname, user.name, user.discriminator)
+    null -> user.asTag
+    else -> "$nickname (${user.asTag})"
 }
 
 /**

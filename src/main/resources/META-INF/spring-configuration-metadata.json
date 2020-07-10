@@ -23,9 +23,19 @@
       "description": "Description for bot.prefix."
     },
     {
+      "name": "bot.clientId",
+      "type": "java.lang.String",
+      "description": "Description for bot.clientId."
+    },
+    {
       "name": "lavalink.name",
       "type": "java.lang.String",
       "description": "Description for lavalink.name."
+    },
+    {
+      "name": "lavalink.url",
+      "type": "java.lang.String",
+      "description": "Description for lavalink.url."
     },
     {
       "name": "lavalink.password",

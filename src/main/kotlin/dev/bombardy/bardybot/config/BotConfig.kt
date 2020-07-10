@@ -13,6 +13,8 @@ import org.springframework.context.annotation.Configuration
 @ConfigurationProperties(prefix = "bot")
 class BotConfig {
 
+    lateinit var clientId: String
+
     /**
      * The token of the Discord Bot, used to connect to the Bot application
      * using Discord's API.

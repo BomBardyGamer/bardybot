@@ -31,11 +31,11 @@ class JDAComponent {
     fun jdaFunction() = JDAFunction()
 
     @Bean
-    fun lavalink(jdaFunction: JDAFunction, config: LavalinkConfig) = JdaLavalink(
-            "730367951659859998",
+    fun lavalink(jdaFunction: JDAFunction, linkConfig: LavalinkConfig, botConfig: BotConfig) = JdaLavalink(
+            botConfig.clientId,
             1,
             jdaFunction
-    ).apply { addNode(config.name, URI.create("wss://node-1.lavalink.prevarinite.com"), config.password) }
+    ).apply { addNode(linkConfig.name, URI.create(linkConfig.url), linkConfig.password) }
 
     @Bean
     fun jda(jdaFunction: JDAFunction, lavalink: JdaLavalink, config: BotConfig): JDA = runCatching {
@@ -59,7 +59,8 @@ class JDAComponent {
 
         private val GATEWAY_INTENTS = listOf(
                 GatewayIntent.GUILD_MESSAGES,
-                GatewayIntent.GUILD_VOICE_STATES
+                GatewayIntent.GUILD_VOICE_STATES,
+                GatewayIntent.GUILD_MESSAGE_REACTIONS
         )
 
         private val DISABLED_FLAGS = listOf(
