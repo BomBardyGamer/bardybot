@@ -39,7 +39,7 @@ class TrackScheduler(private val player: IPlayer) : PlayerEventListenerAdapter()
 
         if (next == null) {
             player.stopTrack()
-            return true
+            return false
         }
 
         player.playTrack(next)

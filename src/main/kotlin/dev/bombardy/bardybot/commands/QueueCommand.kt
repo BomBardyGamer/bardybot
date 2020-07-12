@@ -1,11 +1,9 @@
 package dev.bombardy.bardybot.commands
 
-import dev.bombardy.bardybot.format
-import dev.bombardy.bardybot.formatName
-import dev.bombardy.bardybot.getLogger
+import dev.bombardy.bardybot.*
 import dev.bombardy.bardybot.services.TrackService
-import dev.bombardy.bardybot.sumBy
 import dev.bombardy.octo.command.Command
+import io.sentry.Sentry
 import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.entities.Member
 import net.dv8tion.jda.api.entities.Message
@@ -51,7 +49,12 @@ class QueueCommand(private val trackService: TrackService) : Command(listOf("que
                 return
             } else {
                 val requester = nowPlaying.userData as? Member
-                        ?: return LOGGER.error("User data for requested track $nowPlaying should have been of type Member and wasn't, please report to creator.")
+
+                if (requester == null) {
+                    Sentry.capture("User data for requested track $nowPlaying should have been of type Member and wasn't.")
+                    LOGGER.error("User data for requested track $nowPlaying should have been of type Member and wasn't, please report to creator.")
+                    return
+                }
 
                 embed.appendDescription("""
                     [${nowPlaying.info.title}](${nowPlaying.info.uri}) | `${nowPlaying.duration.milliseconds.format()}`
@@ -76,7 +79,12 @@ class QueueCommand(private val trackService: TrackService) : Command(listOf("que
         var itemNumber = 1
         queueAsPages[pageNumber - 1].forEach {
             val requester = it.userData as? Member
-                    ?: return LOGGER.error("User data for requested track $it should have been of type Member and wasn't, please report to creator.")
+
+            if (requester == null) {
+                Sentry.capture("User data for requested track $it should have been of type Member and wasn't.")
+                LOGGER.error("User data for requested track $it should have been of type Member and wasn't, please report to creator.")
+                return
+            }
 
             embed.appendDescription("""
                 

@@ -8,6 +8,10 @@ import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.MessageBuilder
 import net.dv8tion.jda.api.entities.Message
 import java.awt.Color
+import java.time.Duration
+import java.util.concurrent.TimeUnit
+import kotlin.time.milliseconds
+import kotlin.time.toJavaDuration
 
 /**
  * Handles command execution for the play command, which plays music through the bot.
@@ -33,19 +37,22 @@ class PlayCommand(
     override suspend fun execute(message: Message, arguments: List<String>) {
         val member = message.member ?: return
         val channel = message.textChannel
+        val audioPlayer = trackService.getMusicManager(channel.guild.id).player
 
         if (arguments.isEmpty()) {
-            val audioPlayer = trackService.getMusicManager(channel.guild.id).player
-
             if (audioPlayer.isPaused) {
-                LOGGER.info("Attempting to resume paused track ${audioPlayer.playingTrack}")
+                LOGGER.debug("Attempting to resume paused track ${audioPlayer.playingTrack}")
                 audioPlayer.isPaused = false
 
-                channel.sendMessage("**I've started playing the music again!** *About time...*")
+                channel.sendMessage("**About time you played that again, I was starting to get bored!**").queue()
                 return
             }
             channel.sendMessage(helpMessage).queue()
             return
+        }
+
+        if (audioPlayer.isPaused) {
+            channel.sendMessage("**Just to let you know, I'm still on pause from earlier!**").queue()
         }
 
         LOGGER.debug("Delegating track load to TrackService. Provided arguments: channel - $channel, arguments - $arguments, requester - $member")

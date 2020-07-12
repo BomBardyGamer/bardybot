@@ -13,7 +13,7 @@ class PauseCommand(private val trackService: TrackService) : Command(listOf("pau
         if (!audioPlayer.isPaused) {
             LOGGER.debug("Attempting to pause currently playing track ${audioPlayer.playingTrack}")
             audioPlayer.isPaused = true
-            message.channel.sendMessage("**I've put the music on pause...** *for now...*").queue()
+            message.channel.sendMessage("**Ah come on, I was listening to that!**").queue()
         }
     }
 

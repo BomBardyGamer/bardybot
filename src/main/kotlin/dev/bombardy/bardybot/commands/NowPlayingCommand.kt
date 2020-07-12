@@ -18,7 +18,7 @@ class NowPlayingCommand(private val trackService: TrackService) : Command(listOf
         val audioPlayer = trackService.getMusicManager(message.guild.id).player
 
         val nowPlaying = audioPlayer.playingTrack
-                ?: return channel.sendMessage("**I'm not playing anything at the moment! Use the play command to get the party started!**").queue()
+                ?: return channel.sendMessage("**The party hasn't started yet, there's a play command you can use to kick it off!**").queue()
         val requester = nowPlaying.userData as? Member
                 ?: return LOGGER.error("User data for requested track $nowPlaying should have been of type Member and wasn't, please report to creator.")
         val position = audioPlayer.trackPosition
@@ -29,16 +29,17 @@ class NowPlayingCommand(private val trackService: TrackService) : Command(listOf
         val percentage = (position.toDouble() / nowPlaying.duration)
 
         val embed = EmbedBuilder()
-                .setAuthor("What I'm playing now", "https://bot.bardy.me", "https://cdn.prevarinite.com/images/bbg.jpg")
+                .setAuthor("What banging tune I've got on", "https://bot.bardy.me", "https://cdn.prevarinite.com/images/bbg.jpg")
                 .setThumbnail("https://img.youtube.com/vi/${nowPlaying.identifier}/maxresdefault.jpg")
                 .setDescription("""
-                    [${nowPlaying.info.title}](${nowPlaying.info.uri})
-                    
+                    Got [${nowPlaying.info.title}](${nowPlaying.info.uri}) playing now!
+
+                    We're this far through:
                     `${calculateBar(percentage)}`
                     
                     `$formattedPosition / $duration`
                     
-                    *Requested by: ${requester.formatName()}*
+                    *Who put it on? ${requester.formatName()} did!*
                 """.trimIndent())
                 .setColor(16737792)
                 .build()

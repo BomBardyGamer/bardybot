@@ -27,7 +27,7 @@ class LoadResultHandler(private val channel: TextChannel,
      * Will be called when a track fails to load from the [AudioSourceManager],
      * usually when an outbound connection cannot be established.
      */
-    override fun loadFailed(exception: FriendlyException) = channel.sendMessage("Could not play: ${exception.message}").queue()
+    override fun loadFailed(exception: FriendlyException) = channel.sendMessage("**I did my best, but couldn't play what you requested for this reason:** ${exception.message}").queue()
 
     /**
      * Will be called when a track is found by the [AudioSourceManager] and will
@@ -35,7 +35,7 @@ class LoadResultHandler(private val channel: TextChannel,
      * in the constructor of this class).
      */
     override fun trackLoaded(track: AudioTrack) {
-        channel.sendMessage("**I've queued up** `${track.info.title}` **ready to be played.**").queue()
+        channel.sendMessage("**I found this banging tune** `${track.info.title}` **and queued it up to be played!**").queue()
         track.userData = requester
         trackService.playTrack(channel.guild.id, track)
     }
@@ -52,7 +52,7 @@ class LoadResultHandler(private val channel: TextChannel,
             true -> trackURL.substring(YT_SEARCH_PREFIX_LENGTH)
             else -> trackURL
         }
-        channel.sendMessage("**I couldn't find anything under** \"$message\"").queue()
+        channel.sendMessage("**I tried very hard, but couldn't find any results for** \"$message\"").queue()
     }
 
     /**
@@ -71,11 +71,11 @@ class LoadResultHandler(private val channel: TextChannel,
         val message = when (playlist.isSearchResult) {
             false -> {
                 trackService.queueTracks(playlist.tracks, requester)
-                "*The first track of the playlist:* `${playlist.name}`"
+                "*The first banging tune in the playlist:* `${playlist.name}`"
             }
-            else -> "*What I found for:* \"${trackURL.substring(YT_SEARCH_PREFIX_LENGTH)}\""
+            else -> "*Your original request:* \"${trackURL.substring(YT_SEARCH_PREFIX_LENGTH)}\""
         }
-        channel.sendMessage("**I've queued up** `${firstTrack.info.title}` ($message) **ready to be played.**").queue()
+        channel.sendMessage("**I found this banging tune** `${firstTrack.info.title}` ($message) **and queued it up to be played!**").queue()
     }
 
     companion object {

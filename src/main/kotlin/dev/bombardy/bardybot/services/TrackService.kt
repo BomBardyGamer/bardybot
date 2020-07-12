@@ -60,7 +60,7 @@ class TrackService @Autowired constructor(
         val connectionResult = connectionService.join(requireNotNull(voiceChannel))
         if (connectionResult != Result.SUCCESSFUL) return connectionResult
 
-        channel.sendMessage("**I'm performing a search for your query** `$trackString`").queue()
+        channel.sendMessage("**I'm having a look around to see if I can find ** `$trackString`").queue()
         playerManager.loadItemOrdered(musicManager, trackURL, LoadResultHandler(channel, requester, trackURL, this))
 
         return Result.SUCCESSFUL

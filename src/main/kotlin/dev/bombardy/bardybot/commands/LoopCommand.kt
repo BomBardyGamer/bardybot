@@ -11,8 +11,8 @@ class LoopCommand(private val trackService: TrackService) : Command(listOf("loop
         val scheduler = trackService.getMusicManager(message.textChannel.guild.id).scheduler
 
         when (scheduler.isLooping) {
-            false -> channel.sendMessage("**I've enabled looping! I will now loop the current track for all eternity!** *Yay...*").queue()
-            else -> channel.sendMessage("**I've disabled looping! I will no longer loop the current track!** *Finally...*").queue()
+            false -> channel.sendMessage("**Loop's on boss, gonna be looping this corker of a tune until you tell me to stop!**").queue()
+            else -> channel.sendMessage("**Loop's off boss, I'll stop looping now!**").queue()
         }
 
         scheduler.isLooping = !scheduler.isLooping

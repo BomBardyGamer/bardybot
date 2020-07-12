@@ -4,6 +4,7 @@ import dev.bombardy.bardybot.commands.*
 import dev.bombardy.octo.command.CommandManager
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
+import javax.annotation.PostConstruct
 
 /**
  * Handles command registration. Will do more in the future.
@@ -13,11 +14,12 @@ import org.springframework.stereotype.Service
  */
 @Service
 class CommandService @Autowired constructor(
-        commandManager: CommandManager,
-        trackService: TrackService
+        private val commandManager: CommandManager,
+        private val trackService: TrackService
 ) {
 
-    init {
+    @PostConstruct
+    fun registerCommands() {
         commandManager.register(PlayCommand(trackService, commandManager.prefix))
         commandManager.register(PauseCommand(trackService))
         commandManager.register(SkipCommand(trackService))
@@ -25,5 +27,6 @@ class CommandService @Autowired constructor(
         commandManager.register(LoopCommand(trackService))
         commandManager.register(NowPlayingCommand(trackService))
         commandManager.register(VolumeCommand(trackService))
+        commandManager.register(VersionCommand())
     }
 }

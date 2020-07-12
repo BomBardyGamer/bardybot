@@ -1,14 +1,14 @@
 package dev.bombardy.bardybot
 
-import com.sedmelluq.discord.lavaplayer.player.AudioConfiguration
-import com.sedmelluq.discord.lavaplayer.player.AudioConfiguration.ResamplingQuality
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager
-import com.sedmelluq.discord.lavaplayer.source.AudioSourceManager
 import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers
 import com.sedmelluq.discord.lavaplayer.source.soundcloud.SoundCloudAudioSourceManager
 import com.sedmelluq.discord.lavaplayer.source.twitch.TwitchStreamAudioSourceManager
 import com.sedmelluq.discord.lavaplayer.source.vimeo.VimeoAudioSourceManager
 import com.sedmelluq.discord.lavaplayer.source.youtube.YoutubeAudioSourceManager
+import dev.bombardy.bardybot.config.SentryConfig
+import dev.bombardy.bardybot.listeners.VoiceListener
+import io.sentry.Sentry
 import net.dv8tion.jda.api.JDA
 import net.dv8tion.jda.api.entities.Member
 import org.slf4j.Logger
@@ -17,10 +17,7 @@ import org.springframework.beans.factory.BeanFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
-import org.springframework.cache.annotation.EnableCaching
-import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory
 import javax.annotation.PostConstruct
-import javax.annotation.PreDestroy
 import kotlin.time.Duration
 
 /**
@@ -31,7 +28,10 @@ import kotlin.time.Duration
  */
 @SpringBootApplication
 class BardyBotApplication @Autowired constructor(
-        private val audioPlayerManager: AudioPlayerManager
+        private val audioPlayerManager: AudioPlayerManager,
+        private val sentryConfig: SentryConfig,
+        private val jda: JDA,
+        private val voiceListener: VoiceListener
 ) {
 
     /**
@@ -43,7 +43,7 @@ class BardyBotApplication @Autowired constructor(
      * the server's IP.
      */
     @PostConstruct
-    fun init() {
+    fun initSourceManagers() {
         AudioSourceManagers.registerLocalSource(audioPlayerManager)
 
         audioPlayerManager.registerSourceManager(YoutubeAudioSourceManager(true))
@@ -53,9 +53,21 @@ class BardyBotApplication @Autowired constructor(
 
         audioPlayerManager.setTrackStuckThreshold(5000)
     }
-}
 
-val LOGGER = getLogger<BardyBotApplication>()
+    @PostConstruct
+    fun initSentry() {
+        Sentry.init(sentryConfig.dsn)
+    }
+
+    @PostConstruct
+    fun initListeners() {
+        jda.addEventListener(voiceListener)
+    }
+
+    companion object {
+        private val LOGGER = getLogger<BardyBotApplication>()
+    }
+}
 
 fun main() {
     runApplication<BardyBotApplication>()
@@ -99,7 +111,7 @@ fun Duration.format() = when (inHours.toInt() > 0) {
  */
 fun Member.formatName() = when (nickname) {
     null -> user.asTag
-    else -> "$nickname (${user.asTag})"
+    else -> "${user.asTag} (also known as $nickname)"
 }
 
 /**

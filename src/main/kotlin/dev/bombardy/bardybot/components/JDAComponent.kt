@@ -4,6 +4,7 @@ import dev.bombardy.bardybot.JDAFunction
 import dev.bombardy.bardybot.config.BotConfig
 import dev.bombardy.bardybot.config.LavalinkConfig
 import dev.bombardy.bardybot.getLogger
+import dev.bombardy.bardybot.listeners.VoiceListener
 import dev.bombardy.octo.command.CommandManager
 import lavalink.client.io.jda.JdaLavalink
 import net.dv8tion.jda.api.JDA

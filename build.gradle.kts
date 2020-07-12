@@ -15,7 +15,7 @@ plugins {
 }
 
 group = "dev.bombardy"
-version = "1.4.1-BETA"
+version = "1.5-BETA"
 java.sourceCompatibility = JavaVersion.VERSION_1_8
 
 application.mainClassName = "dev.bombardy.bardybot.BardyBotApplicationKt"
@@ -46,13 +46,15 @@ dependencies {
     }
 
     // Discord-related
-    implementation("net.dv8tion:JDA:4.2.0_175")
-    implementation("com.github.FredBoat:Lavalink-Client:41e1025c")
+    implementation("net.dv8tion:JDA:4.2.0_177")
+    implementation("com.github.FredBoat:Lavalink-Client:41e1025cd4")
     implementation("com.sedmelluq:lavaplayer:1.3.50")
-    implementation("dev.bombardy:octo:1.0.1")
+    implementation("dev.bombardy:octo:1.0.2")
 
     // Logging
     implementation("ch.qos.logback:logback-classic:1.2.3")
+    implementation("io.sentry:sentry-spring:1.7.30")
+    implementation("io.sentry:sentry-logback:1.7.30")
 }
 
 tasks.withType<Test> {

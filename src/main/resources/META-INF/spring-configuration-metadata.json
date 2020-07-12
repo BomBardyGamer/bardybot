@@ -9,6 +9,11 @@
       "name": "lavalink",
       "type": "dev.bombardy.bardybot.config.LavalinkConfig",
       "sourceType": "dev.bombardy.bardybot.config.LavalinkConfig"
+    },
+    {
+      "name": "sentry",
+      "type": "dev.bombardy.bardybot.config.SentryConfig",
+      "sourceType": "dev.bombardy.bardybot.config.SentryConfig"
     }
   ],
   "properties": [
@@ -41,6 +46,11 @@
       "name": "lavalink.password",
       "type": "java.lang.String",
       "description": "Description for lavalink.password."
+    },
+    {
+      "name": "sentry.dsn",
+      "type": "java.lang.String",
+      "description": "Description for sentry.dsn."
     }
   ]
 }
