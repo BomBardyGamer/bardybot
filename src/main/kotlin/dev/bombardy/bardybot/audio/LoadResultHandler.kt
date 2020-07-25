@@ -17,10 +17,11 @@ import net.dv8tion.jda.api.entities.TextChannel
  * @author Callum Seabrook
  * @since 1.0
  */
-class LoadResultHandler(private val channel: TextChannel,
-                        private val requester: Member,
-                        private val trackURL: String,
-                        private val trackService: TrackService
+class LoadResultHandler(
+        private val channel: TextChannel,
+        private val requester: Member,
+        private val trackURL: String,
+        private val trackService: TrackService
 ) : AudioLoadResultHandler {
 
     /**

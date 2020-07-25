@@ -8,10 +8,6 @@ import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.MessageBuilder
 import net.dv8tion.jda.api.entities.Message
 import java.awt.Color
-import java.time.Duration
-import java.util.concurrent.TimeUnit
-import kotlin.time.milliseconds
-import kotlin.time.toJavaDuration
 
 /**
  * Handles command execution for the play command, which plays music through the bot.
@@ -56,7 +52,7 @@ class PlayCommand(
         }
 
         LOGGER.debug("Delegating track load to TrackService. Provided arguments: channel - $channel, arguments - $arguments, requester - $member")
-        trackService.loadTrack(channel, arguments, member).handle(channel)
+        trackService.loadTrack(channel, arguments.joinToString(" "), member).handle(channel)
     }
 
     companion object {

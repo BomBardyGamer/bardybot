@@ -13,35 +13,45 @@ class VoiceListener(
         private val trackService: TrackService
 ) : ListenerAdapter() {
 
-    private val timers = mutableMapOf<String, TimerTask>()
+    private val tasks = mutableMapOf<String, TimerTask>()
 
     override fun onGuildVoiceLeave(event: GuildVoiceLeaveEvent) {
         val guild = event.guild
         val guildId = guild.id
-        val botVoiceChannel = guild.selfMember.voiceState?.channel ?: return
+
+        val bot = guild.selfMember
+        val botVoiceChannel = bot.voiceState?.channel ?: return
 
         if (event.channelLeft != botVoiceChannel) return // Not the bot's channel
         if (event.channelLeft.members.size > 1) return // More than one user (someone else) still in channel
-        if (event.channelLeft.members[0] != guild.selfMember) return // Remaining member not the bot
+        if (event.channelLeft.members[0] != bot) return // Remaining member not the bot
 
-        trackService.getMusicManager(guildId).player.isPaused = true
+        val audioPlayer = trackService.getMusicManager(guildId).player
 
-        if (timers[guildId] != null) return // Ensure the timer is not replaced or repeated if active
+        audioPlayer.isPaused = true
 
-        val timerTask = Timer().schedule(300000) {
-            connectionService.leave(event.guild.id, true)
-            timers.remove(guildId)
+        if (tasks[guildId] != null) return
+
+        tasks[guildId] = Timer().schedule(300000) {
+            connectionService.leave(guildId)
+            trackService.removeMusicManager(guildId)
+            complete(guildId)
         }
-
-        timers[guildId] = timerTask
     }
 
     override fun onGuildVoiceJoin(event: GuildVoiceJoinEvent) {
         val guild = event.guild
         val botVoiceChannel = guild.selfMember.voiceState?.channel ?: return
 
+        if (tasks[guild.id] == null) return // Won't cancel if there isn't one running
+        if (event.entity == guild.selfMember) return // Won't run if the bot's the one joining
         if (event.channelJoined != botVoiceChannel) return
 
-        timers[guild.id]?.cancel()
+        complete(guild.id)
+    }
+
+    private fun complete(guildId: String) {
+        tasks[guildId]?.cancel()
+        tasks.remove(guildId)
     }
 }

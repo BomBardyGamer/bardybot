@@ -1,5 +1,6 @@
 package dev.bombardy.bardybot.commands
 
+import dev.bombardy.bardybot.BARDY_ORANGE
 import dev.bombardy.bardybot.format
 import dev.bombardy.bardybot.formatName
 import dev.bombardy.bardybot.getLogger
@@ -41,7 +42,7 @@ class NowPlayingCommand(private val trackService: TrackService) : Command(listOf
                     
                     *Who put it on? ${requester.formatName()} did!*
                 """.trimIndent())
-                .setColor(16737792)
+                .setColor(BARDY_ORANGE)
                 .build()
 
         channel.sendMessage(embed).queue()

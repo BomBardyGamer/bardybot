@@ -1,5 +1,6 @@
 package dev.bombardy.bardybot.commands
 
+import dev.bombardy.bardybot.BARDY_ORANGE
 import dev.bombardy.octo.command.Command
 import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.entities.Message
@@ -20,7 +21,7 @@ class VersionCommand : Command(listOf("version", "v", "info"), true) {
 
                     Lavalink - [3.3.1](https://github.com/Frederikam/Lavalink)
                 """.trimIndent())
-                 .setColor(16737792)
+                 .setColor(BARDY_ORANGE)
                  .build()
          ).queue()
     }

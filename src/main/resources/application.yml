@@ -1,0 +1,14 @@
+bot:
+  token: my_token
+  clientId: my_client_id
+  prefix: !
+
+lavalink:
+  nodes:
+    node-1:
+      name: lavalink-node-1
+      url: wss://localhost:9000
+      password: TheWorldsBestPassword
+
+#sentry:
+  #dsn: my_sentry_dsn

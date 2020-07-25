@@ -5,15 +5,11 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrack
 import dev.bombardy.bardybot.audio.LoadResultHandler
 import dev.bombardy.bardybot.audio.MusicManager
 import dev.bombardy.bardybot.audio.Result
-import dev.bombardy.bardybot.getBean
 import dev.bombardy.bardybot.getLogger
 import lavalink.client.io.jda.JdaLavalink
-import net.dv8tion.jda.api.JDA
 import net.dv8tion.jda.api.entities.Member
 import net.dv8tion.jda.api.entities.TextChannel
 import net.dv8tion.jda.api.entities.VoiceChannel
-import org.springframework.beans.factory.BeanFactory
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 
 /**
@@ -23,10 +19,10 @@ import org.springframework.stereotype.Service
  * @since 1.0
  */
 @Service
-class TrackService @Autowired constructor(
+class TrackService(
         private val connectionService: ConnectionService,
         private val lavalink: JdaLavalink,
-        private val beanFactory: BeanFactory
+        private val playerManager: AudioPlayerManager
 ) {
 
     val musicManagers = mutableMapOf<String, MusicManager>()
@@ -34,15 +30,15 @@ class TrackService @Autowired constructor(
     @Synchronized
     fun getMusicManager(guildId: String) = musicManagers.getOrPut(guildId, { MusicManager(lavalink.getLink(guildId)) })
 
-    fun loadTrack(channel: TextChannel, track: List<String>, requester: Member): Result {
+    @Synchronized
+    fun removeMusicManager(guildId: String) = musicManagers.remove(guildId)
+
+    fun loadTrack(channel: TextChannel, track: String, requester: Member): Result {
         val musicManager = getMusicManager(channel.guild.id)
-        val playerManager = beanFactory.getBean<AudioPlayerManager>()
 
-        val trackString = track.joinToString(" ")
-
-        val trackURL = when (URL_REGEX.matches(trackString)) {
-            true -> trackString
-            else -> "ytsearch:$trackString"
+        val trackURL = when (URL_REGEX.matches(track)) {
+            true -> track
+            else -> "ytsearch:$track"
         }
 
         if (requester.guild.voiceChannels.isEmpty()) {
@@ -60,7 +56,7 @@ class TrackService @Autowired constructor(
         val connectionResult = connectionService.join(requireNotNull(voiceChannel))
         if (connectionResult != Result.SUCCESSFUL) return connectionResult
 
-        channel.sendMessage("**I'm having a look around to see if I can find ** `$trackString`").queue()
+        channel.sendMessage("**I'm having a look around to see if I can find ** `$track`").queue()
         playerManager.loadItemOrdered(musicManager, trackURL, LoadResultHandler(channel, requester, trackURL, this))
 
         return Result.SUCCESSFUL

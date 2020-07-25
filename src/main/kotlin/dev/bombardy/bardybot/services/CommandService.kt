@@ -13,7 +13,7 @@ import javax.annotation.PostConstruct
  * @since 1.0
  */
 @Service
-class CommandService @Autowired constructor(
+class CommandService(
         private val commandManager: CommandManager,
         private val trackService: TrackService
 ) {

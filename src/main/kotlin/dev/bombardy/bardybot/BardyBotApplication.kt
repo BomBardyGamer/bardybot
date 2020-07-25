@@ -7,15 +7,13 @@ import com.sedmelluq.discord.lavaplayer.source.twitch.TwitchStreamAudioSourceMan
 import com.sedmelluq.discord.lavaplayer.source.vimeo.VimeoAudioSourceManager
 import com.sedmelluq.discord.lavaplayer.source.youtube.YoutubeAudioSourceManager
 import dev.bombardy.bardybot.config.SentryConfig
-import dev.bombardy.bardybot.listeners.VoiceListener
 import io.sentry.Sentry
-import net.dv8tion.jda.api.JDA
 import net.dv8tion.jda.api.entities.Member
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.BeanFactory
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.SpringBootApplication
+import org.springframework.boot.context.properties.ConfigurationPropertiesScan
 import org.springframework.boot.runApplication
 import javax.annotation.PostConstruct
 import kotlin.time.Duration
@@ -27,11 +25,10 @@ import kotlin.time.Duration
  * @since 1.0
  */
 @SpringBootApplication
-class BardyBotApplication @Autowired constructor(
+@ConfigurationPropertiesScan
+class BardyBotApplication(
         private val audioPlayerManager: AudioPlayerManager,
-        private val sentryConfig: SentryConfig,
-        private val jda: JDA,
-        private val voiceListener: VoiceListener
+        private val sentryConfig: SentryConfig
 ) {
 
     /**
@@ -56,12 +53,12 @@ class BardyBotApplication @Autowired constructor(
 
     @PostConstruct
     fun initSentry() {
-        Sentry.init(sentryConfig.dsn)
-    }
+        if (sentryConfig.dsn == null) {
+            LOGGER.warn("Sentry DSN was not present, skipping...")
+            return
+        }
 
-    @PostConstruct
-    fun initListeners() {
-        jda.addEventListener(voiceListener)
+        Sentry.init(sentryConfig.dsn)
     }
 
     companion object {
@@ -72,14 +69,6 @@ class BardyBotApplication @Autowired constructor(
 fun main() {
     runApplication<BardyBotApplication>()
 }
-
-/**
- * Gets the specified type [T] from its bean method using the [BeanFactory]
- *
- * @param T the type of the bean.
- * @return the type requested as [T]
- */
-inline fun <reified T> BeanFactory.getBean() = getBean(T::class.java)
 
 /**
  * Gets the SLF4J logger instance for the specified class [T] using the
@@ -125,3 +114,5 @@ inline fun <T> Iterable<T>.sumBy(selector: (T) -> Long): Long {
     }
     return sum
 }
+
+const val BARDY_ORANGE = 16737792

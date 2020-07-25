@@ -17,10 +17,7 @@ import org.springframework.stereotype.Service
  * @since 1.0
  */
 @Service
-class ConnectionService @Autowired constructor(
-        private val jda: JDA,
-        private val lavalink: JdaLavalink
-) {
+class ConnectionService(private val lavalink: JdaLavalink) {
 
     /**
      * Connects the bot to the given voice channel, or, if the bot is
@@ -43,28 +40,12 @@ class ConnectionService @Autowired constructor(
      *
      * //@param clearQueue if the queue should be cleared when the bot leaves the channel
      */
-    fun leave(guildId: String, clearQueue: Boolean) {
+    fun leave(guildId: String, clearQueue: Boolean = true) {
         val link = lavalink.getLink(guildId)
         if (clearQueue) link.resetPlayer()
 
         link.disconnect()
         LOGGER.debug("Successfully disconnected from voice channel")
-    }
-
-    fun reconnect(guildId: String) {
-        val link = lavalink.getLink(guildId)
-        val voiceChannel = link.channel?.let { requireNotNull(jda.getGuildById(guildId)).getVoiceChannelById(it) }
-
-        LOGGER.debug("Attempting to disconnect from voice channel $voiceChannel in guild with id $guildId")
-        link.disconnect()
-
-        LOGGER.debug("Attempting to reconnect to voice channel $voiceChannel in guild with id $guildId")
-        runCatching {
-            link.connect(voiceChannel)
-            LOGGER.debug("Successfully reconnected to voice channel $voiceChannel in guild with id $guildId")
-        }.getOrElse {
-            LOGGER.debug("Unable to connect to voice channel $voiceChannel. ${it.message}")
-        }
     }
 
     companion object {

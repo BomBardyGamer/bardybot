@@ -1,11 +1,8 @@
 package dev.bombardy.bardybot.config
 
 import org.springframework.boot.context.properties.ConfigurationProperties
-import org.springframework.context.annotation.Configuration
+import org.springframework.boot.context.properties.ConstructorBinding
 
-@Configuration
-@ConfigurationProperties(prefix = "sentry")
-class SentryConfig {
-
-    lateinit var dsn: String
-}
+@ConfigurationProperties("sentry")
+@ConstructorBinding
+data class SentryConfig(val dsn: String?)

@@ -22,7 +22,7 @@ class SkipCommand(private val trackService: TrackService) : Command(listOf("skip
             return
         }
 
-        message.channel.sendMessage("**I've skipped the track!** *About time...*").queue()
+        channel.sendMessage("**I've skipped the track!** *About time...*").queue()
     }
 
     companion object {

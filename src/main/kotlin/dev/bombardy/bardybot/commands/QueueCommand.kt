@@ -8,6 +8,7 @@ import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.entities.Member
 import net.dv8tion.jda.api.entities.Message
 import java.util.concurrent.ArrayBlockingQueue
+import java.util.concurrent.ThreadLocalRandom
 import kotlin.random.Random
 import kotlin.time.milliseconds
 
@@ -23,7 +24,7 @@ class QueueCommand(private val trackService: TrackService) : Command(listOf("que
         val queueAsPages = queue.chunked(10)
         val embed = EmbedBuilder()
                 .setTitle("Here's what I'm playing in ${message.guild.name}", "https://bot.bardy.me/")
-                .setColor(Random.Default.nextInt(16777216))
+                .setColor(ThreadLocalRandom.current().nextInt(RGB_MAX_VALUE))
 
         val pageNumber = runCatching {
             arguments.getOrElse(0) { "1" }.toInt()
@@ -112,6 +113,8 @@ class QueueCommand(private val trackService: TrackService) : Command(listOf("que
     }
 
     companion object {
+        const val RGB_MAX_VALUE = 16777216
+
         private val LOGGER = getLogger<QueueCommand>()
     }
 }

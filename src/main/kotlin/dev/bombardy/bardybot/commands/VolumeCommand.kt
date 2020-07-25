@@ -3,6 +3,7 @@ package dev.bombardy.bardybot.commands
 import dev.bombardy.bardybot.services.TrackService
 import dev.bombardy.octo.command.Command
 import net.dv8tion.jda.api.entities.Message
+import java.lang.AssertionError
 import kotlin.math.max
 import kotlin.math.min
 
@@ -12,14 +13,16 @@ class VolumeCommand(private val trackService: TrackService) : Command(listOf("vo
         val channel = message.channel
         val audioPlayer = trackService.getMusicManager(message.guild.id).player
 
+        val volumeBounds = Bounds(200, 0)
+
         val volume = runCatching {
-            min(200, max(0, arguments[0].toInt()))
+            forceBetween(arguments[0].toInt(), volumeBounds)
         }.getOrElse {
             val match = PERCENTAGE_REGEX.find(arguments[0])
             val number = match?.groups?.get(1)?.value?.toInt()
 
             if (number != null) {
-                return@getOrElse min(200, max(0, number))
+                return@getOrElse forceBetween(number, volumeBounds)
             }
 
             return channel.sendMessage("**Computers may seem like magic, but even we can't convert letters to numbers!**").queue()
@@ -32,6 +35,10 @@ class VolumeCommand(private val trackService: TrackService) : Command(listOf("vo
 
         audioPlayer.volume = volume
     }
+
+    private fun forceBetween(value: Int, bounds: Bounds) = min(bounds.upper, max(bounds.lower, value))
+
+    data class Bounds(val upper: Int, val lower: Int)
 
     companion object {
         private val PERCENTAGE_REGEX = "(\\d+)%".toRegex()

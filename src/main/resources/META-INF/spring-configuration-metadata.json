@@ -33,19 +33,9 @@
       "description": "Description for bot.clientId."
     },
     {
-      "name": "lavalink.name",
-      "type": "java.lang.String",
-      "description": "Description for lavalink.name."
-    },
-    {
-      "name": "lavalink.url",
-      "type": "java.lang.String",
-      "description": "Description for lavalink.url."
-    },
-    {
-      "name": "lavalink.password",
-      "type": "java.lang.String",
-      "description": "Description for lavalink.password."
+      "name": "lavalink.nodes",
+      "type": "java.util.Map<java.lang.String, dev.bombardy.bardybot.config.LavalinkConfig.NodeConfig>",
+      "description": "Description for lavalink."
     },
     {
       "name": "sentry.dsn",

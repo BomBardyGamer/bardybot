@@ -1,29 +1,19 @@
 package dev.bombardy.bardybot.config
 
 import org.springframework.boot.context.properties.ConfigurationProperties
+import org.springframework.boot.context.properties.ConstructorBinding
 import org.springframework.context.annotation.Configuration
 
 /**
- * Wrapper class for configuration values stored in application.properties
+ * Wrapper class for configuration values stored in application.yml
  *
  * @author Callum Seabrook
  * @since 1.0
  */
-@Configuration
-@ConfigurationProperties(prefix = "bot")
-class BotConfig {
-
-    lateinit var clientId: String
-
-    /**
-     * The token of the Discord Bot, used to connect to the Bot application
-     * using Discord's API.
-     */
-    lateinit var token: String
-
-    /**
-     * The prefix of the bot. Will be configurable per-guild via in-guild
-     * commands in a later version.
-     */
-    lateinit var prefix: String
-}
+@ConfigurationProperties("bot")
+@ConstructorBinding
+data class BotConfig(
+        val clientId: String,
+        val token: String,
+        val prefix: String
+)

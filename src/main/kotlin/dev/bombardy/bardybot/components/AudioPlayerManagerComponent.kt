@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Bean
 import org.springframework.stereotype.Component
 
 @Component
-class AudioPlayerManagerBean {
+class AudioPlayerManagerComponent {
 
     @Bean
     fun audioPlayerManager(): AudioPlayerManager = DefaultAudioPlayerManager()

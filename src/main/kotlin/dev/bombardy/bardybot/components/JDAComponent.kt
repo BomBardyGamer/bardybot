@@ -4,13 +4,14 @@ import dev.bombardy.bardybot.JDAFunction
 import dev.bombardy.bardybot.config.BotConfig
 import dev.bombardy.bardybot.config.LavalinkConfig
 import dev.bombardy.bardybot.getLogger
-import dev.bombardy.bardybot.listeners.VoiceListener
 import dev.bombardy.octo.command.CommandManager
 import lavalink.client.io.jda.JdaLavalink
 import net.dv8tion.jda.api.JDA
 import net.dv8tion.jda.api.JDABuilder
 import net.dv8tion.jda.api.entities.Activity
 import net.dv8tion.jda.api.requests.GatewayIntent
+import net.dv8tion.jda.api.utils.ChunkingFilter
+import net.dv8tion.jda.api.utils.MemberCachePolicy
 import net.dv8tion.jda.api.utils.cache.CacheFlag
 import org.springframework.context.annotation.Bean
 import org.springframework.stereotype.Component
@@ -36,20 +37,26 @@ class JDAComponent {
             botConfig.clientId,
             1,
             jdaFunction
-    ).apply { addNode(linkConfig.name, URI.create(linkConfig.url), linkConfig.password) }
+    ).apply {
+        linkConfig.nodes.values.forEach {
+            addNode(it.name, URI(it.url), it.password)
+        }
+    }
 
     @Bean
     fun jda(jdaFunction: JDAFunction, lavalink: JdaLavalink, config: BotConfig): JDA = runCatching {
         val jda = JDABuilder.create(config.token, GATEWAY_INTENTS)
-                .setActivity(Activity.playing("prevarinite.com"))
+                .setActivity(Activity.playing("bot.bardy.me | !help"))
                 .setVoiceDispatchInterceptor(lavalink.voiceInterceptor)
+                .setMemberCachePolicy(MemberCachePolicy.VOICE)
+                .setChunkingFilter(ChunkingFilter.NONE)
                 .disableCache(DISABLED_FLAGS)
                 .build()
 
         jdaFunction.jda = jda
         return jda
     }.getOrElse {
-        LOGGER.error("Your bot token is empty or invalid! You can configure your token by providing the -Dbot.token=my_token argument when running this application")
+        LOGGER.error("Your bot token is empty or invalid! You can configure your token by providing the setting the \"token\" value in application.yml to your token!")
         exitProcess(0)
     }
 
