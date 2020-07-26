@@ -23,7 +23,7 @@ class QueueCommand(private val trackService: TrackService) : Command(listOf("que
 
         val queueAsPages = queue.chunked(10)
         val embed = EmbedBuilder()
-                .setTitle("Here's what I'm playing in ${message.guild.name}", "https://bot.bardy.me/")
+                .setTitle("Here's what I've got lined up for you in ${message.guild.name}", "https://bot.bardy.me/")
                 .setColor(ThreadLocalRandom.current().nextInt(RGB_MAX_VALUE))
 
         val pageNumber = runCatching {
@@ -36,7 +36,7 @@ class QueueCommand(private val trackService: TrackService) : Command(listOf("que
         if (pageNumber == 1) {
             embed.setDescription("""
 
-            __What's playing now:__
+            __What I'm playing now:__
 
             """.trimIndent())
 
@@ -59,7 +59,7 @@ class QueueCommand(private val trackService: TrackService) : Command(listOf("que
 
                 embed.appendDescription("""
                     [${nowPlaying.info.title}](${nowPlaying.info.uri}) | `${nowPlaying.duration.milliseconds.format()}`
-                    *Requested by: ${requester.formatName()}*
+                    *Who put it on? ${requester.formatName()} did!*
 
                 """.trimIndent())
             }
@@ -74,7 +74,7 @@ class QueueCommand(private val trackService: TrackService) : Command(listOf("que
 
         embed.appendDescription("""
             
-            __What's next:__
+            __What I've got for you next:__
         """.trimIndent())
 
         var itemNumber = 1
@@ -90,7 +90,7 @@ class QueueCommand(private val trackService: TrackService) : Command(listOf("que
             embed.appendDescription("""
                 
                 `$itemNumber.` [${it.info.title}](${it.info.uri}) | `${it.duration.milliseconds.format()}`
-                *Requested by: ${requester.formatName()}*
+                *Who put it on? ${requester.formatName()} did!*
                 
             """.trimIndent())
             itemNumber++
@@ -104,7 +104,7 @@ class QueueCommand(private val trackService: TrackService) : Command(listOf("que
 
             embed.appendDescription("""
 
-                **${queue.size} $plural ready to be played, ${queue.sumBy { it.duration }.milliseconds.format()} long**
+                **${queue.size} banging $plural ready to be played, ${queue.sumBy { it.duration }.milliseconds.format()} long**
             """.trimIndent())
         }
 

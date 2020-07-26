@@ -2,7 +2,7 @@ import org.jetbrains.dokka.gradle.DokkaTask
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    id("org.springframework.boot") version "2.3.1.RELEASE"
+    id("org.springframework.boot") version "2.3.2.RELEASE"
     id("io.spring.dependency-management") version "1.0.9.RELEASE"
 
     kotlin("jvm") version "1.3.72"
@@ -13,7 +13,7 @@ plugins {
 }
 
 group = "dev.bombardy"
-version = "1.6.1-BETA"
+version = "1.6.2-BETA"
 java.sourceCompatibility = JavaVersion.VERSION_1_8
 
 application.mainClassName = "dev.bombardy.bardybot.BardyBotApplicationKt"
@@ -45,7 +45,7 @@ dependencies {
     }
 
     // Discord-related
-    implementation("net.dv8tion:JDA:4.2.0_177")
+    implementation("net.dv8tion:JDA:4.2.0_182")
     implementation("com.github.FredBoat:Lavalink-Client:41e1025cd4")
     implementation("com.sedmelluq:lavaplayer:1.3.50")
     implementation("dev.bombardy:octo:1.0.2")

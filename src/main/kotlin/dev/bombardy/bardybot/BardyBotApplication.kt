@@ -87,7 +87,7 @@ inline fun <reified T> getLogger(): Logger = LoggerFactory.getLogger(T::class.ja
 fun Duration.format() = when (inHours.toInt() > 0) {
     true -> String.format("%d:%02d:%02d", inHours.toInt(),
                 inMinutes.minus(inHours.toInt() * 60).toInt(),
-                inSeconds.minus(inMinutes.toInt() * 60 * 60).toInt())
+                inSeconds.minus(inMinutes.toInt() * 60).toInt())
 
     else -> String.format("%d:%02d", inMinutes.toInt(),
                 inSeconds.minus(inMinutes.toInt() * 60).toInt())
