@@ -11,7 +11,6 @@ import io.sentry.Sentry
 import net.dv8tion.jda.api.entities.Member
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import org.springframework.beans.factory.BeanFactory
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan
 import org.springframework.boot.runApplication
@@ -67,7 +66,9 @@ class BardyBotApplication(
 }
 
 fun main() {
-    runApplication<BardyBotApplication>()
+    runApplication<BardyBotApplication> {
+        setBanner(BardyBotBanner())
+    }
 }
 
 /**

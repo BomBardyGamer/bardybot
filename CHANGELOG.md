@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.7-BETA] - 2020-07-31
+### Added
+- Small REST API for retrieving the bot's status
+- Minor metrics system using Micrometer and Prometheus
+- ClearQueue command, for, well, clearing the queue
+- Custom banner
+
 ## [1.6.2-BETA] - 2020-07-26
 ### Changed
 - Slight language update, queue now says "Who put it on?" instead of "Requested By:"

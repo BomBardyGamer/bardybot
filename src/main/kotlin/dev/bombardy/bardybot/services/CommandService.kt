@@ -2,7 +2,6 @@ package dev.bombardy.bardybot.services
 
 import dev.bombardy.bardybot.commands.*
 import dev.bombardy.octo.command.CommandManager
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import javax.annotation.PostConstruct
 

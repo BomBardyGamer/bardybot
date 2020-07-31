@@ -3,7 +3,6 @@ package dev.bombardy.bardybot.commands
 import dev.bombardy.bardybot.services.TrackService
 import dev.bombardy.octo.command.Command
 import net.dv8tion.jda.api.entities.Message
-import java.lang.AssertionError
 import kotlin.math.max
 import kotlin.math.min
 

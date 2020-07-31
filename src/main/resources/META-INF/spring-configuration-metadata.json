@@ -14,6 +14,11 @@
       "name": "sentry",
       "type": "dev.bombardy.bardybot.config.SentryConfig",
       "sourceType": "dev.bombardy.bardybot.config.SentryConfig"
+    },
+    {
+      "name": "services",
+      "type": "dev.bombardy.bardybot.config.ServicesConfig",
+      "sourceType": "dev.bombardy.bardybot.config.ServicesConfig"
     }
   ],
   "properties": [
@@ -41,6 +46,16 @@
       "name": "sentry.dsn",
       "type": "java.lang.String",
       "description": "Description for sentry.dsn."
+    },
+    {
+      "name": "services.metrics",
+      "type": "java.lang.Boolean",
+      "description": "Description for services.metrics."
+    },
+    {
+      "name": "services.api",
+      "type": "java.lang.Boolean",
+      "description": "Description for services.api."
     }
   ]
 }
