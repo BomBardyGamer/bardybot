@@ -4,7 +4,7 @@ jdk: openjdk8
 services:
   - docker
 
-before_install:
+after_script:
   - docker build -t bombardygamer/bardybot:1.7.1-BETA .
 
 deploy:
