@@ -11,15 +11,15 @@ class VersionCommand : Command(listOf("version", "v", "info"), true) {
          message.channel.sendMessage(EmbedBuilder()
                 .setTitle("Here's a list of some awesome software I'm using:")
                 .setDescription("""
-                    **My Version:** [1.4.1-BETA](https://github.com/BomBardyGamer/BardyBot)
+                    **My Version:** [1.7-BETA](https://github.com/BomBardyGamer/BardyBot)
                     
                     **Powered By:**
                     Octo - [1.0.2](https://github.com/BomBardyGamer/Octo)
-                    JDA - [4.2.0_175](https://github.com/DV8FromTheWorld/JDA)
+                    JDA - [4.2.0_183](https://github.com/DV8FromTheWorld/JDA)
                     Lavalink-Client - [41e1025cd4](https://github.com/FredBoat/Lavalink-Client)
                     Lavaplayer - [1.3.50](https://github.com/sedmelluq/lavaplayer)
 
-                    Lavalink - [3.3.1](https://github.com/Frederikam/Lavalink)
+                    Lavalink - [3.3.1.1](https://github.com/Frederikam/Lavalink)
                 """.trimIndent())
                  .setColor(BARDY_ORANGE)
                  .build()

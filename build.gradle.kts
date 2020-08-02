@@ -14,7 +14,7 @@ plugins {
 }
 
 group = "dev.bombardy"
-version = "1.7-BETA"
+version = "1.7.1-BETA"
 java.sourceCompatibility = JavaVersion.VERSION_1_8
 
 application.mainClassName = "dev.bombardy.bardybot.BardyBotApplicationKt"
@@ -49,7 +49,7 @@ dependencies {
     }
 
     // Discord-related
-    implementation("net.dv8tion:JDA:4.2.0_182")
+    implementation("net.dv8tion:JDA:4.2.0_183")
     implementation("com.github.FredBoat:Lavalink-Client:41e1025cd4")
     implementation("com.sedmelluq:lavaplayer:1.3.50")
     implementation("dev.bombardy:octo:1.0.2")

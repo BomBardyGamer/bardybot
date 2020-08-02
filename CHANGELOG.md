@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.7.1-BETA] - 2020-08-02
+### Fixed
+- Version command versions, were very outdated since they are hard-coded and I forgot to update them
+
 ## [1.7-BETA] - 2020-07-31
 ### Added
 - Small REST API for retrieving the bot's status
@@ -18,7 +22,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Bug with hour time formatting, was multiplying the time in minutes by 3600 instead of 60 and taking that away
   from the time in seconds (to calculate time in seconds), producing a negative second count every time
-
 
 ## [1.6.1-BETA] - 2020-07-25
 ### Added

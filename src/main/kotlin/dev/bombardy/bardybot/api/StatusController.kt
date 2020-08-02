@@ -16,8 +16,12 @@ class StatusController {
 
     @GetMapping(produces = ["application/json"])
     fun overallStatus() = ResponseEntity.ok()
-            .body(Json(JsonConfiguration.Stable).stringify(BardyBotStatus.serializer(), BardyBotStatus("running")))
+                .body(JSON.stringify(BardyBotStatus.serializer(), BardyBotStatus("running")))
 
     @Serializable
-    data class BardyBotStatus(val status: String)
+    private data class BardyBotStatus(val status: String)
+
+    companion object {
+        private val JSON = Json(JsonConfiguration.Stable)
+    }
 }
