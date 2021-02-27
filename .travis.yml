@@ -5,7 +5,7 @@ services:
   - docker
 
 before_deploy:
-  - docker build -t bombardygamer/bardybot:1.7.1-BETA .
+  - docker build -t bombardygamer/bardybot:1.8-BETA .
 
 deploy:
   provider: script
