@@ -9,7 +9,8 @@ import com.sedmelluq.discord.lavaplayer.source.youtube.YoutubeAudioSourceManager
 import io.sentry.Sentry
 import me.bardy.bot.config.SentryConfig
 import net.dv8tion.jda.api.entities.Member
-import org.slf4j.Logger
+import org.apache.logging.log4j.LogManager
+import org.apache.logging.log4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan
@@ -79,7 +80,7 @@ fun main() {
  * @param T the class to log from
  * @return an instance of [Logger] for the specified class [T]
  */
-inline fun <reified T> logger(): Logger = LoggerFactory.getLogger(T::class.java)
+inline fun <reified T> logger(): Logger = LogManager.getLogger(T::class.java)
 
 /**
  * Formats the [Duration] in to a specific format.
@@ -95,22 +96,21 @@ inline fun <reified T> logger(): Logger = LoggerFactory.getLogger(T::class.java)
 //                inSeconds.minus(inMinutes.toInt() * 60).toInt())
 //}
 
+/**
+ * Formats the [Duration] in to a specific format.
+ *
+ * This format is either %d:%02d:%02d if this duration has an hour component greater than 0
+ * Or it is %d:%02d if it does not
+ *
+ * @return the [Duration] in one of the formats above
+ */
 fun Duration.format() = if (inHours.toInt() > 0) {
-//    String.format("%d:%02d:%02d",
-//        inHours.toInt(),
-//        inMinutes.minus(inHours.toInt() * 60).toInt(),
-//        inSeconds.minus(inMinutes.toInt() * 60).toInt()
-//    )
     "%d:%02d:%02d".format(
         inHours.toInt(),
         inMinutes.minus(inHours.toInt() * 60).toInt(),
         inSeconds.minus(inMinutes.toInt() * 60).toInt()
     )
 } else {
-//    String.format("%d:%02d",
-//        inMinutes.toInt(),
-//        inSeconds.minus(inMinutes.toInt() * 60).toInt()
-//    )
     "%d:%02d".format(
         inMinutes.toInt(),
         inSeconds.minus(inMinutes.toInt() * 60).toInt()

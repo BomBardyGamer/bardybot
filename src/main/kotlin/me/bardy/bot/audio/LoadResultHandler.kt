@@ -17,10 +17,10 @@ import net.dv8tion.jda.api.entities.TextChannel
  * @since 1.0
  */
 class LoadResultHandler(
-        private val channel: TextChannel,
-        private val requester: Member,
-        private val trackURL: String,
-        private val trackService: TrackService
+    private val channel: TextChannel,
+    private val requester: Member,
+    private val trackURL: String,
+    private val trackService: TrackService
 ) : AudioLoadResultHandler {
 
     /**
@@ -37,6 +37,7 @@ class LoadResultHandler(
     override fun trackLoaded(track: AudioTrack) {
         channel.sendMessage("**I found this banging tune** `${track.info.title}` **and queued it up to be played!**").queue()
         track.userData = requester
+        trackService.audioItemCache.put(trackURL, track)
         trackService.playTrack(channel.guild.id, track)
     }
 
@@ -63,6 +64,7 @@ class LoadResultHandler(
     override fun playlistLoaded(playlist: AudioPlaylist) {
         val firstTrack = playlist.selectedTrack ?: playlist.tracks.first()
         firstTrack.userData = requester
+        trackService.audioItemCache.put(trackURL, playlist)
         trackService.playTrack(channel.guild.id, firstTrack)
 
         val message = if (playlist.isSearchResult) {

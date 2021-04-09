@@ -2,60 +2,60 @@
   "groups": [
     {
       "name": "bot",
-      "type": "dev.bombardy.bardybot.config.BotConfig",
-      "sourceType": "dev.bombardy.bardybot.config.BotConfig"
+      "type": "me.bardy.bot.config.BotConfig",
+      "sourceType": "me.bardy.bot.config.BotConfig"
     },
     {
       "name": "lavalink",
-      "type": "dev.bombardy.bardybot.config.LavalinkConfig",
-      "sourceType": "dev.bombardy.bardybot.config.LavalinkConfig"
+      "type": "me.bardy.bot.config.LavalinkConfig",
+      "sourceType": "me.bardy.bot.config.LavalinkConfig"
     },
     {
       "name": "sentry",
-      "type": "dev.bombardy.bardybot.config.SentryConfig",
-      "sourceType": "dev.bombardy.bardybot.config.SentryConfig"
+      "type": "me.bardy.bot.config.SentryConfig",
+      "sourceType": "me.bardy.bot.config.SentryConfig"
     },
     {
       "name": "services",
-      "type": "dev.bombardy.bardybot.config.ServicesConfig",
-      "sourceType": "dev.bombardy.bardybot.config.ServicesConfig"
+      "type": "me.bardy.bot.config.ServicesConfig",
+      "sourceType": "me.bardy.bot.config.ServicesConfig"
     }
   ],
   "properties": [
     {
       "name": "bot.token",
       "type": "java.lang.String",
-      "description": "Description for bot.token."
+      "description": "The bot's token. This is used to authenticate with the Discord API"
     },
     {
       "name": "bot.prefix",
       "type": "java.lang.String",
-      "description": "Description for bot.prefix."
+      "description": "This is what is used to prefix commands that the bot recognises"
     },
     {
       "name": "bot.clientId",
       "type": "java.lang.String",
-      "description": "Description for bot.clientId."
+      "description": "This is used by Lavalink, and it is the ID of the bot"
     },
     {
       "name": "lavalink.nodes",
       "type": "java.util.Map<java.lang.String, dev.bombardy.bardybot.config.LavalinkConfig.NodeConfig>",
-      "description": "Description for lavalink."
+      "description": "Nodes are Lavalink servers that the bot can use to send audio from"
     },
     {
       "name": "sentry.dsn",
       "type": "java.lang.String",
-      "description": "Description for sentry.dsn."
+      "description": "The URL to POST Sentry requests to"
     },
     {
       "name": "services.metrics",
       "type": "java.lang.Boolean",
-      "description": "Description for services.metrics."
+      "description": "Enable/disable prometheus metrics for BardyBot"
     },
     {
       "name": "services.api",
       "type": "java.lang.Boolean",
-      "description": "Description for services.api."
+      "description": "Enable/disable BardyBot's HTTP API"
     }
   ]
 }

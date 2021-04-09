@@ -1,7 +1,6 @@
 package me.bardy.bot.components
 
 import lavalink.client.io.jda.JdaLavalink
-import me.bardy.bot.command.CommandManager
 import me.bardy.bot.config.BotConfig
 import me.bardy.bot.config.LavalinkConfig
 import me.bardy.bot.logger

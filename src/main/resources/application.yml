@@ -1,6 +1,6 @@
 bot:
   token: my_token
-  clientId: my_client_id
+  client-id: my_client_id
   prefix: !
 
 lavalink:

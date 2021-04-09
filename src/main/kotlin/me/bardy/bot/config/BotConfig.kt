@@ -12,7 +12,7 @@ import org.springframework.boot.context.properties.ConstructorBinding
 @ConfigurationProperties("bot")
 @ConstructorBinding
 data class BotConfig(
-        val clientId: String,
-        val token: String,
-        val prefix: String
+    val clientId: String,
+    val token: String,
+    val prefix: String
 )

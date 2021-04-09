@@ -19,7 +19,6 @@ import java.util.concurrent.ArrayBlockingQueue
 class TrackScheduler(private val player: IPlayer) : PlayerEventListenerAdapter() {
 
     var isLooping = false
-
     val queue = ArrayBlockingQueue<AudioTrack>(100)
 
     fun queue(track: AudioTrack) {
@@ -73,6 +72,7 @@ class TrackScheduler(private val player: IPlayer) : PlayerEventListenerAdapter()
     }
 
     companion object {
+
         private val LOGGER = logger<TrackScheduler>()
     }
 }

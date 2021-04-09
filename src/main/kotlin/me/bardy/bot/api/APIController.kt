@@ -12,16 +12,11 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @RequestMapping("/api")
 @ConditionalOnProperty("services.api")
-class StatusController {
+class APIController {
 
     @GetMapping("/status", produces = ["application/json"])
-    fun status() = ResponseEntity.ok().body(JSON.encodeToString(BardyBotStatus("running")))
+    fun status(): ResponseEntity<String> = ResponseEntity.ok().body(Json.encodeToString(BardyBotStatus("running")))
 
     @Serializable
     private data class BardyBotStatus(val status: String)
-
-    companion object {
-
-        private val JSON = Json {}
-    }
 }

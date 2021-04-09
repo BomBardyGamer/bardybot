@@ -4,6 +4,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.8-BETA] - 2021-04-01
+### Added
+- Brigader for command parsing and dispatching
+- Caffeine for caching command parse results and audio items
+- `CommandContext` to give us a few things we need
+
+### Changed
+- Moved commands into their own packages, to make them clearer to distinguish
+- Went back to Kotlin DSL from Groovy DSL
+- Massively cleaned up the queue command's code, to further avoid repeating ourselves unnecessarily
+- Versions for various dependencies that are used in the version command now come from a file in
+  META-INF called "versions.properties", to avoid us hard coding them and potentially forgetting to
+  update them (which happened a few times)
+- Made `ShardManager` use `guildCache`, rather than `guilds`, to give Discord a bit of a break
+
 ## [1.7.1-BETA] - 2020-08-02
 ### Fixed
 - Version command versions, were very outdated since they are hard-coded and I forgot to update them

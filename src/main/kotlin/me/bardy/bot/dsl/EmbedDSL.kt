@@ -11,32 +11,22 @@ annotation class EmbedDSL
 fun embed(builder: EmbedBuilder.() -> Unit) = EmbedBuilder().apply(builder).build()
 
 @EmbedDSL
-var EmbedBuilder.title: String
-    get() = ""
-    set(value) { setTitle(value) }
+fun EmbedBuilder.title(value: String) = setTitle(value)
 
 @EmbedDSL
-fun EmbedBuilder.title(title: String, url: String) = setTitle(title, url)
+fun EmbedBuilder.title(value: String, url: String) = setTitle(value, url)
 
 @EmbedDSL
-var EmbedBuilder.description: String
-    get() = ""
-    set(value) { setDescription(value) }
+fun EmbedBuilder.description(value: String) = setDescription(value)
 
 @EmbedDSL
-var EmbedBuilder.intColor: Int
-    get() = 0
-    set(value) { setColor(value) }
+fun EmbedBuilder.color(value: Int) = setColor(value)
 
 @EmbedDSL
-var EmbedBuilder.color: Color
-    get() = Color.WHITE
-    set(value) { setColor(value) }
+fun EmbedBuilder.color(value: Color) = setColor(value)
 
 @EmbedDSL
-var EmbedBuilder.thumbnail: String
-    get() = ""
-    set(value) { setThumbnail(value) }
+fun EmbedBuilder.thumbnail(value: String) = setThumbnail(value)
 
 @EmbedDSL
 fun EmbedBuilder.author(name: String, url: String, iconUrl: String) = setAuthor(name, url, iconUrl)
