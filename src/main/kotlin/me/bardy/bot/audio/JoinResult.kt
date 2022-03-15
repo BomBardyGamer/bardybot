@@ -2,7 +2,7 @@ package me.bardy.bot.audio
 
 import net.dv8tion.jda.api.entities.MessageChannel
 
-enum class Result(val message: String) {
+enum class JoinResult(val message: String) {
 
     SUCCESSFUL(""),
     NO_CHANNELS("**I can't play music if there isn't a channel to play music on!**"),
@@ -11,7 +11,11 @@ enum class Result(val message: String) {
     USER_NOT_IN_CHANNEL_WITH_BOT("**You need to be in the same channel as me to use my music commands!**"),
     OTHER("**An unrecognised internal error has occurred. Please report to creator.**");
 
-    fun handle(channel: MessageChannel) = if (message.isNotEmpty()) channel.sendMessage(message).queue() else Unit
+    fun handle(channel: MessageChannel) {
+        if (message.isNotEmpty()) channel.sendMessage(message).queue()
+    }
 
-    inline fun require(value: Result, failure: (Result) -> Unit) = if (value == this) Unit else failure(this)
+    inline fun require(value: JoinResult, failure: (JoinResult) -> Unit) {
+        if (value != this) failure(this)
+    }
 }

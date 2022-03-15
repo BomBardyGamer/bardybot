@@ -6,18 +6,15 @@ import com.sedmelluq.discord.lavaplayer.tools.FriendlyException
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack
 import me.bardy.bot.services.TrackService
+import net.dv8tion.jda.api.entities.GuildMessageChannel
 import net.dv8tion.jda.api.entities.Member
-import net.dv8tion.jda.api.entities.TextChannel
 
 /**
  * Represents the result of an attempt to load an audio track from a given URL, search query or
  * playlist, used to process the result of an attempt to load a given track by the Guild's [TrackService].
- *
- * @author Callum Seabrook
- * @since 1.0
  */
 class LoadResultHandler(
-    private val channel: TextChannel,
+    private val channel: GuildMessageChannel,
     private val requester: Member,
     private val trackURL: String,
     private val trackService: TrackService
@@ -27,7 +24,9 @@ class LoadResultHandler(
      * Will be called when a track fails to load from the [AudioSourceManager],
      * usually when an outbound connection cannot be established.
      */
-    override fun loadFailed(exception: FriendlyException) = channel.sendMessage("**I did my best, but couldn't play what you requested for this reason:** ${exception.message}").queue()
+    override fun loadFailed(exception: FriendlyException) {
+        channel.sendMessage("**I did my best, but couldn't play what you requested for this reason:** ${exception.message}").queue()
+    }
 
     /**
      * Will be called when a track is found by the [AudioSourceManager] and will
@@ -37,7 +36,7 @@ class LoadResultHandler(
     override fun trackLoaded(track: AudioTrack) {
         channel.sendMessage("**I found this banging tune** `${track.info.title}` **and queued it up to be played!**").queue()
         track.userData = requester
-        trackService.audioItemCache.put(trackURL, track)
+        trackService.cacheItem(trackURL, track)
         trackService.playTrack(channel.guild.id, track)
     }
 
@@ -49,8 +48,7 @@ class LoadResultHandler(
      * does not exist.
      */
     override fun noMatches() {
-        val message = if (trackURL.startsWith("ytsearch:")) trackURL.substring(YT_SEARCH_PREFIX_LENGTH) else trackURL
-        channel.sendMessage("**I tried very hard, but couldn't find any results for** \"$message\"").queue()
+        channel.sendMessage("**I tried very hard, but couldn't find any results for** \"${trackURL.removePrefix(SEARCH_PREFIX)}\"").queue()
     }
 
     /**
@@ -64,11 +62,11 @@ class LoadResultHandler(
     override fun playlistLoaded(playlist: AudioPlaylist) {
         val firstTrack = playlist.selectedTrack ?: playlist.tracks.first()
         firstTrack.userData = requester
-        trackService.audioItemCache.put(trackURL, playlist)
+        trackService.cacheItem(trackURL, playlist)
         trackService.playTrack(channel.guild.id, firstTrack)
 
         val message = if (playlist.isSearchResult) {
-            "*Your original request:* \"${trackURL.substring(YT_SEARCH_PREFIX_LENGTH)}\""
+            "*Your original request:* \"${trackURL.removePrefix(SEARCH_PREFIX)}\""
         } else {
             trackService.queueTracks(playlist.tracks, requester)
             "*The first banging tune in the playlist* `${playlist.name}`"
@@ -78,6 +76,6 @@ class LoadResultHandler(
 
     companion object {
 
-        const val YT_SEARCH_PREFIX_LENGTH = 9
+        private const val SEARCH_PREFIX = "ytsearch:"
     }
 }

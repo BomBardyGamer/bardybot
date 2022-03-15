@@ -1,19 +1,23 @@
 package me.bardy.bot.commands.misc
 
-import me.bardy.bot.audio.Result
+import com.mojang.brigadier.tree.LiteralCommandNode
+import me.bardy.bot.audio.JoinResult
 import me.bardy.bot.command.Command
+import me.bardy.bot.command.CommandContext
 import me.bardy.bot.services.ConnectionService
+import net.dv8tion.jda.api.entities.VoiceChannel
 import org.springframework.stereotype.Component
 
 @Component
 class JoinCommand(private val connectionService: ConnectionService) : Command() {
 
-    override fun register() = default("join") { context ->
-        val guildId = context.guild.id
+    override fun register(): LiteralCommandNode<CommandContext> = default("join") { context ->
+        val member = context.member ?: return@default
         val botVoiceChannel = context.self.voiceState?.channel
-        val voiceChannel = (context.member ?: return@default).voiceState?.channel
+        val voiceChannel = member.voiceState?.channel
+        if (voiceChannel !is VoiceChannel?) return@default
 
-        connectionService.evalJoinResult(guildId, botVoiceChannel, voiceChannel).require(Result.SUCCESSFUL) {
+        connectionService.evaluateJoin(botVoiceChannel, voiceChannel).require(JoinResult.SUCCESSFUL) {
             context.reply(it.message)
             return@default
         }

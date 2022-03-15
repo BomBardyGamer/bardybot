@@ -1,17 +1,18 @@
 package me.bardy.bot.services
 
+import com.github.benmanes.caffeine.cache.Cache
 import com.github.benmanes.caffeine.cache.Caffeine
 import com.sedmelluq.discord.lavaplayer.track.AudioItem
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack
 import lavalink.client.io.jda.JdaLavalink
 import me.bardy.bot.audio.LoadResultHandler
-import me.bardy.bot.audio.MusicManager
-import me.bardy.bot.audio.Result
+import me.bardy.bot.audio.JoinResult
 import me.bardy.bot.components.ManagerMap
-import me.bardy.bot.logger
+import me.bardy.bot.util.logger
+import net.dv8tion.jda.api.entities.GuildMessageChannel
 import net.dv8tion.jda.api.entities.Member
-import net.dv8tion.jda.api.entities.TextChannel
+import net.dv8tion.jda.api.entities.VoiceChannel
 import org.springframework.stereotype.Service
 import java.util.concurrent.TimeUnit
 
@@ -28,25 +29,22 @@ class TrackService(
     private val lavalink: JdaLavalink
 ) {
 
-    val audioItemCache = Caffeine.newBuilder()
+    val audioItemCache: Cache<String, AudioItem> = Caffeine.newBuilder()
         .maximumSize(64)
         .expireAfterWrite(30, TimeUnit.MINUTES)
-        .build<String, AudioItem>()
+        .build()
 
-    fun loadTrack(channel: TextChannel, track: String, requester: Member): Result {
-        val trackURL = if (URL_REGEX.matches(track)) track else "ytsearch:${track.toLowerCase()}"
-
+    fun loadTrack(channel: GuildMessageChannel, track: String, requester: Member): JoinResult {
+        val trackURL = if (URL_REGEX.matches(track)) track else "ytsearch:${track.lowercase()}"
         if (requester.guild.voiceChannels.isEmpty()) {
             LOGGER.debug("No voice channels found in guild.")
-            return Result.NO_CHANNELS
+            return JoinResult.NO_CHANNELS
         }
-
-        val guildId = requester.guild.id
         val channelId = requester.guild.selfMember.voiceState?.channel
-        val voiceChannel = requester.voiceState?.channel
+        val voiceChannel = requester.voiceState?.channel as? VoiceChannel
 
-        connectionService.evalJoinResult(guildId, channelId, voiceChannel).require(Result.SUCCESSFUL) { return it }
-        connectionService.join(requireNotNull(voiceChannel)).require(Result.SUCCESSFUL) { return it }
+        connectionService.evaluateJoin(channelId, voiceChannel).require(JoinResult.SUCCESSFUL) { return it }
+        connectionService.join(requireNotNull(voiceChannel)).require(JoinResult.SUCCESSFUL) { return it }
 
         channel.sendMessage("**I'm having a look around to see if I can find ** `$track`").queue()
         if (audioItemCache.getIfPresent(trackURL) != null) {
@@ -56,24 +54,30 @@ class TrackService(
                 is AudioPlaylist -> resultHandler.playlistLoaded(item)
             }
 
-            return Result.SUCCESSFUL
+            return JoinResult.SUCCESSFUL
         }
 
         lavalink.getLink(channel.guild).restClient.loadItem(trackURL, LoadResultHandler(channel, requester, trackURL, this))
-        return Result.SUCCESSFUL
+        return JoinResult.SUCCESSFUL
     }
 
-    fun playTrack(guildId: String, audioTrack: AudioTrack) = musicManagers[guildId].scheduler.queue(audioTrack)
+    fun playTrack(guildId: String, audioTrack: AudioTrack) {
+        musicManagers.get(guildId).scheduler.queue(audioTrack)
+    }
 
     fun queueTracks(tracks: List<AudioTrack>, requester: Member) {
-        val musicManager = musicManagers[requester.guild.id]
+        val musicManager = musicManagers.get(requester.guild.id)
         tracks.forEach {
             musicManager.scheduler.queue(it)
             it.userData = requester
         }
     }
 
-    fun skipTrack(guildId: String) = musicManagers[guildId].scheduler.nextTrack()
+    fun skipTrack(guildId: String): Boolean = musicManagers.get(guildId).scheduler.nextTrack()
+
+    fun cacheItem(trackURL: String, item: AudioItem) {
+        audioItemCache.put(trackURL, item)
+    }
 
     companion object {
 

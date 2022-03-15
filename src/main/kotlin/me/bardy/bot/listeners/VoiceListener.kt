@@ -2,21 +2,24 @@ package me.bardy.bot.listeners
 
 import me.bardy.bot.components.ManagerMap
 import me.bardy.bot.services.ConnectionService
-import me.bardy.bot.services.TrackService
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceJoinEvent
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceLeaveEvent
 import net.dv8tion.jda.api.hooks.ListenerAdapter
 import org.springframework.stereotype.Component
 import java.util.*
+import java.util.concurrent.Executors
+import java.util.concurrent.ScheduledFuture
+import java.util.concurrent.TimeUnit
 import kotlin.concurrent.schedule
 
 @Component
 class VoiceListener(
     private val connectionService: ConnectionService,
     private val musicManagers: ManagerMap
-) : ListenerAdapter() {
+) : BardyBotListener() {
 
-    private val tasks = mutableMapOf<String, TimerTask>()
+    private val scheduler = Executors.newSingleThreadScheduledExecutor()
+    private val tasks = mutableMapOf<String, ScheduledFuture<*>>()
 
     override fun onGuildVoiceLeave(event: GuildVoiceLeaveEvent) {
         val guildId = event.guild.id
@@ -27,14 +30,14 @@ class VoiceListener(
         if (event.channelLeft != botVoiceChannel) return // Not the bot's channel
         if (event.channelLeft.members.size > 1) return // More than one user (someone else) still in channel
         if (event.channelLeft.members[0] != bot) return // Remaining member not the bot
-        musicManagers[guildId].player.isPaused = true
+        musicManagers.get(guildId).player.isPaused = true
 
         if (tasks[guildId] != null) return
-        tasks[guildId] = Timer().schedule(300000) {
+        tasks[guildId] = scheduler.schedule({
             connectionService.leave(guildId)
-            musicManagers -= guildId
+            musicManagers.remove(guildId)
             complete(guildId)
-        }
+        }, 5, TimeUnit.MINUTES)
     }
 
     override fun onGuildVoiceJoin(event: GuildVoiceJoinEvent) {
@@ -49,7 +52,7 @@ class VoiceListener(
     }
 
     private fun complete(guildId: String) {
-        tasks[guildId]?.cancel()
+        tasks[guildId]?.cancel(false)
         tasks.remove(guildId)
     }
 }

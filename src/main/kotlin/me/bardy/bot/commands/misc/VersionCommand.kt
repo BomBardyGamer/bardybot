@@ -1,18 +1,21 @@
 package me.bardy.bot.commands.misc
 
-import me.bardy.bot.BARDY_ORANGE
+import com.mojang.brigadier.tree.LiteralCommandNode
 import me.bardy.bot.Versions
 import me.bardy.bot.command.Command
-import me.bardy.bot.dsl.color
-import me.bardy.bot.dsl.description
-import me.bardy.bot.dsl.embed
-import me.bardy.bot.dsl.title
+import me.bardy.bot.command.CommandContext
+import me.bardy.bot.util.Colors
+import me.bardy.bot.util.color
+import me.bardy.bot.util.description
+import me.bardy.bot.util.embed
+import me.bardy.bot.util.title
+import net.dv8tion.jda.api.entities.MessageEmbed
 import org.springframework.stereotype.Component
 
 @Component
 class VersionCommand : Command("v", "info") {
 
-    val infoEmbed = embed {
+    val infoEmbed: MessageEmbed = embed {
         title("Here's some information about me:")
         description("""
             My version: [${Versions.BOT}](https://github.com/BomBardyGamer/BardyBot)
@@ -22,10 +25,10 @@ class VersionCommand : Command("v", "info") {
             Lavalink Client - [${Versions.LAVALINK}](https://github.com/Frederikam/Lavalink-Client)
             Lavaplayer - [${Versions.LAVAPLAYER}](https://github.com/sedmelluq/lavaplayer)
         """.trimIndent())
-        color(BARDY_ORANGE)
+        color(Colors.BARDY_ORANGE)
     }
 
-    override fun register() = default("version") {
+    override fun register(): LiteralCommandNode<CommandContext> = default("version") {
         it.reply(infoEmbed)
     }
 }

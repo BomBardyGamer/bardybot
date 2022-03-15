@@ -6,8 +6,6 @@ import java.io.PrintStream
 
 object BardyBotBanner : Banner {
 
-    override fun printBanner(environment: Environment, sourceClass: Class<*>, out: PrintStream) = out.println(BANNER)
-
     private const val BANNER = """
 ______                   _        ______         _   
 | ___ \                 | |       | ___ \       | |  
@@ -18,4 +16,8 @@ ______                   _        ______         _
                              __/ |                   
                             |___/
 """
+
+    override fun printBanner(environment: Environment, sourceClass: Class<*>, out: PrintStream) {
+        out.println(BANNER)
+    }
 }

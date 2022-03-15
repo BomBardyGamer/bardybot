@@ -4,22 +4,20 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrack
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason
 import lavalink.client.player.IPlayer
 import lavalink.client.player.event.PlayerEventListenerAdapter
-import me.bardy.bot.logger
+import me.bardy.bot.util.logger
+import java.util.Queue
 import java.util.concurrent.ArrayBlockingQueue
 
 /**
  * Represents a Guild Track Scheduler, used for queueing, clearing, skipping,
- * and auto-playing the next track in the queue. Also will be responsible for
+ * and autoplaying the next track in the queue. Also, will be responsible for
  * looping tracks where necessary in the future, though that is not implemented
  * yet.
- *
- * @author BomBardyGamer
- * @since 1.0
  */
 class TrackScheduler(private val player: IPlayer) : PlayerEventListenerAdapter() {
 
-    var isLooping = false
-    val queue = ArrayBlockingQueue<AudioTrack>(100)
+    var isLooping: Boolean = false
+    val queue: Queue<AudioTrack> = ArrayBlockingQueue(100)
 
     fun queue(track: AudioTrack) {
         LOGGER.debug("Attempting to start track $track, not interrupting currently playing track.")
@@ -51,7 +49,6 @@ class TrackScheduler(private val player: IPlayer) : PlayerEventListenerAdapter()
         LOGGER.debug("End reason was mayStartNext, attempting to start next track ${queue.peek()}")
         if (isLooping) {
             LOGGER.debug("Loop is enabled. Attempting to start clone of previous track $track with player $player")
-
             player.playTrack(track.makeClone())
             return
         }

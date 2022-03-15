@@ -7,9 +7,5 @@ import org.springframework.boot.context.properties.ConstructorBinding
 @ConstructorBinding
 data class LavalinkConfig(val nodes: Map<String, NodeConfig>) {
 
-    data class NodeConfig(
-        val name: String,
-        val url: String,
-        val password: String
-    )
+    data class NodeConfig(val name: String, val url: String, val password: String)
 }
