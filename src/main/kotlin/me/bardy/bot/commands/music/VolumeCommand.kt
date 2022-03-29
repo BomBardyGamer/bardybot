@@ -3,17 +3,17 @@ package me.bardy.bot.commands.music
 import com.mojang.brigadier.arguments.IntegerArgumentType
 import com.mojang.brigadier.arguments.StringArgumentType
 import com.mojang.brigadier.tree.LiteralCommandNode
+import kotlin.math.max
+import kotlin.math.min
 import lavalink.client.player.LavalinkPlayer
 import me.bardy.bot.command.Command
 import me.bardy.bot.command.CommandContext
 import me.bardy.bot.command.argument
 import me.bardy.bot.command.literal
 import me.bardy.bot.command.runs
-import me.bardy.bot.components.ManagerMap
 import me.bardy.bot.util.argument
+import me.bardy.bot.util.ManagerMap
 import org.springframework.stereotype.Component
-import kotlin.math.max
-import kotlin.math.min
 
 @Component
 class VolumeCommand(private val musicManagers: ManagerMap) : Command("vol") {

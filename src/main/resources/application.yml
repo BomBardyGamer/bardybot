@@ -5,8 +5,7 @@ bot:
 
 lavalink:
   nodes:
-    node-1:
-      name: lavalink-node-1
+    - name: lavalink-node-1
       url: wss://localhost:9000
       password: TheWorldsBestPassword
 

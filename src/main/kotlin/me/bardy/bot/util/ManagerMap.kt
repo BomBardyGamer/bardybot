@@ -1,4 +1,4 @@
-package me.bardy.bot.components
+package me.bardy.bot.util
 
 import lavalink.client.io.jda.JdaLavalink
 import me.bardy.bot.audio.MusicManager

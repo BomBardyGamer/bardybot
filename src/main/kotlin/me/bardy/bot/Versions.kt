@@ -1,6 +1,6 @@
 package me.bardy.bot
 
-import java.util.*
+import java.util.Properties
 
 object Versions {
 

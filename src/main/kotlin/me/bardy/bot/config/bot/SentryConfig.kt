@@ -1,8 +1,8 @@
-package me.bardy.bot.config
+package me.bardy.bot.config.bot
 
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.boot.context.properties.ConstructorBinding
 
-@ConfigurationProperties("services")
+@ConfigurationProperties("sentry")
 @ConstructorBinding
-data class ServicesConfig(val metrics: Boolean, val api: Boolean)
+data class SentryConfig(val dsn: String?)

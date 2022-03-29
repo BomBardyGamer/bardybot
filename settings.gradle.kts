@@ -4,7 +4,7 @@ dependencyResolutionManagement {
     repositories {
         mavenCentral()
         maven("https://m2.dv8tion.net/releases")
-        maven("https://jitpack.io")
+        maven("https://repo.kryptonmc.org/snapshots")
         maven("https://nexus.velocitypowered.com/repository/maven-public/")
     }
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)

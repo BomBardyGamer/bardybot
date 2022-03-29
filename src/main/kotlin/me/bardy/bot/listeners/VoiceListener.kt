@@ -1,16 +1,15 @@
 package me.bardy.bot.listeners
 
-import me.bardy.bot.components.ManagerMap
-import me.bardy.bot.services.ConnectionService
-import net.dv8tion.jda.api.events.guild.voice.GuildVoiceJoinEvent
-import net.dv8tion.jda.api.events.guild.voice.GuildVoiceLeaveEvent
-import net.dv8tion.jda.api.hooks.ListenerAdapter
-import org.springframework.stereotype.Component
-import java.util.*
 import java.util.concurrent.Executors
 import java.util.concurrent.ScheduledFuture
 import java.util.concurrent.TimeUnit
 import kotlin.concurrent.schedule
+import me.bardy.bot.services.ConnectionService
+import me.bardy.bot.util.ManagerMap
+import net.dv8tion.jda.api.events.guild.voice.GuildVoiceJoinEvent
+import net.dv8tion.jda.api.events.guild.voice.GuildVoiceLeaveEvent
+import net.dv8tion.jda.api.hooks.ListenerAdapter
+import org.springframework.stereotype.Component
 
 @Component
 class VoiceListener(

@@ -1,8 +1,8 @@
 package me.bardy.bot.util
 
+import java.awt.Color
 import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.entities.MessageEmbed
-import java.awt.Color
 
 @DslMarker
 private annotation class EmbedDSL

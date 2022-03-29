@@ -2,11 +2,11 @@ package me.bardy.bot.audio
 
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason
+import java.util.Queue
+import java.util.concurrent.ArrayBlockingQueue
 import lavalink.client.player.IPlayer
 import lavalink.client.player.event.PlayerEventListenerAdapter
 import me.bardy.bot.util.logger
-import java.util.Queue
-import java.util.concurrent.ArrayBlockingQueue
 
 /**
  * Represents a Guild Track Scheduler, used for queueing, clearing, skipping,
@@ -54,18 +54,6 @@ class TrackScheduler(private val player: IPlayer) : PlayerEventListenerAdapter()
         }
 
         nextTrack()
-    }
-
-    override fun onTrackStart(player: IPlayer, track: AudioTrack) {
-        LOGGER.debug("TrackStartEvent intercepted! Track $track has been started with player $player")
-    }
-
-    override fun onPlayerPause(player: IPlayer) {
-        LOGGER.debug("PlayerPauseEvent intercepted! Pausing playing track ${player.playingTrack} for player $player")
-    }
-
-    override fun onPlayerResume(player: IPlayer) {
-        LOGGER.debug("PlayerResumeEvent intercepted! Resuming paused track ${player.playingTrack} for player $player")
     }
 
     companion object {

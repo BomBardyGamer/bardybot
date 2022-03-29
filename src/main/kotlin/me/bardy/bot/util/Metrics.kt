@@ -1,4 +1,4 @@
-package me.bardy.bot.metrics
+package me.bardy.bot.util
 
 import io.micrometer.core.instrument.Gauge
 import io.micrometer.core.instrument.MeterRegistry

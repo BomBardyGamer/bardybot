@@ -3,8 +3,8 @@ package me.bardy.bot.commands.misc
 import com.mojang.brigadier.tree.LiteralCommandNode
 import me.bardy.bot.command.Command
 import me.bardy.bot.command.CommandContext
-import me.bardy.bot.components.ManagerMap
 import me.bardy.bot.services.ConnectionService
+import me.bardy.bot.util.ManagerMap
 import org.springframework.stereotype.Component
 
 @Component

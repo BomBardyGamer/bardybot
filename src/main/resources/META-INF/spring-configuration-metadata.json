@@ -2,23 +2,23 @@
   "groups": [
     {
       "name": "bot",
-      "type": "me.bardy.bot.config.BotConfig",
-      "sourceType": "me.bardy.bot.config.BotConfig"
+      "type": "me.bardy.bot.config.bot.BotConfig",
+      "sourceType": "me.bardy.bot.config.bot.BotConfig"
     },
     {
       "name": "lavalink",
-      "type": "me.bardy.bot.config.LavalinkConfig",
-      "sourceType": "me.bardy.bot.config.LavalinkConfig"
+      "type": "me.bardy.bot.config.bot.LavalinkConfig",
+      "sourceType": "me.bardy.bot.config.bot.LavalinkConfig"
     },
     {
       "name": "sentry",
-      "type": "me.bardy.bot.config.SentryConfig",
-      "sourceType": "me.bardy.bot.config.SentryConfig"
+      "type": "me.bardy.bot.config.bot.SentryConfig",
+      "sourceType": "me.bardy.bot.config.bot.SentryConfig"
     },
     {
       "name": "services",
-      "type": "me.bardy.bot.config.ServicesConfig",
-      "sourceType": "me.bardy.bot.config.ServicesConfig"
+      "type": "me.bardy.bot.config.bot.ServicesConfig",
+      "sourceType": "me.bardy.bot.config.bot.ServicesConfig"
     }
   ],
   "properties": [
@@ -39,7 +39,7 @@
     },
     {
       "name": "lavalink.nodes",
-      "type": "java.util.Map<java.lang.String, dev.bombardy.bardybot.config.LavalinkConfig.NodeConfig>",
+      "type": "java.util.List<me.bardy.bot.config.bot.LavalinkConfig.NodeConfig>",
       "description": "Nodes are Lavalink servers that the bot can use to send audio from"
     },
     {

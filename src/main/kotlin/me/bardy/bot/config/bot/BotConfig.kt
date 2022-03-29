@@ -1,4 +1,4 @@
-package me.bardy.bot.config
+package me.bardy.bot.config.bot
 
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.boot.context.properties.ConstructorBinding

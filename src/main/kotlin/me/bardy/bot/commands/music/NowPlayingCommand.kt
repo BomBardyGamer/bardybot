@@ -1,21 +1,21 @@
 package me.bardy.bot.commands.music
 
 import com.mojang.brigadier.tree.LiteralCommandNode
+import java.time.Duration
 import me.bardy.bot.command.Command
 import me.bardy.bot.command.CommandContext
-import me.bardy.bot.components.ManagerMap
-import me.bardy.bot.util.Colors
 import me.bardy.bot.util.author
 import me.bardy.bot.util.color
+import me.bardy.bot.util.Colors
 import me.bardy.bot.util.description
 import me.bardy.bot.util.embed
 import me.bardy.bot.util.format
 import me.bardy.bot.util.formatName
 import me.bardy.bot.util.logger
+import me.bardy.bot.util.ManagerMap
 import me.bardy.bot.util.thumbnail
 import net.dv8tion.jda.api.entities.Member
 import org.springframework.stereotype.Component
-import java.time.Duration
 
 @Component
 class NowPlayingCommand(private val musicManagers: ManagerMap) : Command("np") {

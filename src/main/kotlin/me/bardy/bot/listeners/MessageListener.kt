@@ -4,9 +4,9 @@ import com.mojang.brigadier.CommandDispatcher
 import com.mojang.brigadier.ParseResults
 import com.mojang.brigadier.exceptions.CommandSyntaxException
 import me.bardy.bot.command.CommandContext
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 import org.springframework.cache.annotation.Cacheable
 import org.springframework.stereotype.Component
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 
 @Component
 class MessageListener(private val dispatcher: CommandDispatcher<CommandContext>) : BardyBotListener() {

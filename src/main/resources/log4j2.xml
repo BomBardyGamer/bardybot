@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration xmlns="http://logging.apache.org/log4j/2.0/config" status="DEBUG">
+    <Appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout disableAnsi="false" pattern="%d{HH:mm:ss.SSS} %style{%-30.-30thread}{boldCyan} %style{%10.10X{jda.shard}}{red} %style{%-24.-24logger{0}}{boldGreen} %highlight{%-6level} %msg%n" />
+        </Console>
+        <Sentry name="Sentry" />
+    </Appenders>
+    <Loggers>
+        <Root level="info">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="Sentry"/>
+        </Root>
+    </Loggers>
+</Configuration>

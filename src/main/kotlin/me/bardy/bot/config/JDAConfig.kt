@@ -1,8 +1,9 @@
-package me.bardy.bot.components
+package me.bardy.bot.config
 
 import lavalink.client.io.jda.JdaLavalink
-import me.bardy.bot.config.BotConfig
-import me.bardy.bot.config.LavalinkConfig
+import me.bardy.bot.config.bot.BotConfig
+import me.bardy.bot.config.bot.LavalinkConfig
+import me.bardy.bot.listeners.BardyBotListener
 import me.bardy.bot.util.logger
 import net.dv8tion.jda.api.entities.Activity
 import net.dv8tion.jda.api.requests.GatewayIntent
@@ -12,25 +13,17 @@ import net.dv8tion.jda.api.utils.ChunkingFilter
 import net.dv8tion.jda.api.utils.MemberCachePolicy
 import net.dv8tion.jda.api.utils.cache.CacheFlag
 import org.springframework.context.annotation.Bean
-import org.springframework.stereotype.Component
+import org.springframework.context.annotation.Configuration
 import java.net.URI
 import kotlin.system.exitProcess
 
-/**
- * Sets up JDA and Lavalink client, used for connecting to the Discord API and a Lavalink audio server
- * respectively.
- */
-@Component
-class JDAComponent {
+@Configuration
+class JDAConfig(
+    private val listeners: Set<BardyBotListener>) {
 
     @Bean
-    fun lavalink(linkConfig: LavalinkConfig, botConfig: BotConfig): JdaLavalink = JdaLavalink(botConfig.clientId, 1, null).apply {
-        linkConfig.nodes.values.forEach { addNode(it.name, URI(it.url), it.password) }
-    }
-
-    @Bean
-    fun shardManager(lavalink: JdaLavalink, config: BotConfig): ShardManager {
-        return try {
+    fun shardManager(lavalink: JdaLavalink, config: BotConfig, listeners: Set<BardyBotListener>): ShardManager {
+        try {
             val jda = DefaultShardManagerBuilder.create(config.token, GATEWAY_INTENTS)
                 .setActivity(Activity.playing("bot.bardy.me | !help"))
                 .setVoiceDispatchInterceptor(lavalink.voiceInterceptor)
@@ -38,9 +31,9 @@ class JDAComponent {
                 .setChunkingFilter(ChunkingFilter.NONE)
                 .disableCache(DISABLED_FLAGS)
                 .build()
-
-            lavalink.setJdaProvider { jda.getShardById(it) }
-            jda
+            lavalink.setJdaProvider(jda::getShardById)
+            jda.addEventListener(*listeners.toTypedArray())
+            return jda
         } catch (exception: Exception) {
             LOGGER.error("Your bot token is empty or invalid! You can configure your token by setting the \"token\" value in application.yml")
             exitProcess(0)
@@ -61,6 +54,6 @@ class JDAComponent {
             CacheFlag.MEMBER_OVERRIDES
         )
 
-        private val LOGGER = logger<JDAComponent>()
+        private val LOGGER = logger<JDAConfig>()
     }
 }

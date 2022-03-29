@@ -1,8 +1,8 @@
 package me.bardy.bot
 
+import java.io.PrintStream
 import org.springframework.boot.Banner
 import org.springframework.core.env.Environment
-import java.io.PrintStream
 
 object BardyBotBanner : Banner {
 

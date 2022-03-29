@@ -13,7 +13,7 @@ springDependencyManagement = "1.0.11.RELEASE"
 kotlinCoroutines = "1.6.0"
 kotlinSerialization = "1.3.2"
 jda = "5.0.0-alpha.9"
-lavalink = "8d9b660b2c"
+lavalink = "6583f6668e4d7a1d9c130e12991502ae506c0780-SNAPSHOT"
 lavaplayer = "1.3.78"
 micrometer = "1.8.3"
 brigadier = "1.0.0-SNAPSHOT"
@@ -41,7 +41,7 @@ micrometer-prometheus = { group = "io.micrometer", name = "micrometer-registry-p
 
 # Discord related
 jda = { group = "net.dv8tion", name = "JDA", version.ref = "jda" }
-lavalink = { group = "com.github.freyacodes", name = "Lavalink-Client", version.ref = "lavalink" }
+lavalink = { group = "com.fredboat.lavalink.client", name = "Lavalink-Client", version.ref = "lavalink" }
 lavaplayer = { group = "com.sedmelluq", name = "lavaplayer", version.ref = "lavaplayer" }
 
 # Other

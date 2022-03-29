@@ -1,9 +1,9 @@
 package me.bardy.bot.commands.music
 
 import me.bardy.bot.command.Command
-import me.bardy.bot.components.ManagerMap
 import me.bardy.bot.services.TrackService
 import me.bardy.bot.util.logger
+import me.bardy.bot.util.ManagerMap
 import org.springframework.stereotype.Component
 
 @Component

@@ -5,21 +5,21 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder.literal
 import com.mojang.brigadier.builder.RequiredArgumentBuilder.argument
 import com.mojang.brigadier.tree.LiteralCommandNode
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack
+import java.time.Duration
+import kotlin.random.Random
 import me.bardy.bot.command.Command
 import me.bardy.bot.command.CommandContext
-import me.bardy.bot.components.ManagerMap
 import me.bardy.bot.util.buildEmbed
 import me.bardy.bot.util.color
 import me.bardy.bot.util.description
 import me.bardy.bot.util.format
 import me.bardy.bot.util.formatName
 import me.bardy.bot.util.logger
+import me.bardy.bot.util.ManagerMap
 import me.bardy.bot.util.title
 import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.entities.Member
 import org.springframework.stereotype.Component
-import java.time.Duration
-import kotlin.random.Random
 
 @Component
 class QueueCommand(private val musicManagers: ManagerMap) : Command("q") {
