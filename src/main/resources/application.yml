@@ -12,8 +12,4 @@ lavalink:
 #sentry:
   #dsn: my_sentry_dsn
 
-services:
-  metrics: true
-  api: true
-
 management.endpoints.web.exposure.include: prometheus
