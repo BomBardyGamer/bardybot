@@ -22,7 +22,7 @@ class ConnectionService(private val lavalink: JdaLavalink) {
      * Connects the bot to the given voice channel, or, if the bot is
      * already in a channel, does nothing.
      */
-    final fun join(channel: VoiceChannel): JoinResult {
+    fun join(channel: VoiceChannel): JoinResult {
         return try {
             lavalink.getLink(channel.guild.id).connect(channel)
             LOGGER.debug("Successfully connected to voice channel $channel in guild ${channel.guild}")
@@ -38,14 +38,14 @@ class ConnectionService(private val lavalink: JdaLavalink) {
      * the currently playing track and clear the queue if [clearQueue] is true, or,
      * if the bot is not in a channel, does nothing.
      */
-    final fun leave(guildId: String, clearQueue: Boolean = true) {
+    fun leave(guildId: String, clearQueue: Boolean = true) {
         val link = lavalink.getLink(guildId)
         if (clearQueue) link.resetPlayer()
         link.destroy()
         LOGGER.debug("Successfully disconnected from voice channel")
     }
 
-    final fun evaluateJoin(channelId: AudioChannel?, voiceChannel: AudioChannel?): JoinResult {
+    fun evaluateJoin(channelId: AudioChannel?, voiceChannel: AudioChannel?): JoinResult {
         if (channelId == null) {
             if (voiceChannel == null) return JoinResult.USER_NOT_IN_CHANNEL
             return JoinResult.SUCCESSFUL

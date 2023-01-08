@@ -34,7 +34,7 @@ class TrackService(
         .expireAfterWrite(30, TimeUnit.MINUTES)
         .build()
 
-    final fun loadTrack(channel: GuildMessageChannel, track: String, requester: Member): JoinResult {
+    fun loadTrack(channel: GuildMessageChannel, track: String, requester: Member): JoinResult {
         val trackURL = if (URL_REGEX.matches(track)) track else "ytsearch:${track.lowercase()}"
         if (requester.guild.voiceChannels.isEmpty()) {
             LOGGER.debug("No voice channels found in guild.")
@@ -61,11 +61,11 @@ class TrackService(
         return JoinResult.SUCCESSFUL
     }
 
-    final fun playTrack(guildId: String, audioTrack: AudioTrack) {
+    fun playTrack(guildId: String, audioTrack: AudioTrack) {
         musicManagers.get(guildId).scheduler.queue(audioTrack)
     }
 
-    final fun queueTracks(tracks: List<AudioTrack>, requester: Member) {
+    fun queueTracks(tracks: List<AudioTrack>, requester: Member) {
         val musicManager = musicManagers.get(requester.guild.id)
         tracks.forEach {
             musicManager.scheduler.queue(it)
@@ -73,9 +73,9 @@ class TrackService(
         }
     }
 
-    final fun skipTrack(guildId: String): Boolean = musicManagers.get(guildId).scheduler.nextTrack()
+    fun skipTrack(guildId: String): Boolean = musicManagers.get(guildId).scheduler.nextTrack()
 
-    final fun cacheItem(trackURL: String, item: AudioItem) {
+    fun cacheItem(trackURL: String, item: AudioItem) {
         audioItemCache.put(trackURL, item)
     }
 

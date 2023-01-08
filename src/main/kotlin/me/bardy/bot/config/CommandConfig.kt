@@ -7,10 +7,10 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 
 @Configuration
-class CommandConfig(private val commands: Set<Command>) {
+class CommandConfig {
 
     @Bean
-    fun commandDispatcher(): CommandDispatcher<CommandContext> {
+    fun commandDispatcher(commands: Set<Command>): CommandDispatcher<CommandContext> {
         val dispatcher = CommandDispatcher<CommandContext>()
         commands.forEach { dispatcher.root.addChild(it.register()) }
         return dispatcher

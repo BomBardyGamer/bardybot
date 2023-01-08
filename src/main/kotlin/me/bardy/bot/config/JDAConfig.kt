@@ -16,7 +16,7 @@ import org.springframework.context.annotation.Configuration
 import kotlin.system.exitProcess
 
 @Configuration
-class JDAConfig(private val listeners: Set<BardyBotListener>) {
+class JDAConfig {
 
     @Bean
     fun shardManager(lavalink: JdaLavalink, config: BotConfig, listeners: Set<BardyBotListener>): ShardManager {
