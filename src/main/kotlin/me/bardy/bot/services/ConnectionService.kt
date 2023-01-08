@@ -2,7 +2,7 @@ package me.bardy.bot.services
 
 import lavalink.client.io.jda.JdaLavalink
 import me.bardy.bot.audio.JoinResult
-import me.bardy.bot.util.logger
+import org.apache.logging.log4j.LogManager
 import net.dv8tion.jda.api.entities.AudioChannel
 import net.dv8tion.jda.api.entities.VoiceChannel
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException
@@ -57,6 +57,6 @@ class ConnectionService(private val lavalink: JdaLavalink) {
 
     companion object {
 
-        private val LOGGER = logger<ConnectionService>()
+        private val LOGGER = LogManager.getLogger()
     }
 }

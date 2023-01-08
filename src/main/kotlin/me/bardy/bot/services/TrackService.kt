@@ -8,12 +8,12 @@ import java.util.concurrent.TimeUnit
 import lavalink.client.io.jda.JdaLavalink
 import me.bardy.bot.audio.LoadResultHandler
 import me.bardy.bot.audio.JoinResult
-import me.bardy.bot.util.logger
 import me.bardy.bot.util.GuildMusicManagers
 import net.dv8tion.jda.api.entities.Guild
 import net.dv8tion.jda.api.entities.GuildMessageChannel
 import net.dv8tion.jda.api.entities.Member
 import net.dv8tion.jda.api.entities.VoiceChannel
+import org.apache.logging.log4j.LogManager
 import org.springframework.stereotype.Service
 
 /**
@@ -82,6 +82,6 @@ class TrackService(
     companion object {
 
         private val URL_REGEX = "^(https?)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]".toRegex()
-        private val LOGGER = logger<TrackService>()
+        private val LOGGER = LogManager.getLogger()
     }
 }

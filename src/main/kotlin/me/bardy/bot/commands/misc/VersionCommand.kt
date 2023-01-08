@@ -3,7 +3,7 @@ package me.bardy.bot.commands.misc
 import me.bardy.bot.Versions
 import me.bardy.bot.command.BasicCommand
 import me.bardy.bot.command.BotCommandContext
-import me.bardy.bot.util.Colors
+import me.bardy.bot.util.BardyBotColors
 import me.bardy.bot.util.color
 import me.bardy.bot.util.description
 import me.bardy.bot.util.embed
@@ -24,7 +24,7 @@ class VersionCommand : BasicCommand("version", setOf("v", "info")) {
             Lavalink Client - [${Versions.LAVALINK}](https://github.com/Frederikam/Lavalink-Client)
             Lavaplayer - [${Versions.LAVAPLAYER}](https://github.com/sedmelluq/lavaplayer)
         """.trimIndent())
-        color(Colors.BARDY_ORANGE)
+        color(BardyBotColors.BARDY_ORANGE)
     }
 
     override fun execute(context: BotCommandContext) {

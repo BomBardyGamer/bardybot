@@ -12,10 +12,10 @@ import me.bardy.bot.config.bot.BotConfig
 import me.bardy.bot.services.TrackService
 import me.bardy.bot.util.description
 import me.bardy.bot.util.embed
-import me.bardy.bot.util.logger
 import me.bardy.bot.util.GuildMusicManagers
 import net.dv8tion.jda.api.entities.GuildMessageChannel
 import net.dv8tion.jda.api.entities.MessageEmbed
+import org.apache.logging.log4j.LogManager
 import org.springframework.stereotype.Component
 
 /**
@@ -66,6 +66,6 @@ class PlayCommand(
 
     companion object {
 
-        private val LOGGER = logger<PlayCommand>()
+        private val LOGGER = LogManager.getLogger()
     }
 }

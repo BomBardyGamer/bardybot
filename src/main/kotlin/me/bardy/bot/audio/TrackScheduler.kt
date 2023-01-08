@@ -6,7 +6,7 @@ import java.util.Queue
 import java.util.concurrent.ArrayBlockingQueue
 import lavalink.client.player.IPlayer
 import lavalink.client.player.event.PlayerEventListenerAdapter
-import me.bardy.bot.util.logger
+import org.apache.logging.log4j.LogManager
 
 /**
  * Represents a Guild Track Scheduler, used for queueing, clearing, skipping,
@@ -70,6 +70,6 @@ class TrackScheduler(private val player: IPlayer) : PlayerEventListenerAdapter()
 
     companion object {
 
-        private val LOGGER = logger<TrackScheduler>()
+        private val LOGGER = LogManager.getLogger()
     }
 }

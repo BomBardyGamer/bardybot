@@ -3,17 +3,16 @@ package me.bardy.bot.commands.music
 import me.bardy.bot.command.BasicCommand
 import java.time.Duration
 import me.bardy.bot.command.BotCommandContext
+import me.bardy.bot.util.BardyBotColors
 import me.bardy.bot.util.author
 import me.bardy.bot.util.color
-import me.bardy.bot.util.Colors
+import me.bardy.bot.util.Durations
 import me.bardy.bot.util.description
 import me.bardy.bot.util.embed
-import me.bardy.bot.util.format
-import me.bardy.bot.util.formatName
-import me.bardy.bot.util.logger
 import me.bardy.bot.util.GuildMusicManagers
 import me.bardy.bot.util.thumbnail
 import net.dv8tion.jda.api.entities.Member
+import org.apache.logging.log4j.LogManager
 import org.springframework.stereotype.Component
 
 @Component
@@ -46,11 +45,11 @@ class NowPlayingCommand(private val musicManagers: GuildMusicManagers) : BasicCo
                 We're this far through:
                 `${calculateBar(positionMillis.toDouble() / nowPlaying.duration)}`
 
-                `${position.format()} / ${duration.format()}`
+                `${Durations.formatHumanReadable(position)} / ${Durations.formatHumanReadable(duration)}`
 
-                *Who put it on? ${requester.formatName()} did!*
+                *Who put it on? ${formatMemberName(requester)} did!*
             """.trimIndent())
-            color(Colors.BARDY_ORANGE)
+            color(BardyBotColors.BARDY_ORANGE)
         })
     }
 
@@ -69,6 +68,13 @@ class NowPlayingCommand(private val musicManagers: GuildMusicManagers) : BasicCo
         private const val DASH = "\u25AC"
         private const val BAR_LENGTH = 31
 
-        private val LOGGER = logger<NowPlayingCommand>()
+        private val LOGGER = LogManager.getLogger()
+
+        @JvmStatic
+        private fun formatMemberName(member: Member): String {
+            var result = member.user.asTag
+            if (member.nickname != null) result += " (also known as ${member.nickname})"
+            return result
+        }
     }
 }

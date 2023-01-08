@@ -3,8 +3,8 @@ package me.bardy.bot.commands.music
 import me.bardy.bot.command.BasicCommand
 import me.bardy.bot.command.BotCommandContext
 import me.bardy.bot.services.TrackService
-import me.bardy.bot.util.logger
 import me.bardy.bot.util.GuildMusicManagers
+import org.apache.logging.log4j.LogManager
 import org.springframework.stereotype.Component
 
 @Component
@@ -30,6 +30,6 @@ class SkipCommand(
 
     companion object {
 
-        private val LOGGER = logger<SkipCommand>()
+        private val LOGGER = LogManager.getLogger()
     }
 }

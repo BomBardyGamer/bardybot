@@ -2,10 +2,10 @@ package me.bardy.bot
 
 import io.sentry.Sentry
 import me.bardy.bot.config.bot.SentryConfig
-import me.bardy.bot.util.logger
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan
 import javax.annotation.PostConstruct
+import org.apache.logging.log4j.LogManager
 
 /**
  * The main Spring Boot Application class
@@ -28,6 +28,6 @@ class BardyBotApplication(private val sentryConfig: SentryConfig) {
 
     companion object {
 
-        private val LOGGER = logger<BardyBotApplication>()
+        private val LOGGER = LogManager.getLogger()
     }
 }

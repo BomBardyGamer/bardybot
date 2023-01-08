@@ -3,7 +3,6 @@ package me.bardy.bot.config
 import lavalink.client.io.jda.JdaLavalink
 import me.bardy.bot.config.bot.BotConfig
 import me.bardy.bot.listeners.BardyBotListener
-import me.bardy.bot.util.logger
 import net.dv8tion.jda.api.entities.Activity
 import net.dv8tion.jda.api.requests.GatewayIntent
 import net.dv8tion.jda.api.sharding.DefaultShardManagerBuilder
@@ -11,6 +10,7 @@ import net.dv8tion.jda.api.sharding.ShardManager
 import net.dv8tion.jda.api.utils.ChunkingFilter
 import net.dv8tion.jda.api.utils.MemberCachePolicy
 import net.dv8tion.jda.api.utils.cache.CacheFlag
+import org.apache.logging.log4j.LogManager
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import kotlin.system.exitProcess
@@ -53,6 +53,6 @@ class JDAConfig {
             CacheFlag.ROLE_TAGS
         )
 
-        private val LOGGER = logger<JDAConfig>()
+        private val LOGGER = LogManager.getLogger()
     }
 }
