@@ -7,6 +7,7 @@ import me.bardy.bot.command.CommandContext
 import me.bardy.bot.command.argument
 import me.bardy.bot.command.literal
 import me.bardy.bot.command.runs
+import me.bardy.bot.config.bot.BotConfig
 import me.bardy.bot.services.TrackService
 import me.bardy.bot.util.description
 import me.bardy.bot.util.embed
@@ -24,6 +25,7 @@ import org.springframework.stereotype.Component
  */
 @Component
 class PlayCommand(
+    private val botConfig: BotConfig,
     private val musicManagers: ManagerMap,
     private val trackService: TrackService
 ) : Command("play") {
@@ -32,7 +34,7 @@ class PlayCommand(
         description("""
             You got it wrong, here's how you use it:
 
-            !play [Link or query]
+            ${botConfig.prefix}play [Link or query]
         """.trimIndent())
     }
 
