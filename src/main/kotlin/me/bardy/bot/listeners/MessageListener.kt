@@ -4,16 +4,17 @@ import com.mojang.brigadier.CommandDispatcher
 import com.mojang.brigadier.ParseResults
 import com.mojang.brigadier.exceptions.CommandSyntaxException
 import me.bardy.bot.command.CommandContext
+import me.bardy.bot.config.bot.BotConfig
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 import org.springframework.cache.annotation.Cacheable
 import org.springframework.stereotype.Component
 
 @Component
-class MessageListener(private val dispatcher: CommandDispatcher<CommandContext>) : BardyBotListener() {
+class MessageListener(private val botConfig: BotConfig, private val dispatcher: CommandDispatcher<CommandContext>) : BardyBotListener() {
 
     override fun onMessageReceived(event: MessageReceivedEvent) {
-        if (!event.message.contentRaw.startsWith('!')) return
-        val message = event.message.contentRaw.removePrefix("!")
+        if (!event.message.contentRaw.startsWith(botConfig.prefix)) return
+        val message = event.message.contentRaw.removePrefix(botConfig.prefix)
 
         try {
             dispatcher.execute(parseCommand(CommandContext(event.guild, event.channel, event.member, event.message), message))
