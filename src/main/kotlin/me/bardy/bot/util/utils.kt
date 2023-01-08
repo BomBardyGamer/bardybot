@@ -1,9 +1,7 @@
 package me.bardy.bot.util
 
-import com.mojang.brigadier.context.CommandContext
 import java.awt.Color
 import java.time.Duration
-import me.bardy.bot.command.CommandContext as BotCommandContext
 import net.dv8tion.jda.api.entities.Member
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
@@ -17,8 +15,6 @@ import org.slf4j.LoggerFactory
  * @return an instance of [Logger] for the specified class [T]
  */
 inline fun <reified T> logger(): Logger = LogManager.getLogger(T::class.java)
-
-inline fun <reified T> CommandContext<BotCommandContext>.argument(name: String): T = getArgument(name, T::class.java)
 
 /**
  * Formats the [Duration] in to a specific format.

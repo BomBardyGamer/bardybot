@@ -37,7 +37,7 @@ class LoadResultHandler(
         channel.sendMessage("**I found this banging tune** `${track.info.title}` **and queued it up to be played!**").queue()
         track.userData = requester
         trackService.cacheItem(trackURL, track)
-        trackService.playTrack(channel.guild.id, track)
+        trackService.playTrack(channel.guild, track)
     }
 
     /**
@@ -63,7 +63,7 @@ class LoadResultHandler(
         val firstTrack = playlist.selectedTrack ?: playlist.tracks.first()
         firstTrack.userData = requester
         trackService.cacheItem(trackURL, playlist)
-        trackService.playTrack(channel.guild.id, firstTrack)
+        trackService.playTrack(channel.guild, firstTrack)
 
         val message = if (playlist.isSearchResult) {
             "*Your original request:* \"${trackURL.removePrefix(SEARCH_PREFIX)}\""

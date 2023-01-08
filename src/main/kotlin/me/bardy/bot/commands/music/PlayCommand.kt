@@ -1,10 +1,11 @@
 package me.bardy.bot.commands.music
 
 import com.mojang.brigadier.arguments.StringArgumentType
-import com.mojang.brigadier.tree.LiteralCommandNode
+import com.mojang.brigadier.builder.LiteralArgumentBuilder
 import me.bardy.bot.command.Command
-import me.bardy.bot.command.CommandContext
+import me.bardy.bot.command.BotCommandContext
 import me.bardy.bot.command.argument
+import me.bardy.bot.command.getArgument
 import me.bardy.bot.command.literal
 import me.bardy.bot.command.runs
 import me.bardy.bot.config.bot.BotConfig
@@ -12,7 +13,7 @@ import me.bardy.bot.services.TrackService
 import me.bardy.bot.util.description
 import me.bardy.bot.util.embed
 import me.bardy.bot.util.logger
-import me.bardy.bot.util.ManagerMap
+import me.bardy.bot.util.GuildMusicManagers
 import net.dv8tion.jda.api.entities.GuildMessageChannel
 import net.dv8tion.jda.api.entities.MessageEmbed
 import org.springframework.stereotype.Component
@@ -26,9 +27,9 @@ import org.springframework.stereotype.Component
 @Component
 class PlayCommand(
     private val botConfig: BotConfig,
-    private val musicManagers: ManagerMap,
+    private val musicManagers: GuildMusicManagers,
     private val trackService: TrackService
-) : Command("play") {
+) : Command(setOf("play")) {
 
     val helpMessage: MessageEmbed = embed {
         description("""
@@ -38,27 +39,30 @@ class PlayCommand(
         """.trimIndent())
     }
 
-    override fun register(): LiteralCommandNode<CommandContext> = literal<CommandContext>("play") {
+    override fun create(): LiteralArgumentBuilder<BotCommandContext> = literal("play") {
         argument("track", StringArgumentType.greedyString()) {
             runs {
                 val member = it.source.member ?: return@runs
                 val channel = it.source.channel as? GuildMessageChannel ?: return@runs
-                val audioPlayer = musicManagers.get(it.source.guild.id).player
-                if (audioPlayer.isPaused) it.source.reply("Just to remind you, I'm still on pause from earlier")
-                trackService.loadTrack(channel, it.input.split(" ").drop(1).joinToString(" "), member).handle(it.source.channel)
+
+                val manager = musicManagers.getByGuild(it.source.guild)
+                if (manager.isPaused()) it.source.reply("Just to remind you, I'm still on pause from earlier")
+
+                val track = it.getArgument<String>("track")
+                trackService.loadTrack(channel, track, member).handle(it.source.channel)
             }
         }
         runs {
-            val audioPlayer = musicManagers.get(it.source.guild.id).player
-            if (audioPlayer.isPaused) {
-                LOGGER.debug("Attempting to resume track ${audioPlayer.playingTrack}")
-                audioPlayer.isPaused = false
+            val manager = musicManagers.getByGuild(it.source.guild)
+            if (manager.isPaused()) {
+                LOGGER.debug("Attempting to resume track ${manager.playingTrack()}")
+                manager.resume()
                 it.source.reply("About time you played that again! I was starting to get bored!")
                 return@runs
             }
             it.source.reply(helpMessage)
         }
-    }.build()
+    }
 
     companion object {
 

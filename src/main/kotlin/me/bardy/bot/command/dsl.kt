@@ -11,30 +11,28 @@ inline fun <S> literal(
     builder: LiteralArgumentBuilder<S>.() -> Unit
 ): LiteralArgumentBuilder<S> = LiteralArgumentBuilder.literal<S>(name).apply(builder)
 
-inline fun <S, T> argument(
-    name: String,
-    type: ArgumentType<T>,
-    builder: RequiredArgumentBuilder<S, T>.() -> Unit
-): RequiredArgumentBuilder<S, T> = RequiredArgumentBuilder.argument<S, T>(name, type).apply(builder)
-
-fun <S> LiteralArgumentBuilder<S>.literal(
+inline fun <S> LiteralArgumentBuilder<S>.literal(
     name: String,
     builder: LiteralArgumentBuilder<S>.() -> Unit
 ): LiteralArgumentBuilder<S> = then(LiteralArgumentBuilder.literal<S>(name).apply(builder))
 
-fun <S, T> LiteralArgumentBuilder<S>.argument(
+inline fun <S, T> LiteralArgumentBuilder<S>.argument(
     name: String,
     type: ArgumentType<T>,
     builder: RequiredArgumentBuilder<S, T>.() -> Unit
 ): LiteralArgumentBuilder<S> = then(RequiredArgumentBuilder.argument<S, T>(name, type).apply(builder))
 
-fun <S, T, T1> RequiredArgumentBuilder<S, T>.argument(
+inline fun <S, T, T1> RequiredArgumentBuilder<S, T>.argument(
     name: String,
     type: ArgumentType<T1>,
     builder: RequiredArgumentBuilder<S, T1>.() -> Unit
 ): RequiredArgumentBuilder<S, T> = then(RequiredArgumentBuilder.argument<S, T1>(name, type).apply(builder))
 
-fun <S, T : ArgumentBuilder<S, T>> ArgumentBuilder<S, T>.runs(action: (CommandContext<S>) -> Unit): ArgumentBuilder<S, T> = executes {
-    action(it)
-    com.mojang.brigadier.Command.SINGLE_SUCCESS
+inline fun <S, T : ArgumentBuilder<S, T>> ArgumentBuilder<S, T>.runs(crossinline action: (CommandContext<S>) -> Unit): ArgumentBuilder<S, T> {
+    return executes {
+        action(it)
+        com.mojang.brigadier.Command.SINGLE_SUCCESS
+    }
 }
+
+inline fun <reified T> CommandContext<BotCommandContext>.getArgument(name: String): T = getArgument(name, T::class.java)

@@ -4,7 +4,7 @@ import java.util.concurrent.Executors
 import java.util.concurrent.ScheduledFuture
 import java.util.concurrent.TimeUnit
 import me.bardy.bot.services.ConnectionService
-import me.bardy.bot.util.ManagerMap
+import me.bardy.bot.util.GuildMusicManagers
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceJoinEvent
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceLeaveEvent
 import org.springframework.stereotype.Component
@@ -12,14 +12,13 @@ import org.springframework.stereotype.Component
 @Component
 class VoiceListener(
     private val connectionService: ConnectionService,
-    private val musicManagers: ManagerMap
+    private val musicManagers: GuildMusicManagers
 ) : BardyBotListener() {
 
     private val scheduler = Executors.newSingleThreadScheduledExecutor()
     private val tasks = mutableMapOf<String, ScheduledFuture<*>>()
 
     override fun onGuildVoiceLeave(event: GuildVoiceLeaveEvent) {
-        val guildId = event.guild.id
         val bot = event.guild.selfMember
         val botVoiceChannel = bot.voiceState?.channel ?: return
 
@@ -27,12 +26,13 @@ class VoiceListener(
         if (event.channelLeft != botVoiceChannel) return // Not the bot's channel
         if (event.channelLeft.members.size > 1) return // More than one user (someone else) still in channel
         if (event.channelLeft.members[0] != bot) return // Remaining member not the bot
-        musicManagers.get(guildId).player.isPaused = true
+        musicManagers.getByGuild(event.guild).player.isPaused = true
 
+        val guildId = event.guild.id
         if (tasks[guildId] != null) return
         tasks[guildId] = scheduler.schedule({
             connectionService.leave(guildId)
-            musicManagers.remove(guildId)
+            musicManagers.removeForGuild(guildId)
             complete(guildId)
         }, 5, TimeUnit.MINUTES)
     }

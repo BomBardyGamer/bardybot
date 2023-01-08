@@ -1,9 +1,8 @@
 package me.bardy.bot.commands.misc
 
-import com.mojang.brigadier.tree.LiteralCommandNode
 import me.bardy.bot.Versions
-import me.bardy.bot.command.Command
-import me.bardy.bot.command.CommandContext
+import me.bardy.bot.command.BasicCommand
+import me.bardy.bot.command.BotCommandContext
 import me.bardy.bot.util.Colors
 import me.bardy.bot.util.color
 import me.bardy.bot.util.description
@@ -13,7 +12,7 @@ import net.dv8tion.jda.api.entities.MessageEmbed
 import org.springframework.stereotype.Component
 
 @Component
-class VersionCommand : Command("v", "info") {
+class VersionCommand : BasicCommand("version", setOf("v", "info")) {
 
     val infoEmbed: MessageEmbed = embed {
         title("Here's some information about me:")
@@ -28,7 +27,7 @@ class VersionCommand : Command("v", "info") {
         color(Colors.BARDY_ORANGE)
     }
 
-    override fun register(): LiteralCommandNode<CommandContext> = default("version") {
-        it.reply(infoEmbed)
+    override fun execute(context: BotCommandContext) {
+        context.reply(infoEmbed)
     }
 }

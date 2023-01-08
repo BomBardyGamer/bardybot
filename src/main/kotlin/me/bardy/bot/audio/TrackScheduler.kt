@@ -16,8 +16,20 @@ import me.bardy.bot.util.logger
  */
 class TrackScheduler(private val player: IPlayer) : PlayerEventListenerAdapter() {
 
-    var isLooping: Boolean = false
-    val queue: Queue<AudioTrack> = ArrayBlockingQueue(100)
+    private var looping = false
+    private val queue = ArrayBlockingQueue<AudioTrack>(100)
+
+    fun queue(): Queue<AudioTrack> = queue
+
+    fun isLooping(): Boolean = looping
+
+    fun startLooping() {
+        looping = true
+    }
+
+    fun stopLooping() {
+        looping = false
+    }
 
     fun queue(track: AudioTrack) {
         LOGGER.debug("Attempting to start track $track, not interrupting currently playing track.")
@@ -47,7 +59,7 @@ class TrackScheduler(private val player: IPlayer) : PlayerEventListenerAdapter()
         if (!endReason.mayStartNext) return
 
         LOGGER.debug("End reason was mayStartNext, attempting to start next track ${queue.peek()}")
-        if (isLooping) {
+        if (looping) {
             LOGGER.debug("Loop is enabled. Attempting to start clone of previous track $track with player $player")
             player.playTrack(track.makeClone())
             return

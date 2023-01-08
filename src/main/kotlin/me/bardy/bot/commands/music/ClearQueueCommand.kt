@@ -1,22 +1,21 @@
 package me.bardy.bot.commands.music
 
-import com.mojang.brigadier.tree.LiteralCommandNode
-import me.bardy.bot.command.Command
-import me.bardy.bot.command.CommandContext
-import me.bardy.bot.util.ManagerMap
+import me.bardy.bot.command.BasicCommand
+import me.bardy.bot.command.BotCommandContext
+import me.bardy.bot.util.GuildMusicManagers
 import org.springframework.stereotype.Component
 
 @Component
-class ClearQueueCommand(private val musicManagers: ManagerMap) : Command("cl, cq") {
+class ClearQueueCommand(private val musicManagers: GuildMusicManagers) : BasicCommand("clear", setOf("cl", "cq")) {
 
-    override fun register(): LiteralCommandNode<CommandContext> = default("clear") {
-        val queue = musicManagers.get(it.guild.id).scheduler.queue
-        if (queue.isEmpty()) {
-            it.reply("I tried to clear the queue, but there wasn't any tracks to clear :pensive:")
-            return@default
+    override fun execute(context: BotCommandContext) {
+        val manager = musicManagers.getByGuild(context.guild)
+        if (!manager.hasQueuedTracks()) {
+            context.reply("I tried to clear the queue, but there wasn't any tracks to clear :pensive:")
+            return
         }
 
-        queue.clear()
-        it.reply("Bang! And the tracks are... gone...")
+        manager.clearQueue()
+        context.reply("Bang! And the tracks are... gone...")
     }
 }

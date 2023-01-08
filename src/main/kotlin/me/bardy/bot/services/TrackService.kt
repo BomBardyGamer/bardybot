@@ -1,6 +1,5 @@
 package me.bardy.bot.services
 
-import com.github.benmanes.caffeine.cache.Cache
 import com.github.benmanes.caffeine.cache.Caffeine
 import com.sedmelluq.discord.lavaplayer.track.AudioItem
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist
@@ -10,7 +9,8 @@ import lavalink.client.io.jda.JdaLavalink
 import me.bardy.bot.audio.LoadResultHandler
 import me.bardy.bot.audio.JoinResult
 import me.bardy.bot.util.logger
-import me.bardy.bot.util.ManagerMap
+import me.bardy.bot.util.GuildMusicManagers
+import net.dv8tion.jda.api.entities.Guild
 import net.dv8tion.jda.api.entities.GuildMessageChannel
 import net.dv8tion.jda.api.entities.Member
 import net.dv8tion.jda.api.entities.VoiceChannel
@@ -25,14 +25,14 @@ import org.springframework.stereotype.Service
 @Service
 class TrackService(
     private val connectionService: ConnectionService,
-    private val musicManagers: ManagerMap,
+    private val musicManagers: GuildMusicManagers,
     private val lavalink: JdaLavalink
 ) {
 
-    val audioItemCache: Cache<String, AudioItem> = Caffeine.newBuilder()
+    private val audioItemCache = Caffeine.newBuilder()
         .maximumSize(64)
         .expireAfterWrite(30, TimeUnit.MINUTES)
-        .build()
+        .build<String, AudioItem>()
 
     fun loadTrack(channel: GuildMessageChannel, track: String, requester: Member): JoinResult {
         val trackURL = if (URL_REGEX.matches(track)) track else "ytsearch:${track.lowercase()}"
@@ -61,19 +61,19 @@ class TrackService(
         return JoinResult.SUCCESSFUL
     }
 
-    fun playTrack(guildId: String, audioTrack: AudioTrack) {
-        musicManagers.get(guildId).scheduler.queue(audioTrack)
+    fun playTrack(guild: Guild, audioTrack: AudioTrack) {
+        musicManagers.getByGuild(guild).scheduler.queue(audioTrack)
     }
 
     fun queueTracks(tracks: List<AudioTrack>, requester: Member) {
-        val musicManager = musicManagers.get(requester.guild.id)
+        val musicManager = musicManagers.getByGuild(requester.guild)
         tracks.forEach {
             musicManager.scheduler.queue(it)
             it.userData = requester
         }
     }
 
-    fun skipTrack(guildId: String): Boolean = musicManagers.get(guildId).scheduler.nextTrack()
+    fun skipTrack(guild: Guild): Boolean = musicManagers.getByGuild(guild).scheduler.nextTrack()
 
     fun cacheItem(trackURL: String, item: AudioItem) {
         audioItemCache.put(trackURL, item)

@@ -6,14 +6,14 @@ import net.dv8tion.jda.api.entities.Message
 import net.dv8tion.jda.api.entities.MessageChannel
 import net.dv8tion.jda.api.entities.MessageEmbed
 
-data class CommandContext(
+class BotCommandContext(
     val guild: Guild,
     val channel: MessageChannel,
     val member: Member?,
     val message: Message
 ) {
 
-    val self: Member = guild.selfMember
+    fun getSelf(): Member = guild.selfMember
 
     fun reply(text: String) {
         channel.sendMessage(text).queue()

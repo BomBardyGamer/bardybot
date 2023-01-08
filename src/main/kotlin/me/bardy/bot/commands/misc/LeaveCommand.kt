@@ -1,33 +1,32 @@
 package me.bardy.bot.commands.misc
 
-import com.mojang.brigadier.tree.LiteralCommandNode
-import me.bardy.bot.command.Command
-import me.bardy.bot.command.CommandContext
+import me.bardy.bot.command.BasicCommand
+import me.bardy.bot.command.BotCommandContext
 import me.bardy.bot.services.ConnectionService
-import me.bardy.bot.util.ManagerMap
+import me.bardy.bot.util.GuildMusicManagers
 import org.springframework.stereotype.Component
 
 @Component
 class LeaveCommand(
     private val connectionService: ConnectionService,
-    private val musicManagers: ManagerMap
-) : Command() {
+    private val musicManagers: GuildMusicManagers
+) : BasicCommand("leave", emptySet()) {
 
-    override fun register(): LiteralCommandNode<CommandContext> = default("leave") {
-        val requester = it.member ?: return@default
-        val botVoiceChannel = it.self.voiceState?.channel
+    override fun execute(context: BotCommandContext) {
+        val requester = context.member ?: return
+        val botVoiceChannel = context.getSelf().voiceState?.channel
         if (botVoiceChannel == null) {
-            it.reply("**I can't leave a channel if I'm not in one!**")
-            return@default
+            context.reply("**I can't leave a channel if I'm not in one!**")
+            return
         }
         if (requester.voiceState?.channel != botVoiceChannel) {
-            it.reply("**You have to be in the same channel as me to make me leave**")
-            return@default
+            context.reply("**You have to be in the same channel as me to make me leave**")
+            return
         }
 
-        val guildId = it.guild.id
+        val guildId = context.guild.id
         connectionService.leave(guildId)
-        musicManagers.remove(guildId)
-        it.reply("**I've successfully left the voice channel!**")
+        musicManagers.removeForGuild(guildId)
+        context.reply("**I've successfully left the voice channel!**")
     }
 }

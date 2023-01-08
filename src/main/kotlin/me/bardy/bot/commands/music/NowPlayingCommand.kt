@@ -1,9 +1,8 @@
 package me.bardy.bot.commands.music
 
-import com.mojang.brigadier.tree.LiteralCommandNode
+import me.bardy.bot.command.BasicCommand
 import java.time.Duration
-import me.bardy.bot.command.Command
-import me.bardy.bot.command.CommandContext
+import me.bardy.bot.command.BotCommandContext
 import me.bardy.bot.util.author
 import me.bardy.bot.util.color
 import me.bardy.bot.util.Colors
@@ -12,33 +11,33 @@ import me.bardy.bot.util.embed
 import me.bardy.bot.util.format
 import me.bardy.bot.util.formatName
 import me.bardy.bot.util.logger
-import me.bardy.bot.util.ManagerMap
+import me.bardy.bot.util.GuildMusicManagers
 import me.bardy.bot.util.thumbnail
 import net.dv8tion.jda.api.entities.Member
 import org.springframework.stereotype.Component
 
 @Component
-class NowPlayingCommand(private val musicManagers: ManagerMap) : Command("np") {
+class NowPlayingCommand(private val musicManagers: GuildMusicManagers) : BasicCommand("nowplaying", setOf("np")) {
 
-    override fun register(): LiteralCommandNode<CommandContext> = default("nowplaying") {
-        val audioPlayer = musicManagers.get(it.guild.id).player
+    override fun execute(context: BotCommandContext) {
+        val manager = musicManagers.getByGuild(context.guild)
 
-        val nowPlaying = audioPlayer.playingTrack
+        val nowPlaying = manager.playingTrack()
         if (nowPlaying == null) {
-            it.reply("**The party hasn't started yet, there's a play command you can use to kick it off!**")
-            return@default
+            context.reply("**The party hasn't started yet, there's a play command you can use to kick it off!**")
+            return
         }
 
-        val requester = nowPlaying.userData as? Member
+        val requester = nowPlaying.getUserData(Member::class.java)
         if (requester == null) {
             LOGGER.error("User data for requested track $nowPlaying should have been of type Member and wasn't")
-            return@default
+            return
         }
 
-        val positionMillis = audioPlayer.trackPosition
+        val positionMillis = manager.trackPosition()
         val position = Duration.ofMillis(positionMillis)
         val duration = Duration.ofMillis(nowPlaying.duration)
-        it.reply(embed {
+        context.reply(embed {
             author("What banging tune I've got on", "https://bot.bardy.me", "https://cdn.prevarinite.com/images/bbg.jpg")
             thumbnail("https://img.youtube.com/vi/${nowPlaying.identifier}/maxresdefault.jpg")
             description("""
