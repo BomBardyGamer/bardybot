@@ -19,6 +19,10 @@ import org.springframework.stereotype.Component
 class VolumeCommand(private val musicManagers: ManagerMap) : Command("vol") {
 
     override fun register(): LiteralCommandNode<CommandContext> = literal<CommandContext>("volume") {
+        runs { context ->
+            val player = musicManagers.get(context.source.guild.id).player
+            context.source.reply("Speakers are turned up to **${player.volume}** at the moment!")
+        }
         argument("value", IntegerArgumentType.integer(0, 200)) {
             runs { updateVolume(musicManagers.get(it.source.guild.id).player, it.argument("value"), it.source) }
         }

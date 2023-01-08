@@ -14,7 +14,7 @@ plugins {
 }
 
 group = "me.bardy"
-version = "1.8.2-BETA"
+version = "1.8.3-BETA"
 
 java.sourceCompatibility = JavaVersion.VERSION_17
 application.mainClass.set("me.bardy.bot.BardyBotKt")
