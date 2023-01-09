@@ -17,12 +17,15 @@ class VersionCommand : BasicCommand("version", setOf("v", "info")) {
     val infoEmbed: MessageEmbed = embed {
         title("Here's some information about me:")
         description("""
+            I'm BardyBot, a Discord music bot written in Kotlin using Spring, JDA, and Lavalink.
             My version: [${Versions.BOT}](https://github.com/BomBardyGamer/BardyBot)
-            
+
             __Powered By:__
             JDA - [${Versions.JDA}](https://github.com/DV8FromTheWorld/JDA)
             Lavalink Client - [${Versions.LAVALINK}](https://github.com/Frederikam/Lavalink-Client)
             Lavaplayer - [${Versions.LAVAPLAYER}](https://github.com/sedmelluq/lavaplayer)
+
+            Created by [BomBardyGamer](https://github.com/BomBardyGamer)
         """.trimIndent())
         color(BardyBotColors.BARDY_ORANGE)
     }

@@ -24,7 +24,7 @@ class LoadResultHandler(
      * usually when an outbound connection cannot be established.
      */
     override fun loadFailed(exception: FriendlyException) {
-        channel.sendMessage("**I did my best, but couldn't play what you requested for this reason:** ${exception.message}").queue()
+        channel.sendMessage("Sorry, I tried my best, but I couldn't play what you requested because: ${exception.message}").queue()
     }
 
     /**
@@ -33,7 +33,7 @@ class LoadResultHandler(
      * in the constructor of this class).
      */
     override fun trackLoaded(track: AudioTrack) {
-        channel.sendMessage("**I found this banging tune** `${track.info.title}` **and queued it up to be played!**").queue()
+        channel.sendMessage("I found this banging tune `${track.info.title}` and queued it up to be played!").queue()
         track.userData = requester
         trackManager.cacheItem(trackURL, track)
         trackManager.playTrack(channel.guild, track)
@@ -47,7 +47,8 @@ class LoadResultHandler(
      * does not exist.
      */
     override fun noMatches() {
-        channel.sendMessage("**I tried very hard, but couldn't find any results for** \"${trackURL.removePrefix(SEARCH_PREFIX)}\"").queue()
+        val request = trackURL.removePrefix(SEARCH_PREFIX)
+        channel.sendMessage("Sorry, I tried very hard, but I couldn't find any results for '$request'").queue()
     }
 
     /**
@@ -65,12 +66,13 @@ class LoadResultHandler(
         trackManager.playTrack(channel.guild, firstTrack)
 
         val message = if (playlist.isSearchResult) {
-            "*Your original request:* \"${trackURL.removePrefix(SEARCH_PREFIX)}\""
+            val request = trackURL.removePrefix(SEARCH_PREFIX)
+            "*What you asked for:* '$request'"
         } else {
             trackManager.queueTracks(playlist.tracks, requester)
-            "*The first banging tune in the playlist* `${playlist.name}`"
+            "*The first in the playlist* '${playlist.name}'"
         }
-        channel.sendMessage("**I found this banging tune** `${firstTrack.info.title}` ($message) **and queued it up to be played!**").queue()
+        channel.sendMessage("I found this banging tune `${firstTrack.info.title}` ($message) and queued it up to be played!").queue()
     }
 
     companion object {

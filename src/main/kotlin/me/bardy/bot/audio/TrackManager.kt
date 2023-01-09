@@ -43,7 +43,7 @@ class TrackManager(
 
         val joinResult = connectionManager.tryJoin(voiceChannel)
         if (joinResult != JoinResult.SUCCESSFUL) return joinResult
-        channel.sendMessage("**I'm having a look around to see if I can find ** `$track`").queue()
+        channel.sendMessage("I'm having a look around to see if I can find anything for `$track`").queue()
 
         val resultHandler = LoadResultHandler(channel, requester, trackURL, this)
         val cachedItem = audioItemCache.getIfPresent(trackURL)

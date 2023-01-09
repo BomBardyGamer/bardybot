@@ -23,7 +23,7 @@ class NowPlayingCommand(private val musicManagers: GuildMusicManagers) : BasicCo
 
         val nowPlaying = manager.playingTrack()
         if (nowPlaying == null) {
-            context.reply("**The party hasn't started yet, there's a play command you can use to kick it off!**")
+            context.reply("The party hasn't started yet, there's a play command you can use to kick it off!")
             return
         }
 
@@ -37,12 +37,12 @@ class NowPlayingCommand(private val musicManagers: GuildMusicManagers) : BasicCo
         val position = Duration.ofMillis(positionMillis)
         val duration = Duration.ofMillis(nowPlaying.duration)
         context.reply(embed {
-            author("What banging tune I've got on", "https://bot.bardy.me", "https://cdn.prevarinite.com/images/bbg.jpg")
+            author("What I've got on", "https://bot.bardy.me", "https://cdn.prevarinite.com/images/bbg.jpg")
             thumbnail("https://img.youtube.com/vi/${nowPlaying.identifier}/maxresdefault.jpg")
             description("""
                 Got [${nowPlaying.info.title}](${nowPlaying.info.uri}) playing now!
 
-                We're this far through:
+                We're this far in:
                 `${calculateBar(positionMillis.toDouble() / nowPlaying.duration)}`
 
                 `${Durations.formatHumanReadable(position)} / ${Durations.formatHumanReadable(duration)}`

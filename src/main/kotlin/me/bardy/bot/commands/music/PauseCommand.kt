@@ -14,7 +14,7 @@ class PauseCommand(private val musicManagers: GuildMusicManagers) : BasicCommand
         if (!manager.isPaused()) {
             LOGGER.debug("Attempting to pause currently playing track ${manager.playingTrack()}")
             manager.pause()
-            context.reply("Ah come on, I was listening to that.")
+            context.reply("Ah come on! I was listening to that.")
         }
     }
 

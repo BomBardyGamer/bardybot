@@ -43,7 +43,7 @@ class QueueCommand(private val musicManagers: GuildMusicManagers) : Command(setO
         }
 
         if (pageNumber == 1) {
-            embed.description("\n\n__What I'm playing now:__\n")
+            embed.description("\n\n__What's on now:__\n")
 
             val nowPlaying = musicManager.playingTrack()
             if (nowPlaying == null) {
@@ -64,7 +64,7 @@ class QueueCommand(private val musicManagers: GuildMusicManagers) : Command(setO
             }
         }
 
-        embed.appendDescription("\n__What I've got for you next:__\n")
+        embed.appendDescription("\n__What I've got lined up:__\n")
 
         paginatedQueue.forEach { page ->
             page.forEachIndexed { i, track ->

@@ -28,10 +28,10 @@ class LoopCommand(private val musicManagers: GuildMusicManagers) : Command(setOf
     private fun toggleLoop(context: BotCommandContext, manager: MusicManager, state: Boolean) {
         if (state) {
             manager.startLooping()
-            context.reply("**I'll start looping for you now.**")
+            context.reply("I'll start looping for you now.")
         } else {
             manager.stopLooping()
-            context.reply("**Okay that's enough, I'll end the loop.**")
+            context.reply("Okay that's enough, I'll end the loop.")
         }
     }
 }

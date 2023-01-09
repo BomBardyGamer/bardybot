@@ -34,7 +34,7 @@ class PlayCommand(
 
     val helpMessage: MessageEmbed = embed {
         description("""
-            You got it wrong, here's how you use it:
+            You got it wrong! Here's how you use it:
 
             ${botConfig.prefix}play [Link or query]
         """.trimIndent())

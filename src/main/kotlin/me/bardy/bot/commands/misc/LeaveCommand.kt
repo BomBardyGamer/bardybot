@@ -10,22 +10,22 @@ import org.springframework.stereotype.Component
 class LeaveCommand(
     private val connectionManager: ConnectionManager,
     private val musicManagers: GuildMusicManagers
-) : BasicCommand("leave", emptySet()) {
+) : BasicCommand("leave", setOf("fuckoff", "pissoff", "goaway")) {
 
     override fun execute(context: BotCommandContext) {
         val requester = context.member ?: return
         val botVoiceChannel = context.getSelf().voiceState?.channel
         if (botVoiceChannel == null) {
-            context.reply("**I can't leave a channel if I'm not in one!**")
+            context.reply("I can't leave a channel if I'm not in one!")
             return
         }
         if (requester.voiceState?.channel != botVoiceChannel) {
-            context.reply("**You have to be in the same channel as me to make me leave**")
+            context.reply("You have to be in the same channel as me to make me leave!")
             return
         }
 
         connectionManager.leave(context.guild)
         musicManagers.removeForGuild(context.guild)
-        context.reply("**I've successfully left the voice channel!**")
+        context.reply("Alright! Alright! I'll get out of your way!")
     }
 }
