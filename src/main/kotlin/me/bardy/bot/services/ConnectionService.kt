@@ -4,6 +4,7 @@ import lavalink.client.io.jda.JdaLavalink
 import me.bardy.bot.audio.JoinResult
 import org.apache.logging.log4j.LogManager
 import net.dv8tion.jda.api.entities.AudioChannel
+import net.dv8tion.jda.api.entities.Guild
 import net.dv8tion.jda.api.entities.VoiceChannel
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException
 import org.springframework.stereotype.Service
@@ -22,13 +23,21 @@ class ConnectionService(private val lavalink: JdaLavalink) {
      * Connects the bot to the given voice channel, or, if the bot is
      * already in a channel, does nothing.
      */
-    fun join(channel: VoiceChannel): JoinResult {
+    fun tryJoin(channel: VoiceChannel): JoinResult {
+        val botVoiceChannel = getBotVoiceChannel(channel.guild)
+        val joinResult = canJoin(botVoiceChannel, channel)
+        if (joinResult != JoinResult.SUCCESSFUL) return joinResult
+        return joinChannel(channel)
+    }
+
+    private fun joinChannel(channel: VoiceChannel): JoinResult {
         return try {
             lavalink.getLink(channel.guild.id).connect(channel)
             LOGGER.debug("Successfully connected to voice channel $channel in guild ${channel.guild}")
             JoinResult.SUCCESSFUL
-        } catch (exception: Exception) {
-            if (exception is InsufficientPermissionException) JoinResult.NO_PERMISSION_TO_JOIN
+        } catch (_: InsufficientPermissionException) {
+            JoinResult.NO_PERMISSION_TO_JOIN
+        } catch (_: Exception) {
             JoinResult.OTHER
         }
     }
@@ -45,15 +54,15 @@ class ConnectionService(private val lavalink: JdaLavalink) {
         LOGGER.debug("Successfully disconnected from voice channel")
     }
 
-    fun evaluateJoin(channelId: AudioChannel?, voiceChannel: AudioChannel?): JoinResult {
-        if (channelId == null) {
-            if (voiceChannel == null) return JoinResult.USER_NOT_IN_CHANNEL
-            return JoinResult.SUCCESSFUL
+    private fun canJoin(botChannel: AudioChannel?, userChannel: AudioChannel): JoinResult {
+        return when {
+            botChannel == null -> JoinResult.SUCCESSFUL
+            botChannel.id != userChannel.id -> JoinResult.USER_NOT_IN_CHANNEL_WITH_BOT
+            else -> JoinResult.SUCCESSFUL
         }
-        if (voiceChannel == null) return JoinResult.USER_NOT_IN_CHANNEL_WITH_BOT
-        if (channelId.id != voiceChannel.id) return JoinResult.USER_NOT_IN_CHANNEL_WITH_BOT
-        return JoinResult.SUCCESSFUL
     }
+
+    private fun getBotVoiceChannel(guild: Guild): AudioChannel? = guild.selfMember.voiceState?.channel
 
     companion object {
 

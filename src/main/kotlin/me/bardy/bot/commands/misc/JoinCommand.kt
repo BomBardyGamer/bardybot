@@ -1,6 +1,5 @@
 package me.bardy.bot.commands.misc
 
-import me.bardy.bot.audio.JoinResult
 import me.bardy.bot.command.BasicCommand
 import me.bardy.bot.command.BotCommandContext
 import me.bardy.bot.services.ConnectionService
@@ -12,17 +11,13 @@ class JoinCommand(private val connectionService: ConnectionService) : BasicComma
 
     override fun execute(context: BotCommandContext) {
         val member = context.member ?: return
-        val botVoiceChannel = context.getSelf().voiceState?.channel
         val voiceChannel = member.voiceState?.channel
-        if (voiceChannel !is VoiceChannel?) return
-
-        val joinResult = connectionService.evaluateJoin(botVoiceChannel, voiceChannel)
-        if (joinResult != JoinResult.SUCCESSFUL) {
-            context.reply(joinResult.message)
+        if (voiceChannel !is VoiceChannel) {
+            context.reply("I can't join you if you're not in a channel!")
             return
         }
 
-        connectionService.join(voiceChannel!!)
-        context.reply("**I've successfully joined the voice channel!**")
+        val joinResult = connectionService.tryJoin(voiceChannel)
+        context.reply(joinResult.message)
     }
 }

@@ -40,18 +40,19 @@ class TrackService(
             LOGGER.debug("No voice channels found in guild.")
             return JoinResult.NO_CHANNELS
         }
-        val channelId = requester.guild.selfMember.voiceState?.channel
-        val voiceChannel = requester.voiceState?.channel as? VoiceChannel
+        val voiceChannel = requester.voiceState?.channel
+        if (voiceChannel !is VoiceChannel) return JoinResult.USER_NOT_IN_CHANNEL
 
-        connectionService.evaluateJoin(channelId, voiceChannel).require(JoinResult.SUCCESSFUL) { return it }
-        connectionService.join(requireNotNull(voiceChannel)).require(JoinResult.SUCCESSFUL) { return it }
-
+        val joinResult = connectionService.tryJoin(voiceChannel)
+        if (joinResult != JoinResult.SUCCESSFUL) return joinResult
         channel.sendMessage("**I'm having a look around to see if I can find ** `$track`").queue()
-        if (audioItemCache.getIfPresent(trackURL) != null) {
-            val resultHandler = LoadResultHandler(channel, requester, trackURL, this)
-            when (val item = audioItemCache.getIfPresent(trackURL)!!) {
-                is AudioTrack -> resultHandler.trackLoaded(item)
-                is AudioPlaylist -> resultHandler.playlistLoaded(item)
+
+        val resultHandler = LoadResultHandler(channel, requester, trackURL, this)
+        val cachedItem = audioItemCache.getIfPresent(trackURL)
+        if (cachedItem != null) {
+            when (cachedItem) {
+                is AudioTrack -> resultHandler.trackLoaded(cachedItem)
+                is AudioPlaylist -> resultHandler.playlistLoaded(cachedItem)
             }
 
             return JoinResult.SUCCESSFUL

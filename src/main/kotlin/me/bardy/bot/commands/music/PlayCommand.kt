@@ -2,6 +2,7 @@ package me.bardy.bot.commands.music
 
 import com.mojang.brigadier.arguments.StringArgumentType
 import com.mojang.brigadier.builder.LiteralArgumentBuilder
+import me.bardy.bot.audio.JoinResult
 import me.bardy.bot.command.Command
 import me.bardy.bot.command.BotCommandContext
 import me.bardy.bot.command.argument
@@ -49,7 +50,8 @@ class PlayCommand(
                 if (manager.isPaused()) it.source.reply("Just to remind you, I'm still on pause from earlier")
 
                 val track = it.getArgument<String>("track")
-                trackService.loadTrack(channel, track, member).handle(it.source.channel)
+                val result = trackService.loadTrack(channel, track, member)
+                if (result != JoinResult.SUCCESSFUL) it.source.channel.sendMessage(result.message).queue()
             }
         }
         runs {
