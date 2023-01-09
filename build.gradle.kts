@@ -30,8 +30,6 @@ dependencies {
     // Kotlin
     implementation(libs.kotlin.stdlib)
     implementation(libs.kotlin.reflect)
-    implementation(libs.kotlinx.coroutines)
-    implementation(libs.kotlinx.serialization)
 
     // Discord-related
     implementation(libs.jda)
@@ -66,8 +64,7 @@ tasks {
         val tokens = mapOf(
             "version" to project.version.toString(),
             "jdaVersion" to libs.versions.jda.get(),
-            "lavalinkVersion" to libs.versions.lavalink.get(),
-            "lavaplayerVersion" to libs.versions.lavaplayer.get()
+            "lavalinkVersion" to libs.versions.lavalink.get()
         )
         filter<ReplaceTokens>("tokens" to tokens)
     }

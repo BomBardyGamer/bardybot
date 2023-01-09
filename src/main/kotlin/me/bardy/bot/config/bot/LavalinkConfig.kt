@@ -1,11 +1,11 @@
 package me.bardy.bot.config.bot
 
 import org.springframework.boot.context.properties.ConfigurationProperties
-import org.springframework.boot.context.properties.ConstructorBinding
 
 @ConfigurationProperties("lavalink")
-@ConstructorBinding
+@JvmRecord
 data class LavalinkConfig(val nodes: List<NodeConfig>) {
 
+    @JvmRecord
     data class NodeConfig(val name: String, val url: String, val password: String)
 }

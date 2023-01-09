@@ -13,6 +13,7 @@ import net.dv8tion.jda.api.utils.cache.CacheFlag
 import org.apache.logging.log4j.LogManager
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import java.util.EnumSet
 import kotlin.system.exitProcess
 
 @Configuration
@@ -26,7 +27,7 @@ class JdaConfiguration {
                 .setVoiceDispatchInterceptor(lavalink.voiceInterceptor)
                 .setMemberCachePolicy(MemberCachePolicy.VOICE)
                 .setChunkingFilter(ChunkingFilter.NONE)
-                .disableCache(DISABLED_FLAGS)
+                .disableCache(EnumSet.complementOf(ENABLED_FLAGS))
                 .build()
             lavalink.setJdaProvider(jda::getShardById)
             jda.addEventListener(*listeners.toTypedArray())
@@ -39,19 +40,13 @@ class JdaConfiguration {
 
     companion object {
 
-        private val GATEWAY_INTENTS = listOf(
+        private val GATEWAY_INTENTS = EnumSet.of(
             GatewayIntent.GUILD_MESSAGES,
             GatewayIntent.GUILD_VOICE_STATES,
-            GatewayIntent.GUILD_MESSAGE_REACTIONS
+            GatewayIntent.GUILD_MESSAGE_REACTIONS,
+            GatewayIntent.MESSAGE_CONTENT
         )
-        private val DISABLED_FLAGS = listOf(
-            CacheFlag.ACTIVITY,
-            CacheFlag.CLIENT_STATUS,
-            CacheFlag.EMOTE,
-            CacheFlag.MEMBER_OVERRIDES,
-            CacheFlag.ONLINE_STATUS,
-            CacheFlag.ROLE_TAGS
-        )
+        private val ENABLED_FLAGS = EnumSet.of(CacheFlag.VOICE_STATE)
 
         private val LOGGER = LogManager.getLogger()
     }

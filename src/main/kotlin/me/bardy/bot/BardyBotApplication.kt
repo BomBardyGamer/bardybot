@@ -4,7 +4,7 @@ import io.sentry.Sentry
 import me.bardy.bot.config.bot.SentryConfig
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan
-import javax.annotation.PostConstruct
+import jakarta.annotation.PostConstruct
 import org.apache.logging.log4j.LogManager
 
 /**

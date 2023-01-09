@@ -23,7 +23,6 @@ class VersionCommand : BasicCommand("version", setOf("v", "info")) {
             __Powered By:__
             JDA - [${Versions.JDA}](https://github.com/DV8FromTheWorld/JDA)
             Lavalink Client - [${Versions.LAVALINK}](https://github.com/Frederikam/Lavalink-Client)
-            Lavaplayer - [${Versions.LAVAPLAYER}](https://github.com/sedmelluq/lavaplayer)
 
             Created by [BomBardyGamer](https://github.com/BomBardyGamer)
         """.trimIndent())

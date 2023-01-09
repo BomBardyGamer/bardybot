@@ -26,7 +26,7 @@ class MessageListener(
         val message = event.message.contentRaw
         if (!message.startsWith(botConfig.prefix)) return
         val command = message.substring(botConfig.prefix.length)
-        val context = BotCommandContext(event.guild, event.channel, event.member, event.message)
+        val context = BotCommandContext(event.guild, event.channel, event.member)
 
         try {
             val parseResults = parsedCache.get(CacheKey(context, command))

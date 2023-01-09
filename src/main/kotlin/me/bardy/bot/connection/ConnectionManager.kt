@@ -3,9 +3,9 @@ package me.bardy.bot.connection
 import lavalink.client.io.jda.JdaLavalink
 import me.bardy.bot.audio.JoinResult
 import org.apache.logging.log4j.LogManager
-import net.dv8tion.jda.api.entities.AudioChannel
 import net.dv8tion.jda.api.entities.Guild
-import net.dv8tion.jda.api.entities.VoiceChannel
+import net.dv8tion.jda.api.entities.channel.concrete.VoiceChannel
+import net.dv8tion.jda.api.entities.channel.middleman.AudioChannel
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException
 import org.springframework.stereotype.Service
 

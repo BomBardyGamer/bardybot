@@ -14,8 +14,8 @@ import me.bardy.bot.audio.TrackManager
 import me.bardy.bot.util.description
 import me.bardy.bot.util.embed
 import me.bardy.bot.audio.GuildMusicManagers
-import net.dv8tion.jda.api.entities.GuildMessageChannel
 import net.dv8tion.jda.api.entities.MessageEmbed
+import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel
 import org.apache.logging.log4j.LogManager
 import org.springframework.stereotype.Component
 

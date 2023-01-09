@@ -3,7 +3,7 @@ package me.bardy.bot.commands.misc
 import me.bardy.bot.command.BasicCommand
 import me.bardy.bot.command.BotCommandContext
 import me.bardy.bot.connection.ConnectionManager
-import net.dv8tion.jda.api.entities.VoiceChannel
+import net.dv8tion.jda.api.entities.channel.concrete.VoiceChannel
 import org.springframework.stereotype.Component
 
 @Component

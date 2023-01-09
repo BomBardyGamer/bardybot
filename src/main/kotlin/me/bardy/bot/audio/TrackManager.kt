@@ -8,9 +8,9 @@ import java.util.concurrent.TimeUnit
 import lavalink.client.io.jda.JdaLavalink
 import me.bardy.bot.connection.ConnectionManager
 import net.dv8tion.jda.api.entities.Guild
-import net.dv8tion.jda.api.entities.GuildMessageChannel
 import net.dv8tion.jda.api.entities.Member
-import net.dv8tion.jda.api.entities.VoiceChannel
+import net.dv8tion.jda.api.entities.channel.concrete.VoiceChannel
+import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel
 import org.apache.logging.log4j.LogManager
 import org.springframework.stereotype.Service
 

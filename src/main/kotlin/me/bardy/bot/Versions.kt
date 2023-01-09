@@ -7,7 +7,6 @@ object Versions {
     val BOT: String
     val JDA: String
     val LAVALINK: String
-    val LAVAPLAYER: String
 
     init {
         val versionsFile = Properties().apply {
@@ -16,6 +15,5 @@ object Versions {
         BOT = versionsFile.getProperty("bot")
         JDA = versionsFile.getProperty("jda")
         LAVALINK = versionsFile.getProperty("lavalink")
-        LAVAPLAYER = versionsFile.getProperty("lavaplayer")
     }
 }
