@@ -5,19 +5,18 @@ import com.sedmelluq.discord.lavaplayer.source.AudioSourceManager
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack
-import me.bardy.bot.services.TrackService
 import net.dv8tion.jda.api.entities.GuildMessageChannel
 import net.dv8tion.jda.api.entities.Member
 
 /**
  * Represents the result of an attempt to load an audio track from a given URL, search query or
- * playlist, used to process the result of an attempt to load a given track by the Guild's [TrackService].
+ * playlist, used to process the result of an attempt to load a given track by the Guild's [TrackManager].
  */
 class LoadResultHandler(
     private val channel: GuildMessageChannel,
     private val requester: Member,
     private val trackURL: String,
-    private val trackService: TrackService
+    private val trackManager: TrackManager
 ) : AudioLoadResultHandler {
 
     /**
@@ -36,8 +35,8 @@ class LoadResultHandler(
     override fun trackLoaded(track: AudioTrack) {
         channel.sendMessage("**I found this banging tune** `${track.info.title}` **and queued it up to be played!**").queue()
         track.userData = requester
-        trackService.cacheItem(trackURL, track)
-        trackService.playTrack(channel.guild, track)
+        trackManager.cacheItem(trackURL, track)
+        trackManager.playTrack(channel.guild, track)
     }
 
     /**
@@ -62,13 +61,13 @@ class LoadResultHandler(
     override fun playlistLoaded(playlist: AudioPlaylist) {
         val firstTrack = playlist.selectedTrack ?: playlist.tracks.first()
         firstTrack.userData = requester
-        trackService.cacheItem(trackURL, playlist)
-        trackService.playTrack(channel.guild, firstTrack)
+        trackManager.cacheItem(trackURL, playlist)
+        trackManager.playTrack(channel.guild, firstTrack)
 
         val message = if (playlist.isSearchResult) {
             "*Your original request:* \"${trackURL.removePrefix(SEARCH_PREFIX)}\""
         } else {
-            trackService.queueTracks(playlist.tracks, requester)
+            trackManager.queueTracks(playlist.tracks, requester)
             "*The first banging tune in the playlist* `${playlist.name}`"
         }
         channel.sendMessage("**I found this banging tune** `${firstTrack.info.title}` ($message) **and queued it up to be played!**").queue()

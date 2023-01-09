@@ -2,13 +2,13 @@ package me.bardy.bot.commands.misc
 
 import me.bardy.bot.command.BasicCommand
 import me.bardy.bot.command.BotCommandContext
-import me.bardy.bot.services.ConnectionService
-import me.bardy.bot.util.GuildMusicManagers
+import me.bardy.bot.connection.ConnectionManager
+import me.bardy.bot.audio.GuildMusicManagers
 import org.springframework.stereotype.Component
 
 @Component
 class LeaveCommand(
-    private val connectionService: ConnectionService,
+    private val connectionManager: ConnectionManager,
     private val musicManagers: GuildMusicManagers
 ) : BasicCommand("leave", emptySet()) {
 
@@ -24,9 +24,8 @@ class LeaveCommand(
             return
         }
 
-        val guildId = context.guild.id
-        connectionService.leave(guildId)
-        musicManagers.removeForGuild(guildId)
+        connectionManager.leave(context.guild)
+        musicManagers.removeForGuild(context.guild)
         context.reply("**I've successfully left the voice channel!**")
     }
 }

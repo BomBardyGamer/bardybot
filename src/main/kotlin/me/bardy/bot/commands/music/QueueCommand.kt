@@ -15,7 +15,7 @@ import me.bardy.bot.util.Durations
 import me.bardy.bot.util.buildEmbed
 import me.bardy.bot.util.color
 import me.bardy.bot.util.description
-import me.bardy.bot.util.GuildMusicManagers
+import me.bardy.bot.audio.GuildMusicManagers
 import me.bardy.bot.util.title
 import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.entities.Member

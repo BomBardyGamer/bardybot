@@ -4,12 +4,12 @@ import java.net.URI
 import lavalink.client.io.jda.JdaLavalink
 import me.bardy.bot.config.bot.BotConfig
 import me.bardy.bot.config.bot.LavalinkConfig
-import me.bardy.bot.util.GuildMusicManagers
+import me.bardy.bot.audio.GuildMusicManagers
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 
 @Configuration
-class MusicConfig {
+class MusicConfiguration {
 
     @Bean
     fun lavalink(linkConfig: LavalinkConfig, botConfig: BotConfig): JdaLavalink {

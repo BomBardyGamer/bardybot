@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 
 @Configuration
-class CommandConfig {
+class CommandConfiguration {
 
     @Bean
     fun commandDispatcher(commands: Set<Command>): CommandDispatcher<BotCommandContext> {

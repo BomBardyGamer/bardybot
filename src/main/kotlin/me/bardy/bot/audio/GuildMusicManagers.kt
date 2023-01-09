@@ -1,7 +1,6 @@
-package me.bardy.bot.util
+package me.bardy.bot.audio
 
 import lavalink.client.io.jda.JdaLavalink
-import me.bardy.bot.audio.MusicManager
 import net.dv8tion.jda.api.entities.Guild
 
 class GuildMusicManagers(private val lavalink: JdaLavalink) {
@@ -16,7 +15,7 @@ class GuildMusicManagers(private val lavalink: JdaLavalink) {
         return manager
     }
 
-    fun removeForGuild(guildId: String) {
-        managers.remove(guildId)
+    fun removeForGuild(guild: Guild) {
+        managers.remove(guild.id)
     }
 }

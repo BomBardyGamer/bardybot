@@ -1,4 +1,4 @@
-package me.bardy.bot.listeners
+package me.bardy.bot.util
 
 import net.dv8tion.jda.api.hooks.ListenerAdapter
 

@@ -2,7 +2,7 @@ package me.bardy.bot.commands.music
 
 import me.bardy.bot.command.BasicCommand
 import me.bardy.bot.command.BotCommandContext
-import me.bardy.bot.util.GuildMusicManagers
+import me.bardy.bot.audio.GuildMusicManagers
 import org.apache.logging.log4j.LogManager
 import org.springframework.stereotype.Component
 

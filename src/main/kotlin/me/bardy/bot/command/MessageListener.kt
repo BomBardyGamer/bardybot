@@ -1,11 +1,11 @@
-package me.bardy.bot.listeners
+package me.bardy.bot.command
 
 import com.github.benmanes.caffeine.cache.Caffeine
 import com.mojang.brigadier.CommandDispatcher
 import com.mojang.brigadier.ParseResults
 import com.mojang.brigadier.exceptions.CommandSyntaxException
-import me.bardy.bot.command.BotCommandContext
 import me.bardy.bot.config.bot.BotConfig
+import me.bardy.bot.util.BardyBotListener
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 import org.apache.logging.log4j.LogManager
 import org.springframework.stereotype.Component

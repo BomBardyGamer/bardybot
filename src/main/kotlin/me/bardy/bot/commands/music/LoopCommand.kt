@@ -9,7 +9,7 @@ import me.bardy.bot.command.argument
 import me.bardy.bot.command.getArgument
 import me.bardy.bot.command.literal
 import me.bardy.bot.command.runs
-import me.bardy.bot.util.GuildMusicManagers
+import me.bardy.bot.audio.GuildMusicManagers
 import org.springframework.stereotype.Component
 
 @Component

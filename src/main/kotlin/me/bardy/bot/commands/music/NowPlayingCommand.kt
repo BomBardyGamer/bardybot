@@ -9,7 +9,7 @@ import me.bardy.bot.util.color
 import me.bardy.bot.util.Durations
 import me.bardy.bot.util.description
 import me.bardy.bot.util.embed
-import me.bardy.bot.util.GuildMusicManagers
+import me.bardy.bot.audio.GuildMusicManagers
 import me.bardy.bot.util.thumbnail
 import net.dv8tion.jda.api.entities.Member
 import org.apache.logging.log4j.LogManager

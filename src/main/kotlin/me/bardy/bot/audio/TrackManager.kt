@@ -1,4 +1,4 @@
-package me.bardy.bot.services
+package me.bardy.bot.audio
 
 import com.github.benmanes.caffeine.cache.Caffeine
 import com.sedmelluq.discord.lavaplayer.track.AudioItem
@@ -6,9 +6,7 @@ import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack
 import java.util.concurrent.TimeUnit
 import lavalink.client.io.jda.JdaLavalink
-import me.bardy.bot.audio.LoadResultHandler
-import me.bardy.bot.audio.JoinResult
-import me.bardy.bot.util.GuildMusicManagers
+import me.bardy.bot.connection.ConnectionManager
 import net.dv8tion.jda.api.entities.Guild
 import net.dv8tion.jda.api.entities.GuildMessageChannel
 import net.dv8tion.jda.api.entities.Member
@@ -23,8 +21,8 @@ import org.springframework.stereotype.Service
  * @since 1.0
  */
 @Service
-class TrackService(
-    private val connectionService: ConnectionService,
+class TrackManager(
+    private val connectionManager: ConnectionManager,
     private val musicManagers: GuildMusicManagers,
     private val lavalink: JdaLavalink
 ) {
@@ -43,7 +41,7 @@ class TrackService(
         val voiceChannel = requester.voiceState?.channel
         if (voiceChannel !is VoiceChannel) return JoinResult.USER_NOT_IN_CHANNEL
 
-        val joinResult = connectionService.tryJoin(voiceChannel)
+        val joinResult = connectionManager.tryJoin(voiceChannel)
         if (joinResult != JoinResult.SUCCESSFUL) return joinResult
         channel.sendMessage("**I'm having a look around to see if I can find ** `$track`").queue()
 

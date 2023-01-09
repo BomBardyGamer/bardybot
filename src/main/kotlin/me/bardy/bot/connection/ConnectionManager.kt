@@ -1,4 +1,4 @@
-package me.bardy.bot.services
+package me.bardy.bot.connection
 
 import lavalink.client.io.jda.JdaLavalink
 import me.bardy.bot.audio.JoinResult
@@ -9,15 +9,8 @@ import net.dv8tion.jda.api.entities.VoiceChannel
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException
 import org.springframework.stereotype.Service
 
-/**
- * Handles connection to a voice channel, used by [TrackService] to join the
- * bot to a voice channel in order to play music.
- *
- * @author Callum Seabrook
- * @since 1.0
- */
 @Service
-class ConnectionService(private val lavalink: JdaLavalink) {
+class ConnectionManager(private val lavalink: JdaLavalink) {
 
     /**
      * Connects the bot to the given voice channel, or, if the bot is
@@ -42,14 +35,9 @@ class ConnectionService(private val lavalink: JdaLavalink) {
         }
     }
 
-    /**
-     * Disconnects the bot from the voice channel it's currently in, and will stop
-     * the currently playing track and clear the queue if [clearQueue] is true, or,
-     * if the bot is not in a channel, does nothing.
-     */
-    fun leave(guildId: String, clearQueue: Boolean = true) {
-        val link = lavalink.getLink(guildId)
-        if (clearQueue) link.resetPlayer()
+    fun leave(guild: Guild) {
+        val link = lavalink.getLink(guild.id)
+        link.resetPlayer()
         link.destroy()
         LOGGER.debug("Successfully disconnected from voice channel")
     }
