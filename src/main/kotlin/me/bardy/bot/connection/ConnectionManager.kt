@@ -1,6 +1,6 @@
 package me.bardy.bot.connection
 
-import lavalink.client.io.jda.JdaLavalink
+import dev.arbjerg.lavalink.client.LavalinkClient
 import me.bardy.bot.audio.JoinResult
 import org.apache.logging.log4j.LogManager
 import net.dv8tion.jda.api.entities.Guild
@@ -10,7 +10,7 @@ import net.dv8tion.jda.api.exceptions.InsufficientPermissionException
 import org.springframework.stereotype.Service
 
 @Service
-class ConnectionManager(private val lavalink: JdaLavalink) {
+class ConnectionManager(private val lavalink: LavalinkClient) {
 
     /**
      * Connects the bot to the given voice channel, or, if the bot is
@@ -25,8 +25,8 @@ class ConnectionManager(private val lavalink: JdaLavalink) {
 
     private fun joinChannel(channel: VoiceChannel): JoinResult {
         return try {
-            lavalink.getLink(channel.guild.id).connect(channel)
-            LOGGER.debug("Successfully connected to voice channel $channel in guild ${channel.guild}")
+            channel.jda.directAudioController.connect(channel)
+            LOGGER.debug("Successfully connected to voice channel {} in guild {}", channel, channel.guild)
             JoinResult.SUCCESSFUL
         } catch (_: InsufficientPermissionException) {
             JoinResult.NO_PERMISSION_TO_JOIN
@@ -36,9 +36,7 @@ class ConnectionManager(private val lavalink: JdaLavalink) {
     }
 
     fun leave(guild: Guild) {
-        val link = lavalink.getLink(guild.id)
-        link.resetPlayer()
-        link.destroy()
+        lavalink.getLinkIfCached(guild.idLong)?.destroy()
         LOGGER.debug("Successfully disconnected from voice channel")
     }
 

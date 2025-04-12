@@ -1,39 +1,50 @@
 package me.bardy.bot.audio
 
-import com.sedmelluq.discord.lavaplayer.track.AudioTrack
-import lavalink.client.io.Link
-import lavalink.client.player.LavalinkPlayer
+import dev.arbjerg.lavalink.client.Link
+import dev.arbjerg.lavalink.client.event.TrackEndEvent
+import dev.arbjerg.lavalink.client.player.LavalinkPlayer
+import dev.arbjerg.lavalink.client.player.PlayerUpdateBuilder
 
 /**
  * The music manager for a guild.
  */
-class MusicManager(link: Link) {
+class MusicManager(private val link: Link) {
 
-    val player: LavalinkPlayer = link.player
-    val scheduler: TrackScheduler = TrackScheduler(player)
+    private val scheduler = TrackScheduler(this::player)
 
     init {
-        player.addListener(scheduler)
+        link.createOrUpdatePlayer().subscribe()
+        link.node.on<TrackEndEvent>().subscribe(scheduler)
     }
 
-    fun playingTrack(): AudioTrack? = player.playingTrack
+    private fun player(): LavalinkPlayer? = link.cachedPlayer
 
-    fun trackPosition(): Long = player.trackPosition
+    fun playingTrack(): AudioTrack? = scheduler.playing()
 
-    fun isPaused(): Boolean = player.isPaused
+    fun trackPosition(): Long = player()?.position ?: 0L
+
+    fun isPaused(): Boolean = player()?.paused == true
 
     fun pause() {
-        player.isPaused = true
+        updatePlayer { setPaused(true) }
     }
 
     fun resume() {
-        player.isPaused = false
+        updatePlayer { setPaused(false) }
     }
 
-    fun volume(): Int = (player.filters.volume * 100F).toInt()
+    fun volume(): Int {
+        val player = player() ?: return 0
+        return player.volume
+    }
 
     fun setVolume(value: Int) {
-        player.filters.volume = value.toFloat() / 100F
+        updatePlayer { setVolume(value) }
+    }
+
+    private inline fun updatePlayer(update: LavalinkPlayer.() -> PlayerUpdateBuilder) {
+        val player = player() ?: return
+        update(player).subscribe()
     }
 
     fun isLooping(): Boolean = scheduler.isLooping()
@@ -46,9 +57,11 @@ class MusicManager(link: Link) {
         scheduler.stopLooping()
     }
 
-    fun addToQueue(track: AudioTrack) {
+    fun queue(track: AudioTrack) {
         scheduler.queue(track)
     }
+
+    fun nextTrack(): Boolean = scheduler.nextTrack()
 
     fun hasQueuedTracks(): Boolean = scheduler.queue().isNotEmpty()
 
@@ -60,5 +73,5 @@ class MusicManager(link: Link) {
 
     fun paginateQueue(resultsPerPage: Int): List<List<AudioTrack>> = scheduler.queue().chunked(resultsPerPage)
 
-    fun getTotalQueuedTime(): Long = scheduler.queue().sumOf { it.duration }
+    fun getTotalQueuedTime(): Long = scheduler.queue().sumOf { it.track.info.length }
 }

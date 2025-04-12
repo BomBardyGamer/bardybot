@@ -12,7 +12,6 @@ import me.bardy.bot.util.embed
 import me.bardy.bot.audio.GuildMusicManagers
 import me.bardy.bot.util.thumbnail
 import net.dv8tion.jda.api.entities.Member
-import org.apache.logging.log4j.LogManager
 import org.springframework.stereotype.Component
 
 @Component
@@ -27,23 +26,20 @@ class NowPlayingCommand(private val musicManagers: GuildMusicManagers) : BasicCo
             return
         }
 
-        val requester = nowPlaying.getUserData(Member::class.java)
-        if (requester == null) {
-            LOGGER.error("User data for requested track $nowPlaying should have been of type Member and wasn't")
-            return
-        }
+        val track = nowPlaying.track
+        val requester = nowPlaying.requester
 
         val positionMillis = manager.trackPosition()
         val position = Duration.ofMillis(positionMillis)
-        val duration = Duration.ofMillis(nowPlaying.duration)
+        val duration = Duration.ofMillis(track.info.length)
         context.reply(embed {
             author("What I've got on", "https://bot.bardy.me", "https://cdn.prevarinite.com/images/bbg.jpg")
-            thumbnail("https://img.youtube.com/vi/${nowPlaying.identifier}/maxresdefault.jpg")
+            thumbnail("https://img.youtube.com/vi/${track.info.identifier}/maxresdefault.jpg")
             description("""
-                Got [${nowPlaying.info.title}](${nowPlaying.info.uri}) playing now!
+                Got [${track.info.title}](${track.info.uri}) playing now!
 
                 We're this far in:
-                `${calculateBar(positionMillis.toDouble() / nowPlaying.duration)}`
+                `${calculateBar(positionMillis.toDouble() / track.info.length)}`
 
                 `${Durations.formatHumanReadable(position)} / ${Durations.formatHumanReadable(duration)}`
 
@@ -67,8 +63,6 @@ class NowPlayingCommand(private val musicManagers: GuildMusicManagers) : BasicCo
         private const val DOT = "\uD83D\uDD18"
         private const val DASH = "\u25AC"
         private const val BAR_LENGTH = 31
-
-        private val LOGGER = LogManager.getLogger()
 
         @JvmStatic
         private fun formatMemberName(member: Member): String {

@@ -2,7 +2,7 @@ package me.bardy.bot.commands.music
 
 import com.mojang.brigadier.arguments.IntegerArgumentType
 import com.mojang.brigadier.builder.LiteralArgumentBuilder
-import com.sedmelluq.discord.lavaplayer.track.AudioTrack
+import me.bardy.bot.audio.AudioTrack
 import java.time.Duration
 import kotlin.random.Random
 import me.bardy.bot.command.Command
@@ -19,7 +19,6 @@ import me.bardy.bot.audio.GuildMusicManagers
 import me.bardy.bot.util.title
 import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.entities.Member
-import org.apache.logging.log4j.LogManager
 import org.springframework.stereotype.Component
 
 @Component
@@ -49,13 +48,7 @@ class QueueCommand(private val musicManagers: GuildMusicManagers) : Command(setO
             if (nowPlaying == null) {
                 embed.appendDescription("You still haven't queued anything! Come on, let's get this party started! \uD83C\uDF89")
             } else {
-                val requester = nowPlaying.userData as? Member
-                if (requester == null) {
-                    LOGGER.error("User data for requested track $nowPlaying was not of type Member.")
-                    return
-                }
-
-                appendTrack(embed, nowPlaying, requester, -1)
+                appendTrack(embed, nowPlaying, -1)
             }
 
             if (paginatedQueue.isEmpty()) {
@@ -67,15 +60,7 @@ class QueueCommand(private val musicManagers: GuildMusicManagers) : Command(setO
         embed.appendDescription("\n__What I've got lined up:__\n")
 
         paginatedQueue.forEach { page ->
-            page.forEachIndexed { i, track ->
-                val requester = track.getUserData(Member::class.java)
-                if (requester == null) {
-                    LOGGER.error("User data for requested track $track was not of type Member.")
-                    return
-                }
-
-                appendTrack(embed, track, requester, i + 1)
-            }
+            page.forEachIndexed { i, track -> appendTrack(embed, track, i + 1) }
         }
 
         if (musicManager.hasQueuedTracks()) {
@@ -87,22 +72,21 @@ class QueueCommand(private val musicManagers: GuildMusicManagers) : Command(setO
         context.reply(embed.setFooter("Page $pageNumber / ${paginatedQueue.size}", member.user.avatarUrl).build())
     }
 
-    private fun appendTrack(embed: EmbedBuilder, track: AudioTrack, requester: Member, number: Int) {
+    private fun appendTrack(embed: EmbedBuilder, track: AudioTrack, number: Int) {
         if (number != -1) {
             embed.appendDescription("\n`$number`. ")
         } else {
             embed.appendDescription("\n")
         }
 
-        val duration = Durations.formatHumanReadable(track.duration)
-        embed.appendDescription("[${track.info.title}](${track.info.uri}) | `$duration`\n")
-        embed.appendDescription("*Who put it on? ${formatMemberName(requester)} did!*\n\n")
+        val duration = Durations.formatHumanReadable(track.track.info.length)
+        embed.appendDescription("[${track.track.info.title}](${track.track.info.uri}) | `$duration`\n")
+        embed.appendDescription("*Who put it on? ${formatMemberName(track.requester)} did!*\n\n")
     }
 
     companion object {
 
         private const val RGB_MAX_VALUE = 16777216
-        private val LOGGER = LogManager.getLogger()
 
         @JvmStatic
         private fun formatMemberName(member: Member): String {

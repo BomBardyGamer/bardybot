@@ -12,7 +12,7 @@ class PauseCommand(private val musicManagers: GuildMusicManagers) : BasicCommand
     override fun execute(context: BotCommandContext) {
         val manager = musicManagers.getByGuild(context.guild)
         if (!manager.isPaused()) {
-            LOGGER.debug("Attempting to pause currently playing track ${manager.playingTrack()}")
+            LOGGER.debug("Attempting to pause currently playing track {}", manager.playingTrack())
             manager.pause()
             context.reply("Ah come on! I was listening to that.")
         }

@@ -1,7 +1,8 @@
 package me.bardy.bot.config
 
-import java.net.URI
-import lavalink.client.io.jda.JdaLavalink
+import dev.arbjerg.lavalink.client.LavalinkClient
+import dev.arbjerg.lavalink.client.NodeOptions
+import dev.arbjerg.lavalink.client.getUserIdFromToken
 import me.bardy.bot.config.bot.BotConfig
 import me.bardy.bot.config.bot.LavalinkConfig
 import me.bardy.bot.audio.GuildMusicManagers
@@ -12,12 +13,19 @@ import org.springframework.context.annotation.Configuration
 class MusicConfiguration {
 
     @Bean
-    fun lavalink(linkConfig: LavalinkConfig, botConfig: BotConfig): JdaLavalink {
-        val lavalink = JdaLavalink(botConfig.clientId, 1, null)
-        linkConfig.nodes.forEach { lavalink.addNode(it.name, URI(it.url), it.password) }
+    fun lavalink(linkConfig: LavalinkConfig, botConfig: BotConfig): LavalinkClient {
+        val lavalink = LavalinkClient(getUserIdFromToken(botConfig.token))
+        linkConfig.nodes.forEach {
+            val node = NodeOptions.Builder()
+                .setName(it.name)
+                .setServerUri(it.url)
+                .setPassword(it.password)
+                .build()
+            lavalink.addNode(node)
+        }
         return lavalink
     }
 
     @Bean
-    fun managerMap(lavalink: JdaLavalink): GuildMusicManagers = GuildMusicManagers(lavalink)
+    fun managerMap(lavalink: LavalinkClient): GuildMusicManagers = GuildMusicManagers(lavalink)
 }

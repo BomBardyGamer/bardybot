@@ -2,7 +2,7 @@ package me.bardy.bot.audio
 
 enum class JoinResult(val message: String) {
 
-    SUCCESSFUL("Yeah! I'm in here now! Let's get this party started!"),
+    SUCCESSFUL("Here I am! Let's get this party started! WOOOOO!!"),
     NO_CHANNELS("I can't play music if there isn't a channel to play music on!"),
     NO_PERMISSION_TO_JOIN("You need to give me permission to join the channel you're in!"),
     USER_NOT_IN_CHANNEL("I can't join you if you're not in a channel!"),

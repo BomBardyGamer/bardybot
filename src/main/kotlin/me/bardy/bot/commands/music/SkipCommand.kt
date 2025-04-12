@@ -20,7 +20,7 @@ class SkipCommand(
         }
 
         LOGGER.debug("Delegating track skipping to TrackService.")
-        if (!trackManager.skipTrack(context.guild)) {
+        if (!trackManager.trySkipTrack(context.guild)) {
             context.reply("I tried to skip to the next track, but there wasn't a next track, so I've stopped the current one.")
             return
         }

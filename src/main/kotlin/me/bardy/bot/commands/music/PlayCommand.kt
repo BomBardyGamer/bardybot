@@ -57,7 +57,7 @@ class PlayCommand(
         runs {
             val manager = musicManagers.getByGuild(it.source.guild)
             if (manager.isPaused()) {
-                LOGGER.debug("Attempting to resume track ${manager.playingTrack()}")
+                LOGGER.debug("Attempting to resume track {}", manager.playingTrack())
                 manager.resume()
                 it.source.reply("About time you played that again! I was starting to get bored!")
                 return@runs

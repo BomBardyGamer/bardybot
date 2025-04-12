@@ -14,7 +14,7 @@ plugins {
 }
 
 group = "me.bardy"
-version = "1.9-BETA"
+version = "2.0"
 
 java.sourceCompatibility = JavaVersion.VERSION_17
 application.mainClass.set("me.bardy.bot.BardyBotKt")
@@ -34,7 +34,6 @@ dependencies {
     // Discord-related
     implementation(libs.jda)
     implementation(libs.lavalink)
-    implementation(libs.lavaplayer)
 
     // Metrics
     implementation(libs.micrometer.core)

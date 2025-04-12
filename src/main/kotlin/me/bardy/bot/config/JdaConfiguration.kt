@@ -1,6 +1,7 @@
 package me.bardy.bot.config
 
-import lavalink.client.io.jda.JdaLavalink
+import dev.arbjerg.lavalink.client.LavalinkClient
+import dev.arbjerg.lavalink.libraries.jda.JDAVoiceUpdateListener
 import me.bardy.bot.config.bot.BotConfig
 import me.bardy.bot.util.BardyBotListener
 import net.dv8tion.jda.api.entities.Activity
@@ -20,18 +21,16 @@ import kotlin.system.exitProcess
 class JdaConfiguration {
 
     @Bean
-    fun shardManager(lavalink: JdaLavalink, config: BotConfig, listeners: Set<BardyBotListener>): ShardManager {
+    fun shardManager(lavalink: LavalinkClient, config: BotConfig, listeners: Set<BardyBotListener>): ShardManager {
         try {
-            val jda = DefaultShardManagerBuilder.create(config.token, GATEWAY_INTENTS)
+            return DefaultShardManagerBuilder.create(config.token, GATEWAY_INTENTS)
                 .setActivity(Activity.playing("bot.bardy.me | ${config.prefix}help"))
-                .setVoiceDispatchInterceptor(lavalink.voiceInterceptor)
+                .setVoiceDispatchInterceptor(JDAVoiceUpdateListener(lavalink))
                 .setMemberCachePolicy(MemberCachePolicy.VOICE)
                 .setChunkingFilter(ChunkingFilter.NONE)
                 .disableCache(EnumSet.complementOf(ENABLED_FLAGS))
+                .addEventListeners(listeners)
                 .build()
-            lavalink.setJdaProvider(jda::getShardById)
-            jda.addEventListener(*listeners.toTypedArray())
-            return jda
         } catch (_: Exception) {
             LOGGER.error("Your bot token is empty or invalid! You can configure your token by setting the \"token\" value in application.yml")
             exitProcess(0)

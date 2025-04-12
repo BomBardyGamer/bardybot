@@ -10,4 +10,4 @@ import org.springframework.boot.context.properties.ConfigurationProperties
  */
 @ConfigurationProperties("bot")
 @JvmRecord
-data class BotConfig(val clientId: String, val token: String, val prefix: String)
+data class BotConfig(val token: String, val prefix: String)
