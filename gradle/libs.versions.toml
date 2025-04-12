@@ -2,21 +2,21 @@ metadata.format.version = "1.1"
 
 [versions]
 # Shared
-kotlin = "1.8.0"
-spring = "3.0.1"
+kotlin = "2.1.20"
+spring = "3.4.4"
 
 # Plugins
-dokka = "1.7.20"
-springDependencyManagement = "1.1.0"
+dokka = "2.0.0"
+springDependencyManagement = "1.1.7"
 
 # Dependencies
 #kotlinCoroutines = "1.6.4"
 jda = "5.3.2"
 lavalink = "3.2.0"
-micrometer = "1.10.2"
+micrometer = "1.14.5"
 brigadier = "1.0.0-SNAPSHOT"
-sentry = "6.11.0"
-caffeine = "3.1.2"
+sentry = "8.7.0"
+caffeine = "3.2.0"
 
 [libraries]
 # Kotlin
@@ -56,4 +56,4 @@ spring-boot = { id = "org.springframework.boot", version.ref = "spring" }
 spring-dependencyManagement = { id = "io.spring.dependency-management", version.ref = "springDependencyManagement" }
 
 # Other
-dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
+dokka = { id = "org.jetbrains.dokka-javadoc", version.ref = "dokka" }
