@@ -32,7 +32,7 @@ class QueueCommand(private val musicManagers: GuildMusicManagers) : Command(setO
     }
 
     private fun paginateQueue(context: BotCommandContext, pageNumber: Int) {
-        val member = context.member ?: return
+        val member = context.member
         val musicManager = musicManagers.getByGuild(context.guild)
 
         val paginatedQueue = musicManager.paginateQueue(10)

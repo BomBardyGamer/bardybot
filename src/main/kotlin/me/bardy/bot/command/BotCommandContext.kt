@@ -5,7 +5,7 @@ import net.dv8tion.jda.api.entities.Member
 import net.dv8tion.jda.api.entities.MessageEmbed
 import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel
 
-class BotCommandContext(val guild: Guild, val channel: MessageChannel, val member: Member?) {
+class BotCommandContext(val guild: Guild, val channel: MessageChannel, val member: Member) {
 
     fun getSelf(): Member = guild.selfMember
 

@@ -8,6 +8,11 @@ lavalink:
       url: wss://localhost:9000
       password: TheWorldsBestPassword
 
+permissions:
+  enabled: false
+  roles:
+    - some_role_id
+
 #sentry:
   #dsn: my_sentry_dsn
 

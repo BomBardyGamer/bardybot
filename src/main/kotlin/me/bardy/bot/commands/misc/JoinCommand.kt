@@ -10,8 +10,7 @@ import org.springframework.stereotype.Component
 class JoinCommand(private val connectionManager: ConnectionManager) : BasicCommand("join", emptySet()) {
 
     override fun execute(context: BotCommandContext) {
-        val member = context.member ?: return
-        val voiceChannel = member.voiceState?.channel
+        val voiceChannel = context.member.voiceState?.channel
         if (voiceChannel !is VoiceChannel) {
             context.reply("I can't join you if you're not in a channel!")
             return

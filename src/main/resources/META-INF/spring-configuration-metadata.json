@@ -11,6 +11,11 @@
       "sourceType": "me.bardy.bot.config.bot.LavalinkConfig"
     },
     {
+      "name": "permissions",
+      "type": "me.bardy.bot.config.bot.PermissionsConfig",
+      "sourceType": "me.bardy.bot.config.bot.PermissionsConfig"
+    },
+    {
       "name": "sentry",
       "type": "me.bardy.bot.config.bot.SentryConfig",
       "sourceType": "me.bardy.bot.config.bot.SentryConfig"
@@ -41,6 +46,16 @@
       "name": "lavalink.nodes",
       "type": "java.util.List<me.bardy.bot.config.bot.LavalinkConfig.NodeConfig>",
       "description": "Nodes are Lavalink servers that the bot can use to send audio from"
+    },
+    {
+      "name": "permissions.enabled",
+      "type": "java.lang.Boolean",
+      "description": "Whether permission checks will be performed for using the bot"
+    },
+    {
+      "name": "permissions.roles",
+      "type": "java.util.List<java.lang.String>",
+      "description": "The role IDs required to use the bot"
     },
     {
       "name": "sentry.dsn",

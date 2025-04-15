@@ -43,7 +43,7 @@ class PlayCommand(
     override fun create(): LiteralArgumentBuilder<BotCommandContext> = literal("play") {
         argument("track", StringArgumentType.greedyString()) {
             runs {
-                val member = it.source.member ?: return@runs
+                val member = it.source.member
                 val channel = it.source.channel as? GuildMessageChannel ?: return@runs
 
                 val manager = musicManagers.getByGuild(it.source.guild)

@@ -13,7 +13,7 @@ class LeaveCommand(
 ) : BasicCommand("leave", setOf("fuckoff", "pissoff", "goaway")) {
 
     override fun execute(context: BotCommandContext) {
-        val requester = context.member ?: return
+        val requester = context.member
         val botVoiceChannel = context.getSelf().voiceState?.channel
         if (botVoiceChannel == null) {
             context.reply("I can't leave a channel if I'm not in one!")
