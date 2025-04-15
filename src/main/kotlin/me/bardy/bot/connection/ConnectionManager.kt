@@ -36,7 +36,14 @@ class ConnectionManager(private val lavalink: LavalinkClient) {
     }
 
     fun leave(guild: Guild) {
-        lavalink.getLinkIfCached(guild.idLong)?.destroy()
+        // Try to destroy the music player
+        val link = lavalink.getLinkIfCached(guild.idLong) ?: return
+        link.destroy().subscribe()
+
+        // Try to disconnect from voice channel
+        val currentChannel = getBotVoiceChannel(guild) ?: return
+        currentChannel.jda.directAudioController.disconnect(guild)
+
         LOGGER.debug("Successfully disconnected from voice channel")
     }
 

@@ -103,6 +103,6 @@ class LoadResultHandler(
 
     companion object {
 
-        private const val SEARCH_PREFIX = "ytsearch:"
+        const val SEARCH_PREFIX: String = "ytmsearch:"
     }
 }

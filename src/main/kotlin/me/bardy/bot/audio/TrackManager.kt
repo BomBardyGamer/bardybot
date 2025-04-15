@@ -31,7 +31,7 @@ class TrackManager(
         .build<String, AudioItem>()
 
     fun loadTrack(channel: GuildMessageChannel, track: String, requester: Member): JoinResult {
-        val trackURL = if (URL_REGEX.matches(track)) track else "ytmsearch:${track.lowercase()}"
+        val trackURL = if (URL_REGEX.matches(track)) track else LoadResultHandler.SEARCH_PREFIX + track.lowercase()
         if (requester.guild.voiceChannels.isEmpty()) {
             LOGGER.debug("No voice channels found in guild.")
             return JoinResult.NO_CHANNELS
